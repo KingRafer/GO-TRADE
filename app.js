@@ -193,7 +193,7 @@ function signalView() {
   const active = signals.filter((s) => s.status === "active");
   const closed = signals.filter((s) => s.status === "closed");
   return `${viewHeader("GO TRADE intelligence", "Signal", "Sinyal trading resmi yang dipublikasikan oleh tim GO TRADE.", `<span class="demo-chip"><span class="status-dot"></span> ${active.length} sinyal aktif</span>`)}
-    <div class="disclaimer-box">⚠ Sinyal ini dipublikasikan oleh admin/tim GO TRADE untuk simulasi demo, bukan saran keuangan atau jaminan profit. Selalu lakukan riset Anda sendiri (DYOR) sebelum mengambil keputusan trading.</div>
+    <div class="disclaimer-box">⚠ Sinyal akan muncul setelah admin menambahkan sinyal.</div>
     ${
       signals.length
         ? `<div class="signal-grid">${signals.map(signalCard).join("")}</div>`
@@ -256,7 +256,7 @@ function depositView() {
   const settings = gtSettings();
   return `${viewHeader("Wallet / top up", "Deposit", "Top up saldo untuk membeli paket auto-trading. Admin akan memverifikasi setiap permintaan deposit.")}
     <div class="deposit-address-card">
-      <div class="warn">⚠ Ini adalah <b>alamat demo</b>, bukan alamat sungguhan. Jangan pernah mengirim dana asli ke alamat ini.</div>
+      <div class="warn">⚠ Masih dalam tahap uji coba</div>
       <h2 style="margin-bottom:14px">Pilih rekening & alamat tujuan deposit</h2>
       <div class="deposit-methods">
         <div class="deposit-method">

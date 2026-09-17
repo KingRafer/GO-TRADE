@@ -43,7 +43,7 @@
     if (q.includes("sinyal") || q.includes("signal")) return "Sinyal trading terbaru dari tim GO TRADE bisa dilihat di menu Signal, lengkap dengan entry, target, dan stop-loss.";
     if (q.includes("bonus")) return "Bonus referral & bonus manual dari admin bisa dicek di menu Bonus Tracking.";
     if (q.includes("halo") || q.includes("hai") || q.includes("hello")) return "Halo! Saya asisten demo GO TRADE. Coba tanya soal deposit, penarikan, paket, atau sinyal trading.";
-    return "Ini adalah asisten AI demo (bukan API sungguhan). Coba tanyakan tentang deposit, penarikan, paket, sinyal, atau bonus.";
+    return "AI assisten ini masih dalam tahap uji coba. Coba tanyakan tentang deposit, penarikan, paket, sinyal, atau bonus.";
   }
 
   fab.addEventListener("click", () => {

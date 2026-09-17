@@ -41,7 +41,7 @@ const GT_SESSION_KEY = "gt_session_v1";
 
 const GT_DEFAULT_USERS = [
   {
-    name: "Rafi Pratama",
+    name: "Satrio",
     email: "demo@gotrade.io",
     password: "demo123",
     role: "member",

@@ -203,10 +203,10 @@ function notifyView() {
 
 function settingsView() {
   const s = gtSettings();
-  return `${viewHeader("Sistem / konfigurasi", "System settings", "Atur nama situs, alamat deposit demo, dan batas transaksi.", `<button class="btn btn-primary" data-action="save-system-settings">Simpan pengaturan</button>`)}
+  return `${viewHeader("Sistem / konfigurasi", "System settings", "Atur nama situs, alamat deposit, dan batas transaksi.", `<button class="btn btn-primary" data-action="save-system-settings">Simpan pengaturan</button>`)}
     <div class="card" style="padding:22px;max-width:640px">
       <div class="field-row"><div class="field"><label class="form-label">Nama situs</label><input class="form-control" id="setSiteName" value="${s.siteName}" /></div><div class="field"><label class="form-label">Tagline</label><input class="form-control" id="setTagline" value="${s.tagline}" /></div></div>
-      <div class="field"><label class="form-label">Alamat deposit demo (USDT BEP20)</label><div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap"><input class="form-control" id="setDepositAddress" value="${s.depositAddress}" style="flex:1;min-width:200px" /><div id="settingsQrBox" class="qr-placeholder" style="flex:0 0 auto"><span data-icon="qr" data-icon-size="26"></span><span>Memuat QR...</span></div></div><span class="subhead" style="font-size:9px">⚠ Selalu gunakan alamat DEMO, jangan alamat wallet sungguhan.</span></div>
+      <div class="field"><label class="form-label">Alamat deposit(USDT BEP20)</label><div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap"><input class="form-control" id="setDepositAddress" value="${s.depositAddress}" style="flex:1;min-width:200px" /><div id="settingsQrBox" class="qr-placeholder" style="flex:0 0 auto"><span data-icon="qr" data-icon-size="26"></span><span>Memuat QR...</span></div></div><span class="subhead" style="font-size:9px">⚠ Selalu gunakan alamat DEMO, jangan alamat wallet sungguhan.</span></div>
       <div class="field-row"><div class="field"><label class="form-label">Minimal deposit (USD)</label><input class="form-control" id="setMinDeposit" type="number" value="${s.minDeposit}" /></div><div class="field"><label class="form-label">Minimal penarikan (USD)</label><input class="form-control" id="setMinWithdrawal" type="number" value="${s.minWithdrawal}" /></div></div>
       <div class="field"><label class="form-label">Email support</label><input class="form-control" id="setSupportEmail" value="${s.supportEmail}" /></div>
     </div>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#191153" />
+    <title>Daftar GO TRADE — Intelligent Trading System</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="auth-shell">
+      <div class="theme-toggle auth-theme-toggle"><button data-theme-btn="light" title="Mode terang"><span data-icon="sun" data-icon-size="14"></span></button><button data-theme-btn="dark" title="Mode gelap"><span data-icon="moon" data-icon-size="14"></span></button></div>
+      <section class="auth-left">
+        <div class="auth-brand">
+          <img class="brand-mark" src="assets/logo-icon.png" alt="GO TRADE" />
+          <div>
+            <strong>GO TRADE</strong>
+            <span>INTELLIGENT TRADING SYSTEM</span>
+          </div>
+        </div>
+
+        <div class="auth-tag">
+          <div class="eyebrow">GABUNG SEKARANG</div>
+          <h1>Mulai perjalanan<br /><span class="accent">trading cerdas Anda.</span></h1>
+          <p>Buat akun member GO TRADE, aktifkan paket auto-trading, dan pantau sinyal AI langsung dari satu workspace.</p>
+        </div>
+
+        <div class="auth-stats">
+          <div><b>84.7%</b><span>SIGNAL ACCURACY*</span></div>
+          <div><b>24/7</b><span>MARKET WATCH</span></div>
+          <div><b>3 MENIT</b><span>PROSES DAFTAR</span></div>
+        </div>
+
+        <div class="auth-foot">*Angka demo untuk keperluan tampilan. © 2026 GO TRADE Intelligence. Built for decisive moves.</div>
+      </section>
+
+      <section class="auth-right">
+        <div class="auth-card">
+          <div class="auth-eyebrow">CREATE ACCOUNT</div>
+          <h2>Daftar akun member</h2>
+          <p class="auth-sub">Gratis, tanpa kartu kredit. Ini adalah pendaftaran demo.</p>
+
+          <form id="registerForm">
+            <div class="field">
+              <label class="form-label">Nama lengkap</label>
+              <input class="form-control" type="text" id="regName" placeholder="e.g. Budi Santoso" required />
+            </div>
+            <div class="field">
+              <label class="form-label">Email</label>
+              <input class="form-control" type="email" id="regEmail" placeholder="nama@email.com" required />
+            </div>
+            <div class="form-row" style="margin:0 0 16px">
+              <div class="field" style="margin-bottom:0">
+                <label class="form-label">Password</label>
+                <div class="pass-field">
+                  <input class="form-control" type="password" id="regPassword" placeholder="Min. 6 karakter" minlength="6" required />
+                  <button type="button" class="pass-toggle-btn" data-pass-toggle="regPassword"><span data-icon="eye" data-icon-size="15"></span></button>
+                </div>
+              </div>
+              <div class="field" style="margin-bottom:0">
+                <label class="form-label">Konfirmasi password</label>
+                <div class="pass-field">
+                  <input class="form-control" type="password" id="regPassword2" placeholder="Ulangi password" minlength="6" required />
+                  <button type="button" class="pass-toggle-btn" data-pass-toggle="regPassword2"><span data-icon="eye" data-icon-size="15"></span></button>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label class="form-label">Kode referral <span style="font-weight:400">(opsional)</span></label>
+              <input class="form-control" type="text" id="regReferral" placeholder="e.g. GOTRADE-DEMO1" />
+            </div>
+            <div class="checkbox-row">
+              <input type="checkbox" id="regTerms" required />
+              <label for="regTerms">Saya menyetujui Syarat & Ketentuan serta memahami bahwa ini adalah workspace demo.</label>
+            </div>
+            <div id="regError" class="auth-error"></div>
+            <div id="regSuccess" class="auth-success"></div>
+            <button class="btn btn-primary" type="submit" style="width:100%;padding:13px">Buat akun →</button>
+          </form>
+
+          <p class="auth-switch">Sudah punya akun? <a href="login.html">Masuk di sini</a></p>
+        </div>
+      </section>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="icons.js"></script>
+    <script>
+      gtBindThemeToggle();
+      gtBindPasswordToggles();
+      document.getElementById("registerForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("regName").value.trim();
+        const email = document.getElementById("regEmail").value.trim();
+        const password = document.getElementById("regPassword").value;
+        const password2 = document.getElementById("regPassword2").value;
+        const referralCode = document.getElementById("regReferral").value.trim();
+        const errorBox = document.getElementById("regError");
+        const successBox = document.getElementById("regSuccess");
+        errorBox.classList.remove("show");
+        successBox.classList.remove("show");
+
+        if (password !== password2) {
+          errorBox.textContent = "Konfirmasi password tidak cocok.";
+          errorBox.classList.add("show");
+          return;
+        }
+
+        const result = gtRegister({ name, email, password, referralCode });
+        if (result.error) {
+          errorBox.textContent = result.error;
+          errorBox.classList.add("show");
+          return;
+        }
+
+        successBox.textContent = "Akun berhasil dibuat (demo). Mengarahkan ke halaman login...";
+        successBox.classList.add("show");
+        document.getElementById("registerForm").reset();
+        setTimeout(() => (window.location.href = "login.html"), 1600);
+      });
+
+      (function redirectIfLoggedIn() {
+        const s = gtSession();
+        if (s) window.location.href = s.role === "admin" ? "admin.html" : "dashboard.html";
+      })();
+    </script>
+  </body>
+</html>

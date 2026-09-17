@@ -11,7 +11,7 @@
   const modal = document.getElementById("modal");
   const toastContainer = document.getElementById("toastContainer");
 
-  const DEMO_DEPOSIT_NOTE = "Alamat DEMO — bukan alamat sungguhan. Jangan kirim dana asli.";
+  const DEMO_DEPOSIT_NOTE = "Masih dalam tahap uji coba";
 
 let currentView = "dashboard";
 

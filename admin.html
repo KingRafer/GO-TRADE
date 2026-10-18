@@ -1,89 +1,517 @@
 <!doctype html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a0c1f" />
-    <title>GO TRADE — Admin Center</title>
-    <link rel="icon" type="image/png" href="assets/logo-icon.png" />
-    <link rel="manifest" href="manifest.json" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="app-shell">
-      <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-      <aside class="sidebar" id="sidebar">
-        <div class="brand">
-          <img class="brand-mark" src="assets/logo-icon.png" alt="GO TRADE" />
-          <div>
-            <strong>GO TRADE</strong>
-            <span>ADMIN CENTER</span>
-          </div>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0c1f" />
+  <meta name="description" content="GO TRADE — Intelligent Trading System. Platform trading AI dengan sinyal real-time, auto-trading, wallet, dan panel admin lengkap. Demo frontend premium siap custom." />
+  <meta name="keywords" content="trading, AI trading, crypto, signal, auto trading, dashboard, admin panel" />
+  <meta property="og:title" content="GO TRADE — Intelligent Trading System" />
+  <meta property="og:description" content="Platform trading cerdas berbasis AI. Sinyal, auto-trade, wallet, referral & admin center dalam satu workspace premium." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/png" href="assets/logo-icon.png" />
+  <link rel="apple-touch-icon" href="assets/logo-icon.png" />
+  <link rel="manifest" href="manifest.json" />
+  <title>GO TRADE — Intelligent Trading System</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .lp { overflow-x: hidden; }
+    .lp-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 48px; background: rgba(10,12,31,.72); backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .lp-nav .brand { padding: 0; gap: 12px; }
+    .lp-nav .brand strong { font-size: 17px; }
+    .lp-nav-links { display: flex; align-items: center; gap: 8px; }
+    .lp-nav-links a {
+      color: #a8b0d0; text-decoration: none; font-size: 13px; font-weight: 600;
+      padding: 8px 14px; border-radius: 8px; transition: .18s;
+    }
+    .lp-nav-links a:hover { color: #fff; background: rgba(255,255,255,.06); }
+    .lp-nav .btn-primary {
+      background: linear-gradient(135deg, #16b884, #0f5c33);
+      color: #fff; border: 0; border-radius: 10px; padding: 10px 20px;
+      font-weight: 700; font-size: 13px; text-decoration: none;
+      box-shadow: 0 8px 24px rgba(22,184,132,.28);
+    }
+    .lp-nav .btn-primary:hover { filter: brightness(1.08); }
 
-        <div class="workspace-switcher">
-          <div class="avatar avatar-lime" id="sideAvatar">--</div>
-          <div class="workspace-copy">
-            <strong id="sideName">Admin</strong>
-            <span>Administrator</span>
-          </div>
-        </div>
+    .lp-hero {
+      min-height: 100vh; display: grid; place-items: center;
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(22,184,132,.22), transparent 55%),
+                  radial-gradient(ellipse 50% 40% at 90% 60%, rgba(47,224,164,.08), transparent),
+                  linear-gradient(165deg, #0a0c1f 0%, #0f1630 40%, #0a1a18 100%);
+      padding: 120px 48px 80px; position: relative;
+    }
+    .lp-hero-inner { max-width: 1100px; width: 100%; text-align: center; }
+    .lp-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(22,184,132,.12); border: 1px solid rgba(22,184,132,.28);
+      color: #2fe0a4; font-size: 11px; font-weight: 700; letter-spacing: .08em;
+      padding: 6px 14px; border-radius: 999px; margin-bottom: 28px;
+    }
+    .lp-badge span { width: 6px; height: 6px; border-radius: 50%; background: #2fe0a4; box-shadow: 0 0 8px #2fe0a4; }
+    .lp-hero h1 {
+      font-size: clamp(36px, 6vw, 64px); font-weight: 800; letter-spacing: -.04em;
+      color: #fff; line-height: 1.08; margin-bottom: 20px;
+    }
+    .lp-hero h1 em { font-style: normal; color: #2fe0a4; }
+    .lp-hero p.lead {
+      font-size: clamp(15px, 2vw, 18px); color: #9aa3c4; max-width: 620px;
+      margin: 0 auto 36px; line-height: 1.65;
+    }
+    .lp-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 56px; }
+    .lp-cta .btn-primary {
+      background: linear-gradient(135deg, #16b884, #0f5c33); color: #fff;
+      border: 0; border-radius: 12px; padding: 14px 28px; font-weight: 700; font-size: 15px;
+      text-decoration: none; box-shadow: 0 12px 32px rgba(22,184,132,.3);
+      transition: transform .18s, filter .18s;
+    }
+    .lp-cta .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.08); }
+    .lp-cta .btn-ghost {
+      background: rgba(255,255,255,.06); color: #e8eaf5; border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px; padding: 14px 28px; font-weight: 600; font-size: 15px;
+      text-decoration: none; transition: .18s;
+    }
+    .lp-cta .btn-ghost:hover { background: rgba(255,255,255,.1); }
+    .lp-cta .btn-apk {
+      background: #1a1c2e; color: #fff; border: 1px solid rgba(255,255,255,.18);
+      border-radius: 12px; padding: 14px 22px; font-weight: 700; font-size: 15px;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+      transition: .18s; box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    }
+    .lp-cta .btn-apk:hover { background: #252842; border-color: rgba(47,224,164,.4); transform: translateY(-2px); }
+    .lp-cta .btn-apk svg { flex-shrink: 0; }
+    .lp-nav .btn-apk-nav {
+      color: #e8eaf5; text-decoration: none; font-size: 13px; font-weight: 600;
+      padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,.12);
+      display: inline-flex; align-items: center; gap: 6px; transition: .18s;
+    }
+    .lp-nav .btn-apk-nav:hover { color: #fff; background: rgba(255,255,255,.08); border-color: rgba(47,224,164,.45); }
 
-        <nav class="nav-groups" aria-label="Navigasi admin">
-          <div class="nav-label">Overview</div>
-          <button class="nav-item active" data-view="overview"><span class="nav-icon" data-icon="home"></span><span>Overview</span></button>
-          <div class="nav-label nav-label-spaced">Kelola</div>
-          <button class="nav-item" data-view="users"><span class="nav-icon" data-icon="users"></span><span>Manage Users</span></button>
-          <button class="nav-item" data-view="deposits"><span class="nav-icon" data-icon="inbox"></span><span>Deposit Requests</span><span class="count-badge" id="depBadge">0</span></button>
-          <button class="nav-item" data-view="withdrawals"><span class="nav-icon" data-icon="send"></span><span>Withdrawal Requests</span><span class="count-badge" id="wdBadge">0</span></button>
-          <button class="nav-item" data-view="packages"><span class="nav-icon" data-icon="package"></span><span>Manage Packages</span></button>
-          <button class="nav-item" data-view="signals"><span class="nav-icon" data-icon="sparkles"></span><span>Manage Signals</span></button>
-          <button class="nav-item" data-view="news"><span class="nav-icon" data-icon="megaphone"></span><span>Manage News</span></button>
-          <button class="nav-item" data-view="network"><span class="nav-icon" data-icon="share"></span><span>Referral & Network</span></button>
-          <div class="nav-label nav-label-spaced">Sistem</div>
-          <button class="nav-item" data-view="notify"><span class="nav-icon" data-icon="megaphone"></span><span>Broadcast Notification</span></button>
-          <button class="nav-item" data-view="settings"><span class="nav-icon" data-icon="sliders"></span><span>System Settings</span></button>
-        </nav>
+    .lp-stats {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+      max-width: 800px; margin: 0 auto;
+    }
+    .lp-stat {
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px; padding: 20px 12px;
+    }
+    .lp-stat strong { display: block; font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -.02em; }
+    .lp-stat span { display: block; font-size: 11px; color: #6f7aa3; margin-top: 4px; font-weight: 600; letter-spacing: .04em; }
 
-        <div class="sidebar-footer">
-          <div class="profile-card">
-            <div class="avatar avatar-orange" id="footAvatar">--</div>
-            <div class="profile-copy"><strong id="footName">Admin</strong><span>Admin access</span></div>
-          </div>
-          <button class="nav-item logout-btn" id="logoutBtn" style="margin-top:6px;color:#ff9b9b"><span class="nav-icon" data-icon="logout"></span><span>Logout</span></button>
-        </div>
-      </aside>
+    .lp-section { padding: 90px 48px; max-width: 1200px; margin: 0 auto; }
+    .lp-section-header { text-align: center; margin-bottom: 52px; }
+    .lp-section-header .eyebrow {
+      font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+      color: #16b884; margin-bottom: 12px;
+    }
+    .lp-section-header h2 {
+      font-size: clamp(26px, 4vw, 36px); font-weight: 800; letter-spacing: -.03em;
+      color: var(--ink); margin-bottom: 12px;
+    }
+    .lp-section-header p { color: var(--muted); max-width: 520px; margin: 0 auto; line-height: 1.6; font-size: 15px; }
 
-      <main class="main-content">
-        <header class="topbar">
-          <button class="mobile-menu" id="mobileMenu" aria-label="Buka menu"><span data-icon="menu" data-icon-size="22"></span></button>
-          <div class="breadcrumbs"><span>Admin</span><b>/</b><strong id="breadcrumbCurrent">Overview</strong></div>
-          <div class="topbar-actions">
-            <div class="theme-toggle"><button data-theme-btn="light" title="Mode terang"><span data-icon="sun" data-icon-size="14"></span></button><button data-theme-btn="dark" title="Mode gelap"><span data-icon="moon" data-icon-size="14"></span></button></div>
-            <div class="live-clock" id="liveClock"></div>
-            <div class="live-chip"><span class="status-dot"></span> Live</div>
-            <div class="top-avatar" id="topAvatar">--</div>
-          </div>
-        </header>
+    .lp-features {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+    }
+    .lp-feature {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 18px;
+      padding: 28px 24px; transition: transform .2s, box-shadow .2s;
+    }
+    .lp-feature:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(10,10,35,.1); }
+    .lp-feature-icon {
+      width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
+      background: linear-gradient(135deg, rgba(22,184,132,.15), rgba(47,224,164,.08));
+      color: #16b884; margin-bottom: 16px; font-size: 20px;
+    }
+    .lp-feature h3 { font-size: 16px; margin-bottom: 8px; color: var(--ink); }
+    .lp-feature p { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
-        <section class="page" id="app">
-          <!-- Views are rendered by admin.js -->
-        </section>
-      </main>
+    .lp-showcase {
+      background: linear-gradient(165deg, #0a0c1f, #0f1630);
+      padding: 90px 48px; position: relative; overflow: hidden;
+    }
+    .lp-showcase .lp-section-header h2 { color: #fff; }
+    .lp-showcase .lp-section-header p { color: #8b93bb; }
+    .lp-showcase-grid {
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px;
+      max-width: 1100px; margin: 0 auto; align-items: center;
+    }
+    .lp-mockup {
+      background: #12162f; border: 1px solid #232752; border-radius: 20px;
+      padding: 16px; box-shadow: 0 40px 80px rgba(0,0,0,.4);
+      overflow: hidden;
+    }
+    .lp-mockup-bar { display: flex; gap: 6px; margin-bottom: 14px; }
+    .lp-mockup-bar span { width: 10px; height: 10px; border-radius: 50%; background: #2a3058; }
+    .lp-mockup-bar span:nth-child(1) { background: #fa6767; }
+    .lp-mockup-bar span:nth-child(2) { background: #ffab74; }
+    .lp-mockup-bar span:nth-child(3) { background: #2fe0a4; }
+    .lp-mockup-img {
+      width: 100%; border-radius: 12px; background: linear-gradient(160deg, #132a24, #0a1a18);
+      aspect-ratio: 16/10; display: grid; place-items: center; color: #2fe0a4;
+      font-size: 14px; font-weight: 600; border: 1px solid #1a3a32;
+    }
+    .lp-showcase-list { list-style: none; padding: 0; margin: 0; }
+    .lp-showcase-list li {
+      display: flex; gap: 14px; align-items: flex-start; margin-bottom: 22px;
+      color: #c8cde0; font-size: 14px; line-height: 1.5;
+    }
+    .lp-showcase-list .check {
+      flex: 0 0 24px; height: 24px; border-radius: 8px;
+      background: rgba(22,184,132,.15); color: #2fe0a4;
+      display: grid; place-items: center; font-size: 12px; font-weight: 800;
+    }
+    .lp-showcase-list strong { display: block; color: #fff; margin-bottom: 2px; font-size: 14px; }
+
+    .lp-roles {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+      max-width: 900px; margin: 0 auto;
+    }
+    .lp-role-card {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 20px;
+      padding: 32px 28px; position: relative; overflow: hidden;
+    }
+    .lp-role-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, #16b884, #2fe0a4);
+    }
+    .lp-role-card.admin::before { background: linear-gradient(90deg, #6cc6ff, #3b82f6); }
+    .lp-role-card h3 { font-size: 18px; margin-bottom: 6px; }
+    .lp-role-card .role-tag {
+      display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: #16b884; background: rgba(22,184,132,.1);
+      padding: 4px 10px; border-radius: 6px; margin-bottom: 16px;
+    }
+    .lp-role-card.admin .role-tag { color: #3b82f6; background: rgba(59,130,246,.1); }
+    .lp-role-card ul { list-style: none; padding: 0; margin: 0 0 24px; }
+    .lp-role-card li {
+      font-size: 13px; color: var(--muted); padding: 7px 0;
+      border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 8px;
+    }
+    .lp-role-card li::before { content: "✓"; color: #16b884; font-weight: 700; font-size: 12px; }
+    .lp-role-card.admin li::before { color: #3b82f6; }
+    .lp-role-card .btn-sm {
+      display: inline-block; padding: 10px 20px; border-radius: 10px;
+      font-size: 13px; font-weight: 700; text-decoration: none;
+      background: #16b884; color: #fff;
+    }
+    .lp-role-card.admin .btn-sm { background: #3b82f6; }
+
+    .lp-cta-band {
+      background: linear-gradient(135deg, #0f5c33, #16b884 60%, #2fe0a4);
+      padding: 70px 48px; text-align: center; border-radius: 24px;
+      max-width: 1100px; margin: 0 auto 90px;
+    }
+    .lp-cta-band h2 { color: #fff; font-size: clamp(24px, 3.5vw, 34px); margin-bottom: 12px; }
+    .lp-cta-band p { color: rgba(255,255,255,.85); margin-bottom: 28px; font-size: 15px; }
+    .lp-cta-band .btn-white {
+      display: inline-block; background: #fff; color: #0f5c33;
+      padding: 14px 32px; border-radius: 12px; font-weight: 800; font-size: 15px;
+      text-decoration: none; box-shadow: 0 12px 30px rgba(0,0,0,.15);
+    }
+
+    .lp-footer {
+      background: #0a0c1f; padding: 40px 48px; text-align: center;
+      border-top: 1px solid #1b1f42;
+    }
+    .lp-footer p { color: #565f8c; font-size: 12px; margin-top: 12px; }
+    .lp-footer .brand { justify-content: center; padding: 0; margin-bottom: 8px; }
+
+    @media (max-width: 900px) {
+      .lp-nav { padding: 14px 20px; }
+      .lp-nav-links a:not(.btn-primary) { display: none; }
+      .lp-hero { padding: 100px 20px 60px; }
+      .lp-stats { grid-template-columns: 1fr 1fr; }
+      .lp-features { grid-template-columns: 1fr; }
+      .lp-showcase-grid { grid-template-columns: 1fr; }
+      .lp-roles, .lp-pricing, .lp-testimonials { grid-template-columns: 1fr; }
+      .lp-section { padding: 60px 20px; }
+      .lp-cta-band { margin: 0 20px 60px; padding: 48px 24px; }
+    }
+  </style>
+</head>
+<body class="lp">
+  <nav class="lp-nav">
+    <div class="brand">
+      <img class="brand-mark" src="assets/logo-icon.png" alt="GO TRADE" width="36" height="36" />
+      <div>
+        <strong>GO TRADE</strong>
+        <span>INTELLIGENT TRADING</span>
+      </div>
     </div>
-
-    <div class="toast-container" id="toastContainer"></div>
-    <div class="modal-backdrop" id="modalBackdrop" hidden>
-      <div class="modal" id="modal"></div>
+    <div class="lp-nav-links">
+      <a href="#features">Fitur</a>
+      <a href="#pricing">Paket</a>
+      <a href="#roles">Workspace</a>
+      <a href="#demo">Demo</a>
+      <a class="btn-apk-nav" href="go-trade.apk" download="GO-TRADE.apk" title="Download aplikasi Android">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85a.637.637 0 0 0-.83.22l-1.88 3.24a11.43 11.43 0 0 0-8.94 0L5.65 5.67a.643.643 0 0 0-.87-.2c-.28.18-.37.54-.22.83L6.4 9.48A10.81 10.81 0 0 0 1 18.72h22a10.81 10.81 0 0 0-5.4-9.24zM7 15.25a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+        Download APK
+      </a>
+      <a class="btn-primary" href="login.html">Masuk Workspace →</a>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="config.js"></script>
-    <script src="supabase-client.js"></script>
-    <script src="auth.js"></script>
-    <script src="icons.js"></script>
-    <script src="store.js"></script>
-    <script src="admin.js"></script>
-    <script src="ai-widget.js"></script>
-  </body>
+  </nav>
+
+  <section class="lp-hero">
+    <div class="lp-hero-inner">
+      <div class="lp-badge"><span></span> INTELLIGENT TRADING PLATFORM</div>
+      <h1>Market bergerak.<br><em>Anda siap.</em></h1>
+      <p class="lead">
+        GO TRADE mengubah noise pasar menjadi sinyal, paket auto-trading, dan next action yang bisa Anda percaya — dipantau 24/7 oleh sistem AI kami.
+      </p>
+      <div class="lp-cta">
+        <a class="btn-primary" href="login.html">Coba Demo Sekarang</a>
+        <a class="btn-apk" href="go-trade.apk" download="GO-TRADE.apk">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85a.637.637 0 0 0-.83.22l-1.88 3.24a11.43 11.43 0 0 0-8.94 0L5.65 5.67a.643.643 0 0 0-.87-.2c-.28.18-.37.54-.22.83L6.4 9.48A10.81 10.81 0 0 0 1 18.72h22a10.81 10.81 0 0 0-5.4-9.24zM7 15.25a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+          Download APK Android
+        </a>
+        <a class="btn-ghost" href="#features">Lihat Fitur</a>
+      </div>
+      <div class="lp-stats">
+        <div class="lp-stat"><strong>84.7%</strong><span>SIGNAL ACCURACY*</span></div>
+        <div class="lp-stat"><strong>24/7</strong><span>MARKET WATCH</span></div>
+        <div class="lp-stat"><strong>12K+</strong><span>MEMBER AKTIF*</span></div>
+        <div class="lp-stat"><strong>50+</strong><span>FITUR LENGKAP</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-section" id="features">
+    <div class="lp-section-header">
+      <div class="eyebrow">Kemampuan Platform</div>
+      <h2>Semua yang dibutuhkan trading modern</h2>
+      <p>Dari sinyal AI hingga panel admin penuh — satu codebase siap custom untuk brand Anda.</p>
+    </div>
+    <div class="lp-features">
+      <div class="lp-feature">
+        <div class="lp-feature-icon">⚡</div>
+        <h3>AI Trading Signals</h3>
+        <p>Feed sinyal Buy/Sell dengan entry, target, stop-loss, dan catatan analisis. Badge real-time di sidebar.</p>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-icon">📦</div>
+        <h3>Auto-Trading Packages</h3>
+        <p>Katalog paket (Starter / Growth / Pro) dengan ROI harian, durasi, dan aktivasi dari saldo wallet.</p>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-icon">💰</div>
+        <h3>Wallet &amp; Transaksi</h3>
+        <p>Deposit, withdrawal, riwayat gabungan, export CSV, dan QR code deposit otomatis.</p>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-icon">👥</div>
+        <h3>Referral Network</h3>
+        <p>Kode referral pribadi, tracking downline, dan bonus referral otomatis ke wallet member.</p>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-icon">🛡️</div>
+        <h3>Admin Center Lengkap</h3>
+        <p>CRUD users, signals, packages, deposit/withdraw approval, broadcast, news, dan system settings.</p>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-icon">🌙</div>
+        <h3>Dark / Light Mode</h3>
+        <p>Tema dual mode dengan preferensi tersimpan. UI modern, responsif, dan diuji di mobile.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-showcase">
+    <div class="lp-section-header">
+      <div class="eyebrow" style="color:#2fe0a4">Yang Anda Dapatkan</div>
+      <h2>Dibangun untuk trader yang serius.</h2>
+      <p>Workspace lengkap dari sinyal hingga penarikan. Semua alur sudah terintegrasi.</p>
+    </div>
+    <div class="lp-showcase-grid">
+      <div class="lp-mockup">
+        <div class="lp-mockup-bar"><span></span><span></span><span></span></div>
+        <div class="lp-mockup-img">
+          <div style="text-align:center">
+            <img src="assets/logo-icon.png" alt="" width="48" height="48" style="border-radius:12px;margin-bottom:12px" />
+            <div>Member Dashboard + Admin Panel</div>
+            <div style="font-size:11px;color:#6f7aa3;margin-top:6px">Live preview setelah login</div>
+          </div>
+        </div>
+      </div>
+      <ul class="lp-showcase-list">
+        <li>
+          <span class="check">✓</span>
+          <div><strong>Arsitektur modular</strong> Didesain agar mudah diskalakan dan diintegrasikan dengan sistem Anda.</div>
+        </li>
+        <li>
+          <span class="check">✓</span>
+          <div><strong>Dual role system</strong> Member workspace + Admin center berbagi data via localStorage (demo) / siap API.</div>
+        </li>
+        <li>
+          <span class="check">✓</span>
+          <div><strong>UI/UX production-grade</strong> SVG icons, charts, toast, modal, mobile sidebar, AI chat widget.</div>
+        </li>
+        <li>
+          <span class="check">✓</span>
+          <div><strong>Siap disesuaikan</strong> Konfigurasi brand dan parameter sistem terpusat di satu file.</div>
+        </li>
+        <li>
+          <span class="check">✓</span>
+          <div><strong>Dokumentasi teknis</strong> Panduan setup dan integrasi lengkap untuk tim development Anda.</div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="lp-section" id="roles">
+    <div class="lp-section-header">
+      <div class="eyebrow">Dua Workspace</div>
+      <h2>Member &amp; Admin dalam satu sistem</h2>
+      <p>Setiap peran memiliki interface khusus yang sudah terhubung.</p>
+    </div>
+    <div class="lp-roles">
+      <div class="lp-role-card">
+        <span class="role-tag">Member</span>
+        <h3>Member Workspace</h3>
+        <ul>
+          <li>Dashboard saldo &amp; performa</li>
+          <li>Signal feed (read-only)</li>
+          <li>Auto-trading packages</li>
+          <li>Deposit / Withdrawal</li>
+          <li>Network &amp; Bonus tracking</li>
+          <li>News, Notifikasi, Help Center</li>
+          <li>Account settings + 2FA demo</li>
+        </ul>
+        <a class="btn-sm" href="login.html">Login sebagai Member →</a>
+      </div>
+      <div class="lp-role-card admin">
+        <span class="role-tag">Admin</span>
+        <h3>Admin Center</h3>
+        <ul>
+          <li>Overview metrik real-time</li>
+          <li>Manage Users (CRUD + bonus)</li>
+          <li>Manage Signals (CRUD)</li>
+          <li>Approve Deposit / Withdrawal</li>
+          <li>Manage Packages &amp; News</li>
+          <li>Broadcast Notification</li>
+          <li>System Settings (wallet address)</li>
+        </ul>
+        <a class="btn-sm" href="login.html">Login sebagai Admin →</a>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="lp-section" id="pricing">
+    <div class="lp-section-header">
+      <div class="eyebrow">Paket Auto-Trading</div>
+      <h2>Pilih paket yang sesuai strategi Anda</h2>
+      <p>Aktifkan paket dari wallet di dalam workspace. Semua ROI dan durasi dapat dikustomisasi lewat Admin Center.</p>
+    </div>
+    <div class="lp-pricing">
+      <div class="lp-price-card">
+        <div class="eyebrow" style="color:#16b884;font-size:11px;font-weight:700;letter-spacing:.1em">STARTER</div>
+        <div class="price">$50<span>/min</span></div>
+        <p style="font-size:13px;color:var(--muted);margin:0 0 8px">Cocok untuk memulai</p>
+        <ul>
+          <li>ROI harian hingga 1.0%</li>
+          <li>Durasi 30 hari</li>
+          <li>Akses sinyal dasar</li>
+          <li>Support standar</li>
+        </ul>
+        <a class="btn-sm" href="login.html" style="display:inline-block;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;background:#16b884;color:#fff">Mulai Starter</a>
+      </div>
+      <div class="lp-price-card featured">
+        <div class="eyebrow" style="color:#16b884;font-size:11px;font-weight:700;letter-spacing:.1em">GROWTH</div>
+        <div class="price">$250<span>/min</span></div>
+        <p style="font-size:13px;color:var(--muted);margin:0 0 8px">Paling populer</p>
+        <ul>
+          <li>ROI harian hingga 1.5%</li>
+          <li>Durasi 45 hari</li>
+          <li>Sinyal prioritas + confidence</li>
+          <li>Support prioritas</li>
+          <li>Bonus referral lebih tinggi</li>
+        </ul>
+        <a class="btn-sm" href="login.html" style="display:inline-block;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;background:#16b884;color:#fff">Pilih Growth</a>
+      </div>
+      <div class="lp-price-card">
+        <div class="eyebrow" style="color:#16b884;font-size:11px;font-weight:700;letter-spacing:.1em">PRO</div>
+        <div class="price">$1.000<span>/min</span></div>
+        <p style="font-size:13px;color:var(--muted);margin:0 0 8px">Untuk volume tinggi</p>
+        <ul>
+          <li>ROI harian hingga 2.2%</li>
+          <li>Durasi 60 hari</li>
+          <li>Sinyal eksklusif + AI insight</li>
+          <li>Dedicated support</li>
+          <li>Early access fitur baru</li>
+        </ul>
+        <a class="btn-sm" href="login.html" style="display:inline-block;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;background:#16b884;color:#fff">Go Pro</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-section" id="testimonials" style="background:var(--canvas);padding-top:20px">
+    <div class="lp-section-header">
+      <div class="eyebrow">Testimoni</div>
+      <h2>Dipercaya trader yang fokus hasil</h2>
+      <p>Feedback dari pengguna yang memakai workspace setiap hari.</p>
+    </div>
+    <div class="lp-testimonials">
+      <div class="lp-testimonial">
+        <p>"Dashboard-nya bersih, sinyal masuk cepat, dan proses deposit/withdraw transparan. Cocok buat yang tidak mau ribet."</p>
+        <div class="author">
+          <div class="author-avatar">AR</div>
+          <div><strong>Andi R.</strong><span>Member Growth · Jakarta</span></div>
+        </div>
+      </div>
+      <div class="lp-testimonial">
+        <p>"Admin panel-nya lengkap. Saya bisa kelola user, sinyal, dan approval dalam satu tempat. Hemat waktu operasional."</p>
+        <div class="author">
+          <div class="author-avatar">SL</div>
+          <div><strong>Sari L.</strong><span>Operator · Bandung</span></div>
+        </div>
+      </div>
+      <div class="lp-testimonial">
+        <p>"White-label siap pakai. Ganti logo, warna, dan domain — langsung punya produk trading sendiri untuk komunitas."</p>
+        <div class="author">
+          <div class="author-avatar">BK</div>
+          <div><strong>Budi K.</strong><span>Agency Owner · Surabaya</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-section" id="demo" style="padding-top:20px">
+    <div class="lp-cta-band">
+      <h2>Siap merasakan workspace-nya?</h2>
+      <p>Masuk ke workspace dan mulai kelola sinyal, paket, serta transaksi Anda. Atau unduh aplikasi Android.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <a class="btn-white" href="login.html">Masuk ke Workspace →</a>
+        <a class="btn-apk" href="go-trade.apk" download="GO-TRADE.apk" style="background:#0a0c1f;border-color:rgba(255,255,255,.25)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85a.637.637 0 0 0-.83.22l-1.88 3.24a11.43 11.43 0 0 0-8.94 0L5.65 5.67a.643.643 0 0 0-.87-.2c-.28.18-.37.54-.22.83L6.4 9.48A10.81 10.81 0 0 0 1 18.72h22a10.81 10.81 0 0 0-5.4-9.24zM7 15.25a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+          Download APK
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="lp-footer">
+    <div class="brand">
+      <img class="brand-mark" src="assets/logo-icon.png" alt="GO TRADE" width="32" height="32" />
+      <div>
+        <strong>GO TRADE</strong>
+        <span>INTELLIGENT TRADING SYSTEM</span>
+      </div>
+    </div>
+    <p>
+      © 2026 GO TRADE Intelligence. All rights reserved.<br />
+      GO TRADE Intelligence. Built for decisive moves.
+    </p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="supabase-client.js"></script>
+  <script src="auth.js"></script>
+</body>
 </html>

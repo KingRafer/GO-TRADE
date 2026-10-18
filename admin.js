@@ -78,16 +78,27 @@ function overviewView() {
       <div class="card admin-metric"><div class="stat-icon"><span data-icon="inbox" data-icon-size="16"></span></div><b>${pendingDeposits.length}</b><span>Deposit menunggu</span></div>
       <div class="card admin-metric"><div class="stat-icon"><span data-icon="wallet" data-icon-size="16"></span></div><b>${money(approvedVolume)}</b><span>Volume deposit disetujui</span></div>
     </div>
-    <div class="card" style="margin-bottom:17px">
-      <div class="card-header"><div><h2>Notifikasi deposit & WD</h2><p class="muted">Pemberitahuan otomatis saat member mengajukan deposit atau penarikan</p></div></div>
-      <div class="activity-list" style="padding:0 18px 14px">${
-        adminNotifs.length
-          ? adminNotifs.map((n) => {
-              const isWd = /penarikan|wd/i.test(n.title || "");
-              return `<div class="activity-row"><div class="activity-icon" style="background:${isWd ? "#fff3e4" : "#e3fbf1"};color:${isWd ? "#ba7b35" : "#17915f"}"><span data-icon="${isWd ? "withdrawOut" : "depositIn"}" data-icon-size="14"></span></div><div class="activity-copy"><strong>${n.title}</strong><span>${n.body} · ${n.date}</span></div>${n.read ? "" : '<span class="pill pill-draft">Baru</span>'}</div>`;
-            }).join("")
-          : `<div class="empty-placeholder">Belum ada notifikasi deposit/WD. Notifikasi muncul otomatis saat member submit.</div>`
-      }</div>
+    <div class="dashboard-grid" style="margin-bottom:17px">
+      <div class="card">
+        <div class="card-header"><div><h2>Notifikasi deposit & WD</h2><p class="muted">Pemberitahuan otomatis</p></div></div>
+        <div class="activity-list" style="padding:0 18px 14px">${
+          adminNotifs.length
+            ? adminNotifs.map((n) => {
+                const isWd = /penarikan|wd/i.test(n.title || "");
+                return `<div class="activity-row"><div class="activity-icon" style="background:${isWd ? "#fff3e4" : "#e3fbf1"};color:${isWd ? "#ba7b35" : "#17915f"}"><span data-icon="${isWd ? "withdrawOut" : "depositIn"}" data-icon-size="14"></span></div><div class="activity-copy"><strong>${n.title}</strong><span>${n.body} · ${n.date}</span></div>${n.read ? "" : '<span class="pill pill-draft">Baru</span>'}</div>`;
+              }).join("")
+            : `<div class="empty-placeholder">Belum ada notifikasi deposit/WD.</div>`
+        }</div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div><h2>Log aktivitas terbaru</h2><p class="muted">Audit trail platform</p></div><button class="action-link" data-view="activity">Lihat semua →</button></div>
+        <div class="activity-list" style="padding:0 18px 14px">${
+          (typeof gtAllActivityLogs === "function" ? gtAllActivityLogs() : []).slice(0, 8).map((log) => {
+            const style = activityIcon(log.action);
+            return `<div class="activity-row"><div class="activity-icon" style="background:${style.bg};color:${style.color}"><span data-icon="${style.icon}" data-icon-size="14"></span></div><div class="activity-copy"><strong>${gtEscapeHtml(activityLabel(log.action))}</strong><span>${gtEscapeHtml(log.detail || "—")} · ${formatLogTime(log.createdAt)}</span></div></div>`;
+          }).join("") || `<div class="empty-placeholder">Belum ada log. Jalankan migrasi SQL activity_logs di Supabase.</div>`
+        }</div>
+      </div>
     </div>
     <div class="dashboard-grid">
       <div class="card table-card"><div class="card-header"><div><h2>Deposit menunggu verifikasi</h2><p class="muted">Perlu tindakan Anda</p></div><button class="action-link" data-view="deposits">Kelola →</button></div><table class="data-table"><thead><tr><th>Member</th><th>Jumlah</th><th>Tanggal</th></tr></thead><tbody>${
@@ -227,6 +238,78 @@ function notifyView() {
       .join("") || `<div class="empty-placeholder">Belum ada broadcast terkirim.</div>`}</div></div>`;
 }
 
+function activityLabel(action) {
+  const map = {
+    login: "Login",
+    logout: "Logout",
+    deposit_request: "Ajuan deposit",
+    deposit_approved: "Deposit disetujui",
+    deposit_rejected: "Deposit ditolak",
+    deposit_deleted: "Deposit dihapus",
+    withdrawal_request: "Ajuan penarikan",
+    withdrawal_approved: "Penarikan disetujui",
+    withdrawal_rejected: "Penarikan ditolak",
+    withdrawal_deleted: "Penarikan dihapus",
+    package_activated: "Paket diaktifkan",
+    bonus_given: "Bonus diberikan",
+    signal_created: "Sinyal dibuat",
+    signal_updated: "Sinyal diperbarui",
+    signal_deleted: "Sinyal dihapus",
+    signal_toggled: "Status sinyal diubah",
+    news_created: "Berita dibuat",
+    news_updated: "Berita diperbarui",
+    news_deleted: "Berita dihapus",
+    settings_updated: "Pengaturan diperbarui",
+    user_updated: "User diperbarui",
+    user_deleted: "User dihapus",
+  };
+  return map[action] || action;
+}
+function activityIcon(action) {
+  if (/deposit/.test(action)) return { icon: "depositIn", bg: "#e3fbf1", color: "#17915f" };
+  if (/withdrawal/.test(action)) return { icon: "withdrawOut", bg: "#fff3e4", color: "#ba7b35" };
+  if (/login|logout/.test(action)) return { icon: "users", bg: "#eef0ff", color: "#4f46e5" };
+  if (/package/.test(action)) return { icon: "package", bg: "#e5f7ec", color: "#15803d" };
+  if (/bonus/.test(action)) return { icon: "gift", bg: "#fef3c7", color: "#b45309" };
+  if (/signal/.test(action)) return { icon: "sparkles", bg: "#f0e7ff", color: "#7c3aed" };
+  if (/news/.test(action)) return { icon: "megaphone", bg: "#e0f2fe", color: "#0369a1" };
+  if (/user/.test(action)) return { icon: "users", bg: "#fce7f3", color: "#be185d" };
+  if (/settings/.test(action)) return { icon: "sliders", bg: "#f1f5f9", color: "#475569" };
+  return { icon: "history", bg: "#f1f1fa", color: "#4a4d7a" };
+}
+function formatLogTime(iso) {
+  if (!iso) return "—";
+  try {
+    const d = new Date(iso);
+    return d.toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" });
+  } catch (_) {
+    return String(iso).slice(0, 19);
+  }
+}
+
+function activityView() {
+  const logs = typeof gtAllActivityLogs === "function" ? gtAllActivityLogs() : [];
+  return `${viewHeader("Sistem / audit", "Log aktivitas", "Riwayat aksi member dan admin di platform (login, deposit, WD, paket, dll).")}
+    <div class="card table-card">
+      <div class="card-header"><div><h2>Aktivitas terbaru</h2><p class="muted">Maks. 300 entri terakhir</p></div></div>
+      <div class="activity-list" style="padding:0 18px 14px;max-height:70vh;overflow:auto">${
+        logs.length
+          ? logs.map((log) => {
+              const style = activityIcon(log.action);
+              return `<div class="activity-row">
+                <div class="activity-icon" style="background:${style.bg};color:${style.color}"><span data-icon="${style.icon}" data-icon-size="14"></span></div>
+                <div class="activity-copy">
+                  <strong>${gtEscapeHtml(activityLabel(log.action))}</strong>
+                  <span>${gtEscapeHtml(log.detail || "—")}${log.target ? " · " + gtEscapeHtml(log.target) : ""}</span>
+                  <span style="display:block;font-size:10px;color:var(--muted);margin-top:2px">${gtEscapeHtml(log.actorEmail || "sistem")}${log.actorRole ? " (" + log.actorRole + ")" : ""} · ${formatLogTime(log.createdAt)}</span>
+                </div>
+              </div>`;
+            }).join("")
+          : `<div class="empty-placeholder">Belum ada log aktivitas. Jalankan SQL activity_logs di Supabase, lalu lakukan aksi (login, deposit, dll).</div>`
+      }</div>
+    </div>`;
+}
+
 function settingsView() {
   const s = gtSettings();
   return `${viewHeader("Sistem / konfigurasi", "System settings", "Atur nama situs, alamat deposit, dan batas transaksi.", `<button class="btn btn-primary" data-action="save-system-settings">Simpan pengaturan</button>`)}
@@ -246,8 +329,8 @@ function signalFormBody(sig = {}) {
     <div class="field"><label class="form-label">Catatan / analisis <span style="font-weight:400">(opsional)</span></label><textarea class="form-control" id="sigNote" rows="3">${sig.note || ""}</textarea></div>`;
 }
 
-const views = { overview: overviewView, users: usersView, deposits: depositsView, withdrawals: withdrawalsView, packages: packagesView, signals: signalsView, news: newsView, network: networkView, notify: notifyView, settings: settingsView };
-const viewNames = { overview: "Overview", users: "Manage Users", deposits: "Deposit Requests", withdrawals: "Withdrawal Requests", packages: "Manage Packages", signals: "Manage Signals", news: "Manage News", network: "Referral & Network", notify: "Broadcast Notification", settings: "System Settings" };
+const views = { overview: overviewView, users: usersView, deposits: depositsView, withdrawals: withdrawalsView, packages: packagesView, signals: signalsView, news: newsView, network: networkView, activity: activityView, notify: notifyView, settings: settingsView };
+const viewNames = { overview: "Overview", users: "Manage Users", deposits: "Deposit Requests", withdrawals: "Withdrawal Requests", packages: "Manage Packages", signals: "Manage Signals", news: "Manage News", network: "Referral & Network", activity: "Log Aktivitas", notify: "Broadcast Notification", settings: "System Settings" };
 
 function render(view = currentView) {
   currentView = view;

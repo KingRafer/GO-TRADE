@@ -1,5 +1,5 @@
 /* ============================================================
-   GO TRADE — Authentication (Supabase Auth + profiles)
+   GO TRADE â€” Authentication (Supabase Auth + profiles)
    ============================================================ */
 
 function gtShowEnvWarning(message) {
@@ -47,7 +47,8 @@ async function gtLogin(email, password, role) {
     await sb.auth.signOut();
     return { error: "Profil tidak ditemukan. Hubungi admin." };
   }
-  if (profile.role !== role) {
+  // Role is optional: if provided, enforce match; otherwise accept any role from profile
+  if (role && profile.role !== role) {
     await sb.auth.signOut();
     return {
       error: `Akun ini terdaftar sebagai ${profile.role === "admin" ? "Admin" : "Member"}, bukan ${role === "admin" ? "Admin" : "Member"}.`,
@@ -119,7 +120,7 @@ async function gtUpdateCurrentUser(patch) {
   if (!window.sb) return null;
   const { data: auth } = await sb.auth.getUser();
   if (!auth.user) return null;
-  // SECURITY: members may only update name & avatar — wallet/role/status/verified/level are admin-only
+  // SECURITY: members may only update name & avatar â€” wallet/role/status/verified/level are admin-only
   const dbPatch = {};
   if (patch.name !== undefined) dbPatch.name = String(patch.name).slice(0, 120);
   if (patch.avatar !== undefined) dbPatch.avatar = patch.avatar;
@@ -134,13 +135,38 @@ async function gtUpdateCurrentUser(patch) {
 }
 
 async function gtLogout() {
-  if (window.sb) await sb.auth.signOut();
+  try {
+    if (window.sb) {
+      const { data } = await sb.auth.getUser();
+      const email = data?.user?.email;
+      if (email) {
+        if (typeof gtLogActivity === "function") {
+          await gtLogActivity({
+            action: "logout",
+            actorEmail: email,
+            target: email,
+            detail: "Logout",
+          });
+        } else {
+          await sb.from("activity_logs").insert({
+            actor_email: email,
+            action: "logout",
+            target: email,
+            detail: "Logout",
+          });
+        }
+      }
+      await sb.auth.signOut();
+    }
+  } catch (_) {
+    if (window.sb) try { await sb.auth.signOut(); } catch (__) {}
+  }
   window.location.href = "login.html";
 }
 
 async function gtRequireRole(role) {
   if (!window.gtSupabaseConfigured || !window.gtSupabaseConfigured()) {
-    gtShowEnvWarning("⚠ Supabase belum dikonfigurasi. Buka config.js dan isi supabase.url + anonKey.");
+    gtShowEnvWarning("âš  Supabase belum dikonfigurasi. Buka config.js dan isi supabase.url + anonKey.");
     return null;
   }
   const { data } = await sb.auth.getSession();
@@ -176,11 +202,33 @@ async function gtAdminUpdateUser(email, patch) {
   dbPatch.updated_at = new Date().toISOString();
   const { error } = await sb.from("profiles").update(dbPatch).eq("email", email);
   if (error) console.error("[GO TRADE] gtAdminUpdateUser failed:", error.message);
+  // Log meaningful admin account changes (skip pure wallet balance adjustments)
+  const meaningful = ["verified", "status", "level", "name"].some((k) => patch[k] !== undefined);
+  if (meaningful && typeof gtLogActivity === "function") {
+    const parts = [];
+    if (patch.verified !== undefined) parts.push(patch.verified ? "diverifikasi" : "unverifikasi");
+    if (patch.status !== undefined) parts.push(`status=${patch.status}`);
+    if (patch.level !== undefined) parts.push(`level=${patch.level}`);
+    if (patch.name !== undefined) parts.push(`nama diperbarui`);
+    await gtLogActivity({
+      action: "user_updated",
+      target: email,
+      detail: parts.join(", ") || "Profil diperbarui",
+      meta: patch,
+    });
+  }
 }
 
 async function gtAdminDeleteUser(email) {
   // Soft-delete via status; hard delete needs service role
   await sb.from("profiles").update({ status: "deleted" }).eq("email", email);
+  if (typeof gtLogActivity === "function") {
+    await gtLogActivity({
+      action: "user_deleted",
+      target: email,
+      detail: `Akun ${email} dihapus (soft-delete)`,
+    });
+  }
 }
 
 async function gtFindUser(email) {
@@ -226,13 +274,20 @@ gtInitTheme();
 
 /* Password visibility toggle helper */
 function gtBindPasswordToggles(root = document) {
-  root.querySelectorAll("[data-toggle-password]").forEach((btn) => {
+  root.querySelectorAll("[data-toggle-password], [data-pass-toggle]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const input = document.getElementById(btn.dataset.togglePassword);
+      const id = btn.dataset.togglePassword || btn.dataset.passToggle;
+      const input = document.getElementById(id);
       if (!input) return;
       const show = input.type === "password";
       input.type = show ? "text" : "password";
       btn.setAttribute("aria-label", show ? "Sembunyikan password" : "Tampilkan password");
+      // Swap eye / eyeOff icon if present
+      const icon = btn.querySelector("[data-icon]");
+      if (icon) {
+        icon.setAttribute("data-icon", show ? "eyeOff" : "eye");
+        if (typeof gtRenderIcons === "function") gtRenderIcons(btn);
+      }
     });
   });
 }

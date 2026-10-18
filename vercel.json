@@ -1,6 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/join/:code", "destination": "/register.html?ref=:code" }
-  ],
-  "cleanUrls": true
-}

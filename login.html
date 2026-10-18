@@ -42,11 +42,6 @@
           <h2>Masuk ke GO TRADE</h2>
           <p class="auth-sub">Kembali ke workspace trading Anda.</p>
 
-          <div class="role-tabs">
-            <button type="button" class="role-tab active" id="tabMember">Member</button>
-            <button type="button" class="role-tab" id="tabAdmin">Admin</button>
-          </div>
-
           <form id="loginForm">
             <div class="field">
               <label class="form-label">Email</label>
@@ -54,21 +49,14 @@
             </div>
             <div class="field pass-row">
               <label class="form-label">Password</label>
-              <a class="field-link" href="#" id="fillDemo">Isi otomatis</a>
               <div class="pass-field">
                 <input class="form-control" type="password" id="password" placeholder="Masukkan password" required />
-                <button type="button" class="pass-toggle-btn" data-pass-toggle="password"><span data-icon="eye" data-icon-size="15"></span></button>
+                <button type="button" class="pass-toggle-btn" data-pass-toggle="password" aria-label="Tampilkan password"><span data-icon="eye" data-icon-size="15"></span></button>
               </div>
             </div>
             <div id="loginError" class="auth-error"></div>
             <button class="btn btn-primary" type="submit" style="width:100%;padding:13px;margin-top:6px">Masuk ke workspace →</button>
           </form>
-
-          <div class="auth-demo-box" id="demoBox">
-            <b>Akses cepat — Member</b><br />
-            Email: demo@gotrade.io<br />
-            Password: demo123
-          </div>
 
           <p class="auth-switch">Belum punya akses? <a href="register.html">Daftar sekarang</a></p>
         </div>
@@ -83,28 +71,6 @@
     <script>
       gtBindThemeToggle();
       gtBindPasswordToggles();
-      const tabMember = document.getElementById("tabMember");
-      const tabAdmin = document.getElementById("tabAdmin");
-      const demoBox = document.getElementById("demoBox");
-      let selectedRole = "member";
-
-      function setRole(role) {
-        selectedRole = role;
-        tabMember.classList.toggle("active", role === "member");
-        tabAdmin.classList.toggle("active", role === "admin");
-        demoBox.innerHTML = role === "admin"
-          ? "<b>Akses cepat — Admin</b><br />Email: admin@gotrade.io<br />Password: admin123"
-          : "<b>Akses cepat — Member</b><br />Email: demo@gotrade.io<br />Password: demo123";
-        document.getElementById("loginError").classList.remove("show");
-      }
-      tabMember.addEventListener("click", () => setRole("member"));
-      tabAdmin.addEventListener("click", () => setRole("admin"));
-
-      document.getElementById("fillDemo").addEventListener("click", (e) => {
-        e.preventDefault();
-        document.getElementById("email").value = selectedRole === "admin" ? "admin@gotrade.io" : "demo@gotrade.io";
-        document.getElementById("password").value = selectedRole === "admin" ? "admin123" : "demo123";
-      });
 
       document.getElementById("loginForm").addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -115,18 +81,20 @@
         const submitBtn = e.target.querySelector('button[type="submit"]');
         if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Masuk..."; }
         try {
-          const result = await gtLogin(email, password, selectedRole);
+          // Role auto-detected from profile after successful auth
+          const result = await gtLogin(email, password);
           if (result.error) {
             errorBox.textContent = result.error;
             errorBox.classList.add("show");
             return;
           }
-          window.location.href = selectedRole === "admin" ? "admin.html" : "dashboard.html";
+          const role = result.user?.role || "member";
+          window.location.href = role === "admin" ? "admin.html" : "dashboard.html";
         } catch (err) {
           errorBox.textContent = err.message || "Gagal login. Coba lagi.";
           errorBox.classList.add("show");
         } finally {
-          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Masuk →"; }
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Masuk ke workspace →"; }
         }
       });
 

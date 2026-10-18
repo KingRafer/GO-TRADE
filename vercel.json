@@ -1,0 +1,11 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/join/:code", "destination": "/register.html?ref=:code" },
+    { "source": "/join/:code/", "destination": "/register.html?ref=:code" }
+  ],
+  "redirects": [
+    { "source": "/join", "destination": "/register", "permanent": false }
+  ]
+}

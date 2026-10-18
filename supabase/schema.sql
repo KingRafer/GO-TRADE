@@ -138,7 +138,7 @@ create table if not exists public.settings (
   id int primary key default 1 check (id = 1),
   deposit_address text default '0xDEMO000000000000000000000000000000GO1',
   min_deposit numeric(14,2) default 50,
-  min_withdrawal numeric(14,2) default 20,
+  min_withdrawal numeric(14,2) default 10,
   updated_at timestamptz default now()
 );
 

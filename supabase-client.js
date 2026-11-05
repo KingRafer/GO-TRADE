@@ -4,27 +4,21 @@
   const url = cfg.url || "";
   const key = cfg.anonKey || "";
 
-  window.gtSupabaseConfigured = function () {
-    return url && key && !url.includes("YOUR_PROJECT") && !key.includes("YOUR_ANON");
-  };
+  window.gtSupabaseClient = null;
 
-  if (!window.gtSupabaseConfigured()) {
-    console.warn("[GO TRADE] Supabase belum dikonfigurasi. Isi config.js → supabase.url & anonKey");
-    window.sb = null;
+  if (!url || !key) {
+    console.warn("[GO TRADE] Supabase url/anonKey missing in config.js");
     return;
   }
 
-  if (typeof supabase === "undefined" || !supabase.createClient) {
-    console.error("[GO TRADE] Library @supabase/supabase-js belum dimuat. Pastikan script CDN ada di HTML.");
-    window.sb = null;
+  if (typeof window.supabase === "undefined" || !window.supabase.createClient) {
+    console.error("[GO TRADE] Library @supabase/supabase-js not loaded. Ensure the CDN script is in the HTML.");
     return;
   }
 
-  window.sb = supabase.createClient(url, key, {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-    },
-  });
+  try {
+    window.gtSupabaseClient = window.supabase.createClient(url, key);
+  } catch (err) {
+    console.error("[GO TRADE] Failed to init Supabase client", err);
+  }
 })();

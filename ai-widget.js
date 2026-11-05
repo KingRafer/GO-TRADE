@@ -5,15 +5,15 @@
     <div id="aiWidgetPanel" class="ai-widget-panel" hidden>
       <div class="ai-widget-head">
         <div style="display:flex;align-items:center;gap:8px"><span data-icon="sparkles" data-icon-size="16"></span><strong>GO TRADE Assistant</strong></div>
-        <button id="aiWidgetClose" aria-label="Tutup"><span data-icon="x" data-icon-size="16"></span></button>
+        <button id="aiWidgetClose" aria-label="Close"><span data-icon="x" data-icon-size="16"></span></button>
       </div>
       <div id="aiWidgetMessages" class="ai-widget-messages"></div>
       <form id="aiWidgetForm" class="ai-widget-form">
-        <input id="aiWidgetInput" type="text" placeholder="Tanya tentang deposit, sinyal, paket..." autocomplete="off" />
-        <button type="submit" aria-label="Kirim"><span data-icon="arrowRight" data-icon-size="16"></span></button>
+        <input id="aiWidgetInput" type="text" placeholder="Ask about deposits, signals, packages..." autocomplete="off" />
+        <button type="submit" aria-label="Submit"><span data-icon="arrowRight" data-icon-size="16"></span></button>
       </form>
     </div>
-    <button id="aiWidgetFab" class="ai-widget-fab" aria-label="Buka asisten AI"><span data-icon="sparkles" data-icon-size="22"></span></button>
+    <button id="aiWidgetFab" class="ai-widget-fab" aria-label="Open AI assistant"><span data-icon="sparkles" data-icon-size="22"></span></button>
   `;
   const wrap = document.createElement("div");
   wrap.innerHTML = html;
@@ -52,36 +52,36 @@
   function canned(question) {
     const q = question.toLowerCase();
     if (q.includes("deposit") || q.includes("setor"))
-      return "Untuk deposit: buka menu Deposit → pilih USDT (BEP20) → isi jumlah & kirim. Admin akan memverifikasi dalam 1–30 menit. Minimal deposit tergantung paket yang dipilih.";
+      return "To deposit: open Deposit → choose USDT (BEP20) → enter amount & submit. Admin verifies within 1–30 minutes. Minimum depends on the package you choose.";
     if (q.includes("withdraw") || q.includes("tarik") || q.includes("penarikan") || q.includes("wd"))
-      return "Penarikan: buka menu Withdrawal → masukkan jumlah & alamat wallet USDT (BEP20). Saldo dipotong dulu; jika ditolak admin, saldo dikembalikan otomatis. Proses biasanya 1–24 jam.";
+      return "Withdrawal: open Withdrawal → enter amount & USDT (BEP20) wallet address. Balance is reserved first; if admin rejects, it is refunded automatically. Usually takes 1–24 hours.";
     if (q.includes("paket") || q.includes("package") || q.includes("auto"))
-      return "Tersedia 3 paket Auto Trading: Starter, Growth, dan Pro. Masing-masing punya minimum deposit, ROI harian, dan durasi berbeda. Cek menu Auto Trading untuk detail & aktivasi.";
+      return "There are 3 Auto Trading packages: Starter, Growth, and Pro. Each has its own minimum deposit, daily ROI, and duration. Check Auto Trading for details and activation.";
     if (q.includes("sinyal") || q.includes("signal") || q.includes("entry"))
-      return "Sinyal real-time ada di menu Signal. Setiap sinyal berisi arah (Buy/Sell), entry, target, stop-loss, dan status. Ikuti manajemen risiko — jangan FOMO.";
+      return "Real-time signals are in the Signal menu. Each signal includes direction (Buy/Sell), entry, target, stop-loss, and status. Follow risk management — don't FOMO.";
     if (q.includes("bonus") || q.includes("referral") || q.includes("referal"))
-      return "Bonus referral & bonus manual dari admin tampil di menu Bonus Tracking. Bagikan kode referral Anda di menu Network untuk mendapatkan komisi dari member baru.";
+      return "Referral and manual bonuses from admin appear under Bonuses Tracking. Share your referral code on the Network page to earn commission from new members.";
     if (q.includes("level") || q.includes("rank"))
-      return "Level akun naik seiring aktivitas (deposit, paket aktif, referral). Level lebih tinggi membuka fitur & benefit tambahan di masa depan.";
+      return "Account level rises with activity (deposits, active packages, referrals). Higher levels unlock extra features and benefits over time.";
     if (q.includes("verifikasi") || q.includes("verify") || q.includes("kyc"))
-      return "Status verifikasi diatur oleh admin. Setelah deposit pertama disetujui, akun biasanya ditandai Verified. Hubungi support jika butuh bantuan.";
+      return "Verification status is set by admin. After your first deposit is approved, your account is usually marked Verified. Contact support if you need help.";
     if (q.includes("password") || q.includes("keamanan") || q.includes("2fa") || q.includes("aman"))
-      return "Ganti password di Account Settings. Aktifkan 2FA untuk keamanan ekstra. Jangan bagikan kredensial ke siapa pun, termasuk yang mengaku admin.";
+      return "Change your password in Account Settings. Enable 2FA for extra security. Never share credentials with anyone, including people claiming to be admin.";
     if (q.includes("support") || q.includes("bantuan") || q.includes("help") || q.includes("cs"))
-      return "Tim support bisa dihubungi lewat menu Help Center atau email " + (window.GT_CONFIG?.brand?.supportEmail || "support@go-trade.vercel.app") + ". Sertakan email akun & deskripsi singkat masalah agar lebih cepat ditangani.";
+      return "Contact support via Help Center or email " + (window.GT_CONFIG?.brand?.supportEmail || "support@go-trade.vercel.app") + ". Include your account email and a short description so we can help faster.";
     if (q.includes("roi") || q.includes("profit") || q.includes("hasil"))
-      return "ROI harian bergantung pada paket yang aktif. Hasil trading dapat bervariasi sesuai kondisi pasar. Selalu gunakan modal yang siap Anda kelola risikonya.";
+      return "Daily ROI depends on your active package. Trading results can vary with market conditions. Only use capital you can afford to risk.";
     if (q.includes("halo") || q.includes("hai") || q.includes("hello") || q.includes("hi") || q.includes("pagi") || q.includes("siang") || q.includes("malam"))
-      return "Halo! Saya asisten GO TRADE. Tanyakan tentang deposit, penarikan, paket auto-trading, sinyal, bonus, atau keamanan akun — saya siap bantu.";
+      return "Hi! I'm the GO TRADE assistant. Ask me about deposits, withdrawals, auto-trading packages, signals, bonuses, or account security — I'm here to help.";
     if (q.includes("terima kasih") || q.includes("thanks") || q.includes("makasih"))
-      return "Sama-sama! Semoga trading Anda berjalan lancar. Ada yang lain yang ingin ditanyakan?";
-    return "Saya masih belajar. Coba tanyakan secara spesifik: deposit, penarikan, paket, sinyal, bonus, level, verifikasi, atau keamanan akun.";
+      return "You're welcome! Wishing you smooth trades. Anything else you'd like to ask?";
+    return "I'm still learning. Try asking specifically about: deposits, withdrawals, packages, signals, bonuses, levels, verification, or account security.";
   }
 
   fab.addEventListener("click", () => {
     panel.hidden = !panel.hidden;
     if (!panel.hidden && !messages.childElementCount) {
-      addMessage("Halo! Saya asisten GO TRADE. Ada yang bisa saya bantu seputar trading, deposit, paket, atau sinyal?", "bot");
+      addMessage("Hi! I'm the GO TRADE assistant. How can I help with trading, deposits, packages, or signals?", "bot");
     }
     if (!panel.hidden) input.focus();
   });

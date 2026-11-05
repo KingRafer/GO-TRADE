@@ -1,7 +1,7 @@
 /* ============================================================
    GO TRADE — Configuration (v8.0)
-   White-label ready. Ganti brand, warna, dan Supabase keys.
-   Dashboard → Settings → API untuk mengambil url & anonKey.
+   White-label ready. Change brand, colors, and Supabase keys.
+   Dashboard → Settings → API to get url & anonKey.
    ============================================================ */
 window.GT_CONFIG = {
   brand: {
@@ -18,7 +18,7 @@ window.GT_CONFIG = {
     accent: "#2fe0a4",
     navy: "#0a0c1f",
   },
-  /* === SUPABASE — wajib diisi === */
+  /* === SUPABASE — required === */
   supabase: {
     url: "https://litvwayepniwpzoigcxb.supabase.co",
     anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxpdHZ3YXllcG5pd3B6b2lnY3hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxMjA2ODQsImV4cCI6MjEwNzY5NjY4NH0.TeIxLiY8Z8GMeYffDUR_Y3qlkFBc8ozbUcmtCPYfsVw",

@@ -2,135 +2,117 @@
 
 **v8.0** · Member Workspace + Admin Center · Supabase Backend · White-label Ready
 
-Platform trading cerdas dengan sinyal AI, auto-trading packages, wallet, referral network, news, notifikasi, dan panel administrasi lengkap. Dibangun dengan vanilla HTML/CSS/JS + Supabase — tanpa build step, mudah di-deploy dan di-rebrand.
+**International Edition (English UI)**
+
+Premium AI trading platform with real-time signals, auto-trading packages, wallet, referral network, news, notifications, and a complete admin panel. Built with vanilla HTML/CSS/JS + Supabase — zero build step, easy to deploy and rebrand.
 
 ---
 
-## Mengapa produk ini bernilai jual tinggi?
+## Why this product has high commercial value
 
-| Aspek | Nilai |
-|-------|--------|
-| **Siap jual** | White-label: ganti logo, nama brand, warna, domain dalam hitungan menit |
-| **Fitur lengkap** | Member + Admin dalam satu codebase |
-| **Backend modern** | Supabase (Auth + Postgres + RLS) — scalable & secure |
-| **UI premium** | Dark/Light mode, animasi halus, mobile-responsive, PWA |
-| **Tanpa build** | Buka dengan static host (Netlify, Vercel, Cloudflare Pages, Nginx) |
-| **Dokumentasi** | Setup, schema SQL, demo accounts, security notes |
+| Aspect | Value |
+|--------|--------|
+| **Ready to sell** | White-label: change logo, brand name, colors, domain in minutes |
+| **Full features** | Member + Admin in one codebase |
+| **Modern backend** | Supabase (Auth + Postgres + RLS) — scalable & secure |
+| **Premium UI** | Dark/Light mode, smooth animations, mobile-responsive, PWA |
+| **Zero build** | Deploy on any static host (Netlify, Vercel, Cloudflare Pages, Nginx) |
+| **Documentation** | Setup, SQL schema, demo accounts, security notes |
 
 ---
 
-## Fitur Lengkap
+## Member Workspace
 
-### Member Workspace
-- **Dashboard** — saldo, status, paket aktif, chart performa, market ticker live
+- **Dashboard** — balance, status, active packages, performance chart, live market ticker
 - **AI Trading Signals** — Buy/Sell, entry, target, SL, confidence meter
-- **Auto-Trading Packages** — Starter / Growth / Pro (ROI & durasi customizable)
-- **Wallet** — saldo, riwayat, export CSV
-- **Deposit** — QR + alamat USDT (BEP20), status tracking
+- **Auto-Trading Packages** — Starter / Growth / Pro (customizable ROI & duration)
+- **Wallet** — balance, history, CSV export
+- **Deposit** — QR + USDT (BEP20) address, status tracking
 - **Withdrawal** — form + approval flow
-- **Network Referral** — kode unik, tracking downline, bonus
-- **Bonus Tracking** — riwayat bonus referral & manual
-- **Trade History** — log transaksi
-- **News** — feed berita dari admin
+- **Network Referral** — unique code, downline tracking, bonuses
+- **Bonus Tracking** — referral & manual bonus history
+- **Trade History** — transaction log
+- **News** — admin-published feed
 - **Notifications** — in-app + broadcast
-- **Account Settings** — profil, avatar, password, 2FA toggle
-- **Help Center** + **AI Assistant Widget** (canned responses cerdas)
-- **Dark / Light mode** dengan preferensi tersimpan
+- **Account Settings** — profile, avatar, password, 2FA toggle
+- **Help Center** + **AI Assistant Widget**
+- **Dark / Light mode** with saved preference
 
-### Admin Center
-- Overview metrik real-time
-- Manage Users (verify, edit, bonus, hapus)
-- Manage Signals (CRUD + buka/tutup)
+## Admin Center
+
+- Real-time metrics overview
+- Manage Users (verify, edit, bonus, delete)
+- Manage Signals (CRUD + open/close)
 - Deposit & Withdrawal approval
 - Manage Packages & News
-- Broadcast notification
-- System settings (alamat wallet deposit)
-- Reset data (dev/demo)
+- Broadcast notifications
+- System settings (deposit wallet address)
+- Data reset (dev/demo)
 
 ---
 
-## Setup Cepat
+## Quick Setup
 
 ### 1. Supabase
-1. Buat project di [supabase.com](https://supabase.com)
-2. SQL Editor → jalankan seluruh isi `supabase/schema.sql`
-3. Authentication → Providers → Email → nonaktifkan *Confirm email* (untuk demo)
-4. Copy **Project URL** + **anon key** ke `config.js`
+1. Create a project at [supabase.com](https://supabase.com)
+2. SQL Editor → run the full contents of `supabase/schema.sql`
+3. Authentication → Providers → Email → optionally disable *Confirm email* (for demo)
+4. Copy **Project URL** + **anon key** into `config.js`
 
-### 2. Akun demo
-| Peran  | Email              | Password  |
+### 2. Demo accounts
+| Role   | Email              | Password  |
 |--------|--------------------|-----------|
 | Member | demo@gotrade.io    | demo123   |
 | Admin  | admin@gotrade.io   | admin123  |
 
-Setelah register/login pertama, set `role = admin` di Table Editor → `profiles` untuk akun admin.
+After first register/login, set `role = admin` in Table Editor → `profiles` for the admin account.
 
-### 3. Jalankan lokal
+### 3. Run locally
 ```bash
-cd GO-TRADE-main
+cd GO-TRADE
 python3 -m http.server 8080
-# buka http://localhost:8080
+# open http://localhost:8080
 ```
 
-> Jangan buka via `file://` — localStorage, CDN, dan Auth membutuhkan HTTP server.
+> Do not open via `file://` — localStorage, CDN, and Auth require an HTTP server.
 
 ---
 
-## White-label (rebrand dalam 5 menit)
+## White-label (rebrand in 5 minutes)
 
 Edit `config.js`:
 
 ```js
 window.GT_CONFIG = {
   brand: {
-    name: "NAMA BRAND ANDA",
-    tagline: "TAGLINE ANDA",
-    domain: "domainanda.com",
-    supportEmail: "support@domainanda.com",
+    name: "YOUR BRAND NAME",
+    tagline: "YOUR TAGLINE",
+    domain: "yourdomain.com",
+    supportEmail: "support@yourdomain.com",
   },
   theme: {
-    primary: "#16b884",   // ganti warna utama
+    primary: "#16b884",
     accent: "#2fe0a4",
     navy: "#0a0c1f",
   },
 };
 ```
 
-Ganti logo:
-- `assets/logo-icon.png` (favicon + icon kecil)
-- `assets/logo-full.jpg` (opsional)
+Replace logos:
+- `assets/logo-icon.png` (favicon + small icon)
+- `assets/logo-full.jpg` (optional)
 
 ---
 
-## Struktur Project
+## Security (already applied)
 
-```
-├── index.html          Landing page (pricing, testimonials, CTA)
-├── login.html / register.html
-├── dashboard.html      Member shell
-├── admin.html          Admin shell
-├── config.js           Brand + Supabase keys + feature flags
-├── supabase-client.js  Client init
-├── auth.js / store.js  Auth & data layer (Supabase + cache)
-├── app.js / admin.js   View logic
-├── icons.js / ai-widget.js
-├── style.css           Design system + dark mode + v8 polish
-├── manifest.json       PWA
-├── supabase/schema.sql Schema + RLS + security triggers
-└── assets/
-```
+1. **Privilege escalation** — signup role is always forced to `member`
+2. **Wallet self-edit** — members cannot change `wallet_balance`, `role`, or `status` themselves (DB trigger)
+3. **XSS** — `gtEscapeHtml` / `gtSafeUrl` helpers
+4. **Input validation** — deposit / withdrawal / package amounts validated
+5. **RLS** — Row Level Security on all critical tables
 
----
-
-## Keamanan (sudah diterapkan)
-
-1. **Privilege escalation** — role signup selalu dipaksa `member`
-2. **Wallet self-edit** — member tidak bisa mengubah `wallet_balance`, `role`, `status` sendiri (DB trigger)
-3. **XSS** — helper `gtEscapeHtml` / `gtSafeUrl`
-4. **Input validation** — deposit / withdrawal / package amount divalidasi
-5. **RLS** — Row Level Security di semua tabel kritis
-
-Untuk produksi: aktifkan HTTPS, review RLS, batasi CORS, aktifkan email confirmation.
+For production: enable HTTPS, review RLS, restrict CORS, enable email confirmation.
 
 ---
 
@@ -138,20 +120,9 @@ Untuk produksi: aktifkan HTTPS, review RLS, batasi CORS, aktifkan email confirma
 
 - **Frontend:** Vanilla HTML5, CSS3, ES modules-ready JS
 - **Backend:** Supabase (Auth, Postgres, Realtime-ready, Storage)
-- **Charts:** SVG native (ringan, tanpa dependency berat)
+- **Charts:** Native SVG
 - **Icons:** Inline SVG system (`icons.js`)
-- **PWA:** manifest.json siap install
-
----
-
-## Changelog v8.0
-
-- Premium UI polish (toast variants, confidence meter, empty states, micro-animations)
-- AI Assistant lebih cerdas + typing indicator
-- Landing page: pricing cards + testimonials
-- Signal cards dengan confidence bar
-- Version & feature flags diperluas
-- Dokumentasi komersial siap jual
+- **PWA:** manifest.json install-ready
 
 ---
 

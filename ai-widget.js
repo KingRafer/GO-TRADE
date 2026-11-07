@@ -77,7 +77,7 @@
   fab.addEventListener("click", () => {
     panel.hidden = !panel.hidden;
     if (!panel.hidden && !messages.childElementCount) {
-      addMessage("Hi! I'm the GO TRADE assistant. How can I help with trading, deposits, packages, or signals?", "bot");
+      addMessage("Halo! Saya GO TRADE Assistant. Ada yang bisa saya bantu tentang akun atau fitur platform?", "bot");
     }
     if (!panel.hidden) input.focus();
   });

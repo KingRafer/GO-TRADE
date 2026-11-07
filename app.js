@@ -120,16 +120,7 @@ function pillForStatus(status) {
 /* ---------------- Views ---------------- */
 
 function tickerHTML() {
-  const items = [
-    { p: "BTC/USDT", v: "64,210", c: "+2.4%", up: true },
-    { p: "ETH/USDT", v: "3,142", c: "+1.1%", up: true },
-    { p: "BNB/USDT", v: "588", c: "-0.6%", up: false },
-    { p: "SOL/USDT", v: "142.8", c: "+3.7%", up: true },
-    { p: "XRP/USDT", v: "0.612", c: "-1.2%", up: false },
-    { p: "ADA/USDT", v: "0.401", c: "+0.8%", up: true },
-  ];
-  const row = items.map((i) => `<span>${i.p} <b>${i.v}</b><span class="${i.up ? "up" : "down"}">${i.c}</span></span>`).join("");
-  return `<div class="ticker-wrap"><div class="ticker-track">${row}${row}</div></div>`;
+  return `<div class="ticker-wrap" role="status" aria-label="Status data pasar"><div class="ticker-track" style="animation:none;width:100%;justify-content:center"><span>DATA PASAR <b>Belum terhubung ke penyedia data live</b></span><span>Angka harga tidak ditampilkan agar tidak menyesatkan.</span></div></div>`;
 }
 
 function dashboardView() {

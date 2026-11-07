@@ -3,7 +3,7 @@
    White-label ready. Change brand, colors, and Supabase keys.
    Dashboard → Settings → API to get url & anonKey.
    ============================================================ */
-window.GT_CONFIG = {
+globalThis.GT_CONFIG = {
   brand: {
     name: "GO TRADE",
     tagline: "INTELLIGENT TRADING SYSTEM",
@@ -22,6 +22,15 @@ window.GT_CONFIG = {
   supabase: {
     url: "https://litvwayepniwpzoigcxb.supabase.co",
     anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxpdHZ3YXllcG5pd3B6b2lnY3hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxMjA2ODQsImV4cCI6MjEwNzY5NjY4NH0.TeIxLiY8Z8GMeYffDUR_Y3qlkFBc8ozbUcmtCPYfsVw",
+  },
+  /* Firebase Web App identifiers + VAPID public key. Fill after Firebase setup. */
+  firebase: {
+    apiKey: "",
+    authDomain: "",
+    projectId: "",
+    messagingSenderId: "",
+    appId: "",
+    vapidKey: "",
   },
   features: {
     aiWidget: true,

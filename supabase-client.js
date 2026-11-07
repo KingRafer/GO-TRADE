@@ -18,6 +18,8 @@
 
   try {
     window.gtSupabaseClient = window.supabase.createClient(url, key);
+    // Legacy application modules use the short global alias `sb`.
+    window.sb = window.gtSupabaseClient;
   } catch (err) {
     console.error("[GO TRADE] Failed to init Supabase client", err);
   }

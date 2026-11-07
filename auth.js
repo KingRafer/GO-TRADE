@@ -112,6 +112,11 @@ async function gtRequireAuth(expectedRole) {
   return user;
 }
 
+/* Backward-compatible role guard used by the dedicated admin entry point. */
+async function gtRequireRole(role) {
+  return gtRequireAuth(role);
+}
+
 async function gtLogout() {
   if (window.sb) await sb.auth.signOut();
   window.location.href = "login.html";
@@ -190,4 +195,28 @@ function gtSafeUrl(url) {
   const s = String(url).trim();
   if (/^(https?:|data:image\/)/i.test(s)) return s;
   return "";
+}
+
+
+/* Update only the signed-in user's editable profile fields. */
+async function gtUpdateCurrentUser(patch = {}) {
+  if (!window.sb) return null;
+  const { data: authData, error: authError } = await sb.auth.getUser();
+  if (authError || !authData?.user) return null;
+
+  const safePatch = {};
+  if (typeof patch.name === "string") safePatch.name = patch.name.trim().slice(0, 100);
+  if (typeof patch.avatar === "string") safePatch.avatar = patch.avatar.slice(0, 2_000_000);
+  if (!Object.keys(safePatch).length) return gtFetchProfilee(authData.user.id);
+
+  const { data, error } = await sb.from("profiles")
+    .update(safePatch)
+    .eq("id", authData.user.id)
+    .select("*")
+    .single();
+  if (error || !data) {
+    console.warn("[GO TRADE] Profile update failed:", error?.message);
+    return null;
+  }
+  return gtMapProfilee(data);
 }

@@ -70,7 +70,7 @@ function overviewView() {
   const adminNotifs = (typeof gtAdminNotifications === "function" ? gtAdminNotifications() : []).slice(0, 8);
 
   return `${viewHeader("GO TRADE / administration", "Admin overview", "Tampilan menyeluruh atas member, dana, dan aktivitas platform.")}
-    <div class="admin-banner"><div><h2>Semua sistem berjalan normal <span style="color:#2fe0a4">●</span></h2><p>Semua layanan operasional berjalan normal. Pantau permintaan masuk dan kelola member dari sini.</p></div><span class="pill pill-active">All systems go</span></div>
+    <div class="admin-banner"><div><h2>Status operasional GO TRADE</h2><p>Pantau aktivitas administrasi dan status permintaan yang tercatat di platform.</p></div><span class="pill pill-draft">Monitoring</span></div>
     <div class="admin-grid admin-grid-5">
       <div class="card admin-metric"><div class="stat-icon"><span data-icon="users" data-icon-size="16"></span></div><b>${members.length}</b><span>Total member</span></div>
       <div class="card admin-metric"><div class="stat-icon"><span data-icon="layers" data-icon-size="16"></span></div><b>${activePackages.length}</b><span>Paket aktif</span></div>
@@ -373,7 +373,7 @@ function showToast(message, title = "Admin") {
 }
 
 function openModal(title, body, footer = `<button class="btn btn-secondary" data-action="close-modal">Batal</button><button class="btn btn-primary" data-action="modal-save">Simpan</button>`) {
-  modal.innerHTML = `<div class="modal-header"><h2>${title}</h2><button data-action="close-modal">×</button></div><div class="modal-body">${body}</div><div class="modal-footer">${footer}</div>`;
+  modal.innerHTML = `<div class="modal-header"><h2 id="modalTitle">${title}</h2><button data-action="close-modal">×</button></div><div class="modal-body">${body}</div><div class="modal-footer">${footer}</div>`;
   modalBackdrop.hidden = false;
   gtRenderIcons(modal);
 }

@@ -37,6 +37,8 @@ async function gtEnsureStore() {
     console.warn("[GO TRADE] sb not ready");
     return;
   }
+  const { data: authSnapshot } = await sb.auth.getUser();
+  const currentUserId = authSnapshot?.user?.id || "";
   const [
     packages,
     deposits,
@@ -50,6 +52,7 @@ async function gtEnsureStore() {
     settingsRow,
     profiles,
     activityLogs,
+    notificationReads,
   ] = await Promise.all([
     sb.from("packages").select("*").order("min_deposit"),
     sb.from("deposits").select("*").order("created_at", { ascending: false }),
@@ -63,6 +66,9 @@ async function gtEnsureStore() {
     sb.from("settings").select("*").eq("id", 1).maybeSingle(),
     sb.from("profiles").select("*").order("joined", { ascending: false }),
     sb.from("activity_logs").select("*").order("created_at", { ascending: false }).limit(300),
+    currentUserId
+      ? sb.from("notification_reads").select("notification_id").eq("user_id", currentUserId)
+      : Promise.resolve({ data: [], error: null }),
   ]);
 
   _gtCache.packages = (packages.data || []).map((p) => ({
@@ -96,9 +102,10 @@ async function gtEnsureStore() {
   _gtCache.news = (news.data || []).map((n) => ({
     id: n.id, title: n.title, body: n.body, image: n.image, date: n.date,
   }));
+  const readNotificationIds = new Set((notificationReads.data || []).map((row) => row.notification_id));
   _gtCache.notifications = (notifications.data || []).map((n) => ({
     id: n.id, audience: n.audience, title: n.title, body: n.body, image: n.image,
-    date: n.date, read: !!n.read,
+    date: n.date, read: readNotificationIds.has(n.id) || !!n.read,
   }));
   if (settingsRow.data) {
     _gtCache.settings = {
@@ -525,9 +532,19 @@ async function gtAddNotification({ audience, title, body, image }) {
 }
 
 async function gtMarkNotificationRead(id) {
-  await sb.from("notifications").update({ read: true }).eq("id", id);
+  const { data: authData, error: authError } = await sb.auth.getUser();
+  if (authError || !authData?.user?.id || !id) return { error: authError || new Error("Sesi tidak ditemukan.") };
+  const { error } = await sb.from("notification_reads").upsert({
+    user_id: authData.user.id,
+    notification_id: id,
+  }, { onConflict: "user_id,notification_id" });
+  if (error) {
+    console.warn("[GO TRADE] Gagal menyimpan status notifikasi:", error.message);
+    return { error };
+  }
   const n = _gtCache.notifications.find((x) => x.id === id);
   if (n) n.read = true;
+  return { ok: true };
 }
 
 async function gtMarkAllNotificationsRead(email) {

@@ -9,7 +9,7 @@
       </div>
       <div id="aiWidgetMessages" class="ai-widget-messages"></div>
       <form id="aiWidgetForm" class="ai-widget-form">
-        <input id="aiWidgetInput" type="text" placeholder="Ask about deposits, signals, packages..." autocomplete="off" />
+        <input id="aiWidgetInput" type="text" placeholder="Tanyakan tentang akun atau fitur..." autocomplete="off" />
         <button type="submit" aria-label="Submit"><span data-icon="arrowRight" data-icon-size="16"></span></button>
       </form>
     </div>
@@ -51,31 +51,27 @@
 
   function canned(question) {
     const q = question.toLowerCase();
-    if (q.includes("deposit") || q.includes("setor"))
-      return "To deposit: open Deposit → choose USDT (BEP20) → enter amount & submit. Admin verifies within 1–30 minutes. Minimum depends on the package you choose.";
-    if (q.includes("withdraw") || q.includes("tarik") || q.includes("penarikan") || q.includes("wd"))
-      return "Withdrawal: open Withdrawal → enter amount & USDT (BEP20) wallet address. Balance is reserved first; if admin rejects, it is refunded automatically. Usually takes 1–24 hours.";
-    if (q.includes("paket") || q.includes("package") || q.includes("auto"))
-      return "There are 3 Auto Trading packages: Starter, Growth, and Pro. Each has its own minimum deposit, daily ROI, and duration. Check Auto Trading for details and activation.";
+    if (q.includes("deposit") || q.includes("setor") || q.includes("withdraw") || q.includes("tarik") || q.includes("penarikan") || q.includes("wd"))
+      return "Untuk keamanan, saya tidak dapat memandu pengiriman atau penarikan uang. Jangan kirim dana berdasarkan pesan chat. Verifikasi informasi dan pihak penerima melalui kanal resmi pengelola, serta jangan pernah membagikan kata sandi atau OTP.";
+    if (q.includes("paket") || q.includes("package") || q.includes("auto") || q.includes("roi") || q.includes("profit") || q.includes("hasil"))
+      return "Informasi paket atau angka hasil yang ditampilkan bukan jaminan keuntungan dan bukan rekomendasi investasi. Hasil dapat berbeda dan risiko dapat menyebabkan kerugian. Periksa informasi, ketentuan, dan legalitas layanan secara mandiri sebelum mengambil keputusan.";
     if (q.includes("sinyal") || q.includes("signal") || q.includes("entry"))
-      return "Real-time signals are in the Signal menu. Each signal includes direction (Buy/Sell), entry, target, stop-loss, and status. Follow risk management — don't FOMO.";
+      return "Informasi sinyal di platform bersifat informasional, bukan rekomendasi untuk melakukan transaksi. Data dapat terlambat atau tidak lengkap. Jangan mengambil keputusan hanya berdasarkan satu sinyal.";
     if (q.includes("bonus") || q.includes("referral") || q.includes("referal"))
-      return "Referral and manual bonuses from admin appear under Bonuses Tracking. Share your referral code on the Network page to earn commission from new members.";
+      return "Informasi referral dan bonus dapat dilihat pada halaman Network atau Bonus Tracking. Status yang muncul mengikuti data yang tersimpan dan perlu dikonfirmasi kepada administrator jika ada ketidaksesuaian.";
     if (q.includes("level") || q.includes("rank"))
-      return "Account level rises with activity (deposits, active packages, referrals). Higher levels unlock extra features and benefits over time.";
+      return "Informasi level akun dapat dilihat pada ringkasan profil. Jika data tidak sesuai, hubungi administrator melalui kanal resmi pengelola.";
     if (q.includes("verifikasi") || q.includes("verify") || q.includes("kyc"))
-      return "Verification status is set by admin. After your first deposit is approved, your account is usually marked Verified. Contact support if you need help.";
-    if (q.includes("password") || q.includes("keamanan") || q.includes("2fa") || q.includes("aman"))
-      return "Change your password in Account Settings. Enable 2FA for extra security. Never share credentials with anyone, including people claiming to be admin.";
+      return "Status verifikasi ditampilkan pada ringkasan akun. Jangan mengirim dokumen identitas melalui chat atau tautan yang tidak dapat diverifikasi.";
+    if (q.includes("password") || q.includes("keamanan") || q.includes("2fa") || q.includes("aman") || q.includes("otp"))
+      return "Jangan pernah membagikan kata sandi, kode OTP, atau tautan pemulihan kepada siapa pun. Gunakan hanya halaman resmi GO TRADE untuk mengelola akses akun.";
     if (q.includes("support") || q.includes("bantuan") || q.includes("help") || q.includes("cs"))
-      return "Contact support via Help Center or email " + (window.GT_CONFIG?.brand?.supportEmail || "support@go-trade.vercel.app") + ". Include your account email and a short description so we can help faster.";
-    if (q.includes("roi") || q.includes("profit") || q.includes("hasil"))
-      return "Daily ROI depends on your active package. Trading results can vary with market conditions. Only use capital you can afford to risk.";
+      return "Untuk bantuan akun atau kendala aplikasi, hubungi administrator melalui kanal resmi yang diberikan pengelola GO TRADE. Sertakan deskripsi kendala tanpa membagikan kata sandi atau OTP.";
     if (q.includes("halo") || q.includes("hai") || q.includes("hello") || q.includes("hi") || q.includes("pagi") || q.includes("siang") || q.includes("malam"))
-      return "Hi! I'm the GO TRADE assistant. Ask me about deposits, withdrawals, auto-trading packages, signals, bonuses, or account security — I'm here to help.";
+      return "Halo! Saya GO TRADE Assistant. Saya dapat membantu menjelaskan navigasi, fitur akun, notifikasi, dan informasi umum platform.";
     if (q.includes("terima kasih") || q.includes("thanks") || q.includes("makasih"))
-      return "You're welcome! Wishing you smooth trades. Anything else you'd like to ask?";
-    return "I'm still learning. Try asking specifically about: deposits, withdrawals, packages, signals, bonuses, levels, verification, or account security.";
+      return "Sama-sama. Semoga informasi ini membantu.";
+    return "Saya dapat membantu tentang navigasi dashboard, pengaturan akun, notifikasi, verifikasi, dan kendala aplikasi. Untuk informasi transaksi atau investasi, selalu verifikasi melalui kanal resmi dan jangan mengandalkan klaim hasil.";
   }
 
   fab.addEventListener("click", () => {
@@ -96,6 +92,6 @@
     setTimeout(() => {
       removeTyping();
       addMessage(canned(text), "bot");
-    }, 420 + Math.random() * 280);
+    }, 350);
   });
 })();

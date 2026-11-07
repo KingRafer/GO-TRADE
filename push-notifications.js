@@ -84,5 +84,11 @@
       }
       return { ok: true, permission, registered: true };
     },
+    async sendToUser(payload) {
+      if (!window.sb) return { ok: false, reason: "supabase_not_ready" };
+      const { data, error } = await window.sb.functions.invoke("send-account-push", { body: payload });
+      if (error) return { ok: false, error };
+      return { ok: true, data };
+    },
   };
 })();

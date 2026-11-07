@@ -1,48 +1,40 @@
-/* GO TRADE — Firebase Cloud Messaging service worker
- * Fill the public Firebase Web App config after creating the Firebase project.
- * Never put service-account credentials or private keys in this file.
- */
+/* GO TRADE — Firebase Cloud Messaging background notifications. */
 importScripts("https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js");
+importScripts("/config.js");
 
-const firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  messagingSenderId: "",
-  appId: "",
-};
-
-const configured = Object.values(firebaseConfig).every((value) => Boolean(value));
-
-if (configured && firebaseConfig.projectId) {
-  firebase.initializeApp(firebaseConfig);
+const cfg = self.GT_CONFIG?.firebase || {};
+const ready = ["apiKey", "authDomain", "projectId", "messagingSenderId", "appId"].every((key) => Boolean(cfg[key]));
+if (ready) {
+  firebase.initializeApp({
+    apiKey: cfg.apiKey, authDomain: cfg.authDomain, projectId: cfg.projectId,
+    messagingSenderId: cfg.messagingSenderId, appId: cfg.appId,
+  });
   const messaging = firebase.messaging();
-
   messaging.onBackgroundMessage((payload) => {
     const title = payload.notification?.title || "GO TRADE";
-    const options = {
-      body: payload.notification?.body || "Ada pemberitahuan baru.",
+    self.registration.showNotification(title, {
+      body: payload.notification?.body || "Ada pemberitahuan akun baru.",
       icon: "/assets/logo-icon.png",
       badge: "/assets/logo-icon.png",
       data: { url: payload.data?.url || "/dashboard.html" },
-      tag: payload.data?.tag || "go-trade-notification",
-    };
-    self.registration.showNotification(title, options);
+      tag: payload.data?.tag || "go-trade-account-notice",
+    });
   });
 }
-
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const target = new URL(event.notification.data?.url || "/dashboard.html", self.location.origin).href;
+  const raw = event.notification.data?.url || "/dashboard.html";
+  const target = new URL(raw, self.location.origin);
+  if (target.origin !== self.location.origin) return;
   event.waitUntil((async () => {
-    const windows = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
-    for (const client of windows) {
+    const clients = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+    for (const client of clients) {
       if (client.url.startsWith(self.location.origin) && "focus" in client) {
-        await client.navigate(target);
+        await client.navigate(target.href);
         return client.focus();
       }
     }
-    return self.clients.openWindow(target);
+    return self.clients.openWindow(target.href);
   })());
 });

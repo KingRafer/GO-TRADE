@@ -390,17 +390,24 @@ function settingsView() {
         </div>
         <div data-panel="security" hidden>
           <h2>Keamanan akun</h2>
-          <p class="subhead" style="margin-bottom:23px">Perkuat keamanan login Anda.</p>
-          <div class="toggle-row"><div><p>Autentikasi dua faktor (2FA)</p><span>Wajibkan kode tambahan saat login dari perangkat baru.</span></div><button class="toggle" data-action="toggle-2fa"></button></div>
-          <div class="toggle-row"><div><p>Notifikasi login perangkat baru</p><span>Kirim email setiap ada login dari perangkat baru.</span></div><button class="toggle on" data-action="toggle-2fa"></button></div>
-          <div class="field" style="margin-top:18px"><label class="form-label">Ganti password</label><div class="pass-field"><input class="form-control" type="password" id="setNewPassword" placeholder="Password baru" /><button type="button" class="pass-toggle-btn" data-pass-toggle="setNewPassword"><span data-icon="eye" data-icon-size="15"></span></button></div></div>
+          <p class="subhead" style="margin-bottom:23px">Kelola akses akun dan kata sandi Anda.</p>
+          <div class="notice-box" role="note" style="padding:14px;border-radius:10px;margin-bottom:16px">
+            <strong>Fitur verifikasi tambahan</strong>
+            <p class="subhead">2FA dan peringatan login perangkat baru belum dikonfigurasi. Tombol tidak ditampilkan sebagai aktif sebelum layanan benar-benar tersedia.</p>
+          </div>
+          <div class="field" style="margin-top:18px"><label class="form-label">Ganti password</label><div class="pass-field"><input class="form-control" type="password" id="setNewPassword" placeholder="Password baru" autocomplete="new-password" /><button type="button" class="pass-toggle-btn" data-pass-toggle="setNewPassword"><span data-icon="eye" data-icon-size="15"></span></button></div></div>
         </div>
         <div data-panel="notifications" hidden>
           <h2>Preferensi notifikasi</h2>
-          <p class="subhead" style="margin-bottom:23px">Pilih pembaruan apa saja yang ingin Anda terima.</p>
-          <div class="toggle-row"><div><p>Ringkasan performa mingguan</p><span>Dapatkan ringkasan singkat tiap Senin.</span></div><button class="toggle on" data-action="toggle-2fa"></button></div>
-          <div class="toggle-row"><div><p>Notifikasi sinyal AI</p><span>Diberi tahu saat sinyal baru tersedia.</span></div><button class="toggle on" data-action="toggle-2fa"></button></div>
-          <div class="toggle-row"><div><p>Notifikasi deposit & penarikan</p><span>Diberi tahu saat status transaksi berubah.</span></div><button class="toggle on" data-action="toggle-2fa"></button></div>
+          <p class="subhead" style="margin-bottom:18px">Notifikasi browser hanya aktif setelah Anda memberi izin. Pengiriman push jarak jauh memerlukan konfigurasi Firebase dan backend.</p>
+          <div class="toggle-row">
+            <div><p>Notifikasi browser</p><span id="pushPermissionStatus">Status izin akan diperiksa saat halaman dimuat.</span></div>
+            <button class="btn btn-secondary" data-action="enable-browser-notifications" type="button">Aktifkan</button>
+          </div>
+          <div class="notice-box" role="note" style="padding:14px;border-radius:10px;margin-top:16px">
+            <strong>Pengiriman push belum aktif</strong>
+            <p class="subhead">Izin browser tidak otomatis berarti notifikasi dari server sudah terkirim. Firebase, penyimpanan token yang aman, dan fungsi server masih perlu dikonfigurasi.</p>
+          </div>
         </div>
       </div>
     </div>`;
@@ -604,11 +611,21 @@ async function handleAction(event) {
     URL.revokeObjectURL(url);
     showToast("Riwayat transaksi diexport ke CSV.", "Export");
   }
-  if (action === "toggle-2fa") {
-    const btn = event.currentTarget;
-    const nowOn = !btn.classList.contains("on");
-    btn.classList.toggle("on", nowOn);
-    showToast(nowOn ? "Autentikasi dua faktor diaktifkan." : "Autentikasi dua faktor dinonaktifkan.", "Security");
+  if (action === "enable-browser-notifications") {
+    if (!window.GTNotifications) {
+      showToast("Modul notifikasi belum tersedia. Muat ulang halaman.", "Notifikasi");
+    } else {
+      const result = await window.GTNotifications.requestPermission();
+      const status = document.getElementById("pushPermissionStatus");
+      if (status) status.textContent = "Status izin: " + window.GTNotifications.getPermission();
+      if (result.ok) {
+        showToast("Izin browser diberikan. Pengiriman push server belum dikonfigurasi.", "Notifikasi");
+      } else if (result.reason === "denied") {
+        showToast("Izin ditolak. Ubah izin notifikasi melalui pengaturan browser.", "Notifikasi");
+      } else {
+        showToast("Notifikasi browser tidak tersedia pada perangkat atau konteks ini.", "Notifikasi");
+      }
+    }
   }
   if (action === "toggle-faq") {
     event.currentTarget.closest(".faq-item").classList.toggle("open");

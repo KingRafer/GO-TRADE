@@ -461,6 +461,10 @@ function render(view = currentView) {
   document.querySelectorAll(".nav-item[data-view]").forEach((item) => item.classList.toggle("active", item.dataset.view === view));
   gtRenderIcons(app);
   if (view === "deposit") renderDepositQr();
+  const pushStatus = document.getElementById("pushPermissionStatus");
+  if (pushStatus && window.GTNotifications) {
+    pushStatus.textContent = "Status izin browser: " + window.GTNotifications.getPermission();
+  }
   const badge = document.getElementById("signalBadge");
   if (badge) badge.textContent = String(gtPublishedSignals().filter((s) => s.status === "active").length);
   const notifDot = document.getElementById("notifDot");
@@ -622,8 +626,14 @@ async function handleAction(event) {
         showToast("Izin browser diberikan. Pengiriman push server belum dikonfigurasi.", "Notifikasi");
       } else if (result.reason === "denied") {
         showToast("Izin ditolak. Ubah izin notifikasi melalui pengaturan browser.", "Notifikasi");
+      } else if (result.reason === "firebase_not_configured") {
+        showToast("Firebase belum dikonfigurasi. Ikuti INTEGRATIONS_SETUP.md.", "Notifikasi");
+      } else if (result.reason === "not_authenticated") {
+        showToast("Sesi login tidak ditemukan. Silakan login ulang.", "Notifikasi");
+      } else if (result.reason === "token_storage_failed") {
+        showToast("Token gagal disimpan. Pastikan migration push_devices sudah dijalankan.", "Notifikasi");
       } else {
-        showToast("Notifikasi browser tidak tersedia pada perangkat atau konteks ini.", "Notifikasi");
+        showToast("Notifikasi belum dapat diaktifkan pada perangkat ini.", "Notifikasi");
       }
     }
   }

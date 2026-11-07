@@ -102,6 +102,33 @@ create policy "notif_update_read_own" on public.notifications
 create policy "notif_admin_all" on public.notifications
   for all using (public.is_admin()) with check (public.is_admin());
 
+-- Prevent members from editing notification content or routing fields; only
+-- the read flag is mutable by the notification recipient.
+create or replace function public.protect_notification_fields()
+returns trigger
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $
+begin
+  if auth.uid() is not null and not public.is_admin() then
+    new.id := old.id;
+    new.audience := old.audience;
+    new.title := old.title;
+    new.body := old.body;
+    new.image := old.image;
+    new.date := old.date;
+    new.created_at := old.created_at;
+  end if;
+  return new;
+end;
+$;
+
+drop trigger if exists trg_protect_notification on public.notifications;
+create trigger trg_protect_notification
+  before update on public.notifications
+  for each row execute function public.protect_notification_fields();
+
 -- Activity log inserts must identify the authenticated actor accurately.
 drop policy if exists "activity_insert" on public.activity_logs;
 create policy "activity_insert_own" on public.activity_logs

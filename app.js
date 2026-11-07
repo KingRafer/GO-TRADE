@@ -660,21 +660,42 @@ async function handleAction(event) {
   }
   if (action === "contact-support") showToast("Pesan terkirim ke tim support. Kami akan merespons secepatnya.", "Support");
   if (action === "save-settings") {
-    const newName = document.getElementById("setName")?.value;
+    const newName = document.getElementById("setName")?.value || "";
+    const newPassword = document.getElementById("setNewPassword")?.value || "";
     const photoPreview = document.getElementById("profilePhotoPreview");
+    if (newPassword && newPassword.length < 8) {
+      showToast("Password baru minimal 8 karakter.", "Periksa password");
+      return;
+    }
     const patch = {};
-    if (newName) patch.name = newName;
+    if (newName.trim()) patch.name = newName.trim();
     if (photoPreview && photoPreview.style.display !== "none") patch.avatar = photoPreview.src;
+    let profileSaved = true;
     if (Object.keys(patch).length) {
       const updated = await gtUpdateCurrentUser(patch);
-      if (updated) Object.assign(user, updated);
-      else {
-        const u = gtFindUser(user.email);
-        if (u) Object.assign(user, u);
+      if (updated) {
+        Object.assign(user, updated);
+        paintProfileChrome();
+      } else {
+        profileSaved = false;
       }
-      paintProfileChrome();
     }
-    showToast("Profil berhasil diperbarui.", "Tersimpan");
+    let passwordSaved = true;
+    if (newPassword) {
+      const { error } = await sb.auth.updateUser({ password: newPassword });
+      passwordSaved = !error;
+      if (!error) document.getElementById("setNewPassword").value = "";
+      else console.warn("[GO TRADE] Password update failed:", error.message);
+    }
+    if (profileSaved && passwordSaved) {
+      showToast("Perubahan akun berhasil disimpan.", "Tersimpan");
+    } else if (!profileSaved && !passwordSaved) {
+      showToast("Profil dan password gagal diperbarui. Periksa koneksi dan coba lagi.", "Gagal");
+    } else if (!profileSaved) {
+      showToast("Password diproses, tetapi profil gagal disimpan.", "Sebagian tersimpan");
+    } else {
+      showToast("Profil tersimpan, tetapi password gagal diperbarui.", "Sebagian tersimpan");
+    }
   }
 }
 

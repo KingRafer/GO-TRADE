@@ -112,6 +112,11 @@ async function gtRequireAuth(expectedRole) {
   return user;
 }
 
+/* Backward-compatible role guard used by the dedicated admin entry point. */
+async function gtRequireRole(role) {
+  return gtRequireAuth(role);
+}
+
 async function gtLogout() {
   if (window.sb) await sb.auth.signOut();
   window.location.href = "login.html";

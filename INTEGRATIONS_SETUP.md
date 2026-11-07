@@ -40,13 +40,20 @@ Setup:
 2. Enable Cloud Messaging and generate a Web Push key pair.
 3. Add the Firebase Web App config and VAPID public key to the client-side public configuration only. These are public identifiers, not server secrets.
 4. Keep service-account JSON/private key exclusively in Supabase Function Secrets.
-5. Implement authenticated device registration and per-user token ownership before sending any push messages.
-6. Ask users for notification permission only after they explicitly choose **Enable notifications**.
-7. Test foreground and background notifications on HTTPS. Browser push support varies by browser and device.
+5. Run `supabase/push_devices_migration.sql` to create the owner-only token registry.
+6. Fill the public Firebase values in `config.js` (including the VAPID public key). These are identifiers, not private credentials.
+7. Deploy the admin-only sender: `supabase functions deploy send-account-push`.
+8. Set `FIREBASE_SERVICE_ACCOUNT_JSON` and `APP_ORIGIN` with Supabase Function Secrets. The service-account JSON must never enter Git.
+9. Ask users for notification permission only after they explicitly choose **Aktifkan** in Account settings → Notifications.
+10. Test registration and background delivery on HTTPS using separate member/admin test accounts. Browser push support varies by browser and device.
 
 Do not paste a service-account JSON, private key, Resend API key, Supabase service-role key, or any password into GitHub or chat.
 
-## 4. Supabase security, storage, and realtime
+## 4. Per-user notification receipts
+
+Run `supabase/notification_reads_migration.sql` before deploying the updated notification store. It stores read status separately for each authenticated user, so one member marking a broadcast as read does not mark it read for everyone.
+
+## 5. Supabase security, storage, and realtime
 
 - Keep Row Level Security enabled on every user-data table.
 - Use the anon/publishable key in the browser only; never expose the service-role key.
@@ -55,22 +62,26 @@ Do not paste a service-account JSON, private key, Resend API key, Supabase servi
 - Keep sensitive mutations in server-side functions with authorization and atomic database operations.
 - Backups must be enabled and periodically restore-tested from Supabase Dashboard. Backup availability and retention depend on the Supabase plan.
 
-## 5. Required secrets (server-side only)
+## 6. Required secrets (server-side only)
 
 | Secret | Where it belongs | Purpose |
 |---|---|---|
 | `RESEND_API_KEY` | Supabase Function Secrets | Custom transactional email |
-| Firebase service-account credentials | Supabase Function Secrets | FCM message sending |
+| `FIREBASE_SERVICE_ACCOUNT_JSON` | Supabase Function Secrets | FCM service-account JSON for server-side sending |
+| `APP_ORIGIN` | Supabase Function Secrets | Allowed web app origin, e.g. production domain |
 | Supabase service-role key | Supabase server environment only | Privileged server operations; never frontend |
 | FCM VAPID public key | Public client config | Browser push registration |
 
-## 6. Go-live checklist
+## 7. Go-live checklist
 
 - [ ] Vercel Analytics enabled in the Vercel dashboard.
 - [ ] Speed Insights enabled in the Vercel dashboard.
 - [ ] Resend domain verified and Supabase Auth SMTP tested.
-- [ ] Firebase Web App created and push permission flow tested on HTTPS.
-- [ ] Device-token table and RLS reviewed before enabling push delivery.
+- [ ] Firebase Web App config and VAPID public key filled in `config.js`.
+- [ ] `push_devices_migration.sql` and `notification_reads_migration.sql` run in Supabase.
+- [ ] FCM device registration tested with a member account on HTTPS.
+- [ ] `send-account-push` deployed and server secrets set.
+- [ ] Admin-only push sender tested with one test member and invalid tokens cleaned up.
 - [ ] Edge Functions validate the caller and enforce per-user authorization.
 - [ ] Supabase backups enabled and restore test completed.
 - [ ] No secret keys appear in Git history or browser bundles.

@@ -658,3 +658,125 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 900px) {
   .lp-pricing, .lp-testimonials { grid-template-columns: 1fr; }
 }
+
+
+/* ============================================================
+   GO-TRADE Professional UI Upgrade — responsive refinement
+   Preserves the existing product structure and visual identity.
+   ============================================================ */
+:root {
+  --gt-radius-sm: 10px;
+  --gt-radius-md: 14px;
+  --gt-radius-lg: 18px;
+  --gt-focus: 0 0 0 3px rgba(47,224,164,.22);
+}
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { min-width: 320px; overflow-x: hidden; }
+img, svg, video, canvas { max-width: 100%; }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+button, .btn, .nav-item, .icon-button { min-height: 40px; }
+input, select, textarea { min-height: 42px; }
+:where(button, a, input, select, textarea):focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 3px;
+  box-shadow: var(--gt-focus);
+}
+.card, .stat-card, .signal-card, .product-card, .news-card {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.card-header { min-width: 0; }
+.card-header > * { min-width: 0; }
+.data-table th, .data-table td { white-space: nowrap; }
+.table-card { max-width: 100%; overscroll-behavior-x: contain; }
+.page { width: 100%; }
+.stat-grid, .dashboard-grid, .admin-grid, .metric-strip,
+.analytics-grid, .wallet-layout, .network-grid {
+  min-width: 0;
+}
+.form-control, .search-box input, .ai-widget-form input {
+  min-width: 0;
+}
+.btn { line-height: 1.35; }
+.btn:focus-visible, .icon-button:focus-visible, .nav-item:focus-visible {
+  outline-offset: 2px;
+}
+@media (max-width: 1050px) {
+  .topbar { padding-left: 22px; padding-right: 22px; }
+  .page { padding-left: 22px; padding-right: 22px; }
+  .dashboard-grid { grid-template-columns: minmax(0, 1fr); }
+  .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  body { font-size: 14px; }
+  .topbar {
+    height: 62px;
+    padding: 0 14px;
+    gap: 10px;
+  }
+  .topbar-actions { gap: 7px; }
+  .page { padding: 20px 14px calc(34px + env(safe-area-inset-bottom)); }
+  .view-header { gap: 12px; margin-bottom: 20px; }
+  .view-header h1 { font-size: clamp(22px, 6vw, 28px); line-height: 1.2; }
+  .subhead { line-height: 1.55; }
+  .header-actions { gap: 8px; }
+  .header-actions .btn { flex: 1 1 auto; }
+  .stat-grid, .metric-strip, .admin-grid, .admin-grid-5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+  .stat-card { padding: 13px; }
+  .stat-top { gap: 7px; font-size: 10px; }
+  .stat-number { font-size: clamp(17px, 5vw, 21px); overflow-wrap: anywhere; }
+  .dashboard-grid, .dashboard-grid + .dashboard-grid { gap: 12px; }
+  .card-header { padding: 16px 15px 0; }
+  .card-pad { padding: 15px; }
+  .chart-area { padding-left: 38px; padding-right: 12px; }
+  .chart-svg { left: 37px; right: 12px; width: calc(100% - 49px); }
+  .toolbar { gap: 9px; }
+  .filter-group { max-width: 100%; padding-bottom: 3px; }
+  .filter-group > * { flex: 0 0 auto; }
+  .data-table { min-width: 620px; }
+  .data-table th, .data-table td { padding: 12px 13px; }
+  .form-row, .field-row { gap: 10px; }
+  .welcome-banner { padding: 20px; border-radius: 14px; }
+  .welcome-grid { gap: 12px; }
+  .ai-widget-panel {
+    right: 10px;
+    left: 10px;
+    width: auto;
+    bottom: calc(76px + env(safe-area-inset-bottom));
+    max-height: min(68vh, 520px);
+  }
+  .ai-widget-fab {
+    right: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+  }
+  .modal, .modal-content { max-width: calc(100vw - 24px); }
+  .sidebar { width: min(290px, 86vw); }
+}
+@media (max-width: 420px) {
+  .breadcrumbs { gap: 5px; font-size: 10px; }
+  .topbar-actions { gap: 3px; }
+  .topbar-actions .icon-button { padding: 6px; }
+  .page { padding-left: 11px; padding-right: 11px; }
+  .stat-grid, .metric-strip, .admin-grid, .admin-grid-5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .stat-card { padding: 11px; }
+  .stat-icon { width: 25px; height: 25px; }
+  .stat-number { font-size: 17px; }
+  .btn { padding: 10px 12px; }
+  .welcome-banner { padding: 17px; }
+  .welcome-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .welcome-grid div b { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

@@ -57,8 +57,8 @@ function paintProfileChrome() {
   paintAvatarEl(document.getElementById("topAvatar"));
 }
 
-function statCard(label, value, change, icon, color, down = false) {
-  return `<div class="card stat-card"><div class="stat-top"><span>${label}</span><i class="stat-icon" style="background:${color}"><span data-icon="${icon}" data-icon-size="15"></span></i></div><div class="stat-number">${value}</div><div class="stat-change ${down ? "down" : ""}">${down ? "↓" : "↑"} ${change}<span>vs last month</span></div></div>`;
+function statCard(label, value, note, icon, color) {
+  return `<div class="card stat-card"><div class="stat-top"><span>${label}</span><i class="stat-icon" style="background:${color}"><span data-icon="${icon}" data-icon-size="15"></span></i></div><div class="stat-number">${value}</div>${note ? `<div class="stat-change">${note}</div>` : ""}</div>`;
 }
 
 function viewHeader(eyebrow, title, subhead, action = "") {
@@ -147,14 +147,7 @@ function dashboardView() {
   ];
   const approvedDeposits = deposits.filter((d) => d.status === "approved").reduce((s, d) => s + d.amount, 0);
   const doneWithdrawals = withdrawals.filter((w) => w.status !== "rejected").reduce((s, w) => s + w.amount, 0);
-  const trendBars = [
-    { label: "Apr", a: 120, b: 40 },
-    { label: "Mei", a: 260, b: 90 },
-    { label: "Jun", a: 180, b: 60 },
-    { label: "Jul", a: 340, b: 150 },
-    { label: "Agu", a: approvedDeposits || 500, b: doneWithdrawals || 80 },
-    { label: "Sep", a: (approvedDeposits || 500) * 0.6, b: (doneWithdrawals || 80) * 1.4 },
-  ];
+
 
   return `${viewHeader("Workspace", `Halo, ${gtEscapeHtml(user.name.split(" ")[0])}! 👋`, "Selamat datang kembali di workspace GO TRADE Anda.")}
     ${tickerHTML()}
@@ -172,14 +165,14 @@ function dashboardView() {
     </div>
 
     <div class="stat-grid">
-      ${statCard("Wallet balance", money(user.walletBalance), "+0.0%", "wallet", "#e3fbf1")}
-      ${statCard("Status akun", user.verified ? "Verified" : "Pending", "Siap deposit", "checkCircle", "#dfe8ff")}
-      ${statCard("Paket aktif", `${packages.length} paket`, "Reward harian", "layers", "#e5f7ec")}
-      ${statCard("Total bonus", money(totalBonus), "Dari network", "gift", "#ffe9d6")}
+      ${statCard("Wallet balance", money(user.walletBalance), "Saldo tercatat", "wallet", "#e3fbf1")}
+      ${statCard("Status akun", user.verified ? "Verified" : "Pending", "Status verifikasi akun", "checkCircle", "#dfe8ff")}
+      ${statCard("Paket aktif", `${packages.length} paket`, "Jumlah paket tercatat", "layers", "#e5f7ec")}
+      ${statCard("Total bonus", money(totalBonus), "Akumulasi yang tercatat", "gift", "#ffe9d6")}
     </div>
 
     <div class="dashboard-grid">
-      <div class="card wide-card"><div class="card-header"><div><h2>Performa portofolio</h2><p class="muted">Pertumbuhan saldo & sinyal AI</p></div><select class="select-small"><option>30 hari terakhir</option><option>90 hari terakhir</option></select></div><div class="chart-area"><div class="chart-labels"><span>3k</span><span>2k</span><span>1k</span><span>500</span><span>0</span></div><div class="chart-grid"></div>${chartSvg()}</div><div class="legend"><span><i class="green"></i>Saldo</span><span><i class="blue"></i>Sinyal aktif</span></div></div>
+      <div class="card wide-card"><div class="card-header"><div><h2>Aktivitas workspace</h2><p class="muted">Grafik akan tersedia saat data historis valid tersedia.</p></div></div><div class="empty-placeholder" role="status">Belum ada data historis yang cukup untuk menampilkan grafik.</div></div>
       <div class="card"><div class="card-header"><div><h2>Paket auto-trading</h2><p class="muted">Sedang berjalan</p></div><button class="action-link" data-view="packages">Lihat semua →</button></div><div class="campaign-list">${
         packages.length
           ? packages.map((p) => `<div class="campaign-row"><div class="campaign-mark" style="background:#e3fbf1"><span data-icon="layers" data-icon-size="15"></span></div><div class="campaign-info"><strong>${p.packageName}</strong><span>Modal ${money(p.amount)} · ROI ${p.dailyRoi}%/hari</span></div><span class="pill pill-active">Active</span></div>`).join("")
@@ -198,7 +191,7 @@ function dashboardView() {
 
     <div class="dashboard-grid">
       <div class="card"><div class="card-header"><div><h2>Alokasi portofolio</h2><p class="muted">Distribusi saldo & paket aktif</p></div></div><div class="donut-row">${donutChart(allocationSegments)}<div class="donut-legend">${allocationSegments.map((s) => `<div><i style="background:${s.color}"></i>${s.label}<b>${money(s.value)}</b></div>`).join("")}</div></div></div>
-      <div class="card wide-card"><div class="card-header"><div><h2>Deposit vs penarikan</h2><p class="muted">Tren 6 bulan terakhir</p></div></div><div style="padding:6px 21px 18px">${barChartSvg(trendBars)}</div><div class="legend" style="padding:0 21px 17px"><span><i class="green"></i>Deposit</span><span><i class="blue"></i>Penarikan</span></div></div>
+      <div class="card wide-card"><div class="card-header"><div><h2>Ringkasan aktivitas</h2><p class="muted">Total dari catatan akun yang tersedia</p></div></div><div class="donut-row"><div class="donut-legend"><div>Deposit disetujui<b>${money(approvedDeposits)}</b></div><div>Penarikan tercatat<b>${money(doneWithdrawals)}</b></div></div></div></div>
     </div>`;
 }
 

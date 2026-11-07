@@ -109,7 +109,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = public, pg_temp
-as $
+as $$
 begin
   if auth.uid() is not null and not public.is_admin() then
     new.id := old.id;
@@ -122,7 +122,7 @@ begin
   end if;
   return new;
 end;
-$;
+$$;
 
 drop trigger if exists trg_protect_notification on public.notifications;
 create trigger trg_protect_notification

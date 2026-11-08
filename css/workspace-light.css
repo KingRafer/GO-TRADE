@@ -1,0 +1,127 @@
+/* Light professional workspace (screenshot match) */
+body.light.app-mode,
+body.app-mode.light {
+  --bg: #f3f6f4;
+  --bg-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --bg-hover: #f0f7f3;
+  --border: #e5ebe7;
+  --border-light: #d1ddd6;
+  --text: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --primary: #0f766e;
+  --primary-hover: #0d5c56;
+  --primary-glow: rgba(15,118,110,0.15);
+  --sidebar-w: 250px;
+}
+body.app-mode.light .sidebar {
+  background: linear-gradient(180deg, #0a2f24 0%, #0d3b2e 100%);
+  border-right: none;
+  color: #e8f5f0;
+}
+body.app-mode.light .sidebar-brand strong { color: #fff; }
+body.app-mode.light .sidebar-brand span { color: rgba(255,255,255,0.55); }
+body.app-mode.light .nav-item { color: rgba(255,255,255,0.7); }
+body.app-mode.light .nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
+body.app-mode.light .nav-item.active {
+  background: rgba(16,185,129,0.2); color: #6ee7b7;
+}
+body.app-mode.light .nav-section { color: rgba(255,255,255,0.4); }
+body.app-mode.light .sidebar-foot { border-top-color: rgba(255,255,255,0.1); }
+body.app-mode.light .profile-card strong { color: #fff; }
+body.app-mode.light .profile-card span { color: rgba(255,255,255,0.55); }
+body.app-mode.light .sidebar .btn-ghost { color: rgba(255,255,255,0.7); }
+body.app-mode.light .topbar {
+  background: #fff; border-bottom: 1px solid var(--border);
+}
+body.app-mode.light .main { background: var(--bg); }
+body.app-mode.light .breadcrumb { color: var(--text-muted); font-weight: 500; font-size: 13px; }
+body.app-mode.light .stat-card,
+body.app-mode.light .card {
+  background: #fff; border: 1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  border-radius: 14px;
+}
+.summary-banner {
+  background: linear-gradient(135deg, #0d3b2e, #115e4b);
+  color: #fff; border-radius: 16px; padding: 24px 28px;
+  display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.summary-banner h3 { font-size: 16px; margin-bottom: 6px; }
+.summary-banner p { font-size: 13px; opacity: 0.8; max-width: 360px; }
+.summary-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 28px; }
+.summary-meta span { display: block; font-size: 10px; letter-spacing: 1px; opacity: 0.6; margin-bottom: 2px; }
+.summary-meta strong { font-size: 13px; }
+.ticker-bar {
+  background: #0d3b2e; color: #a7f3d0; border-radius: 10px;
+  padding: 10px 16px; font-size: 12px; font-family: var(--mono);
+  margin-bottom: 16px; overflow: hidden; white-space: nowrap;
+}
+.eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+  color: var(--primary); margin-bottom: 6px;
+}
+.signal-cards {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;
+}
+.signal-card {
+  background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 20px;
+}
+.signal-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.signal-tf { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.side-badge {
+  padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700;
+}
+.side-badge.buy { background: #d1fae5; color: #047857; }
+.side-badge.sell { background: #fee2e2; color: #b91c1c; }
+.signal-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  background: #f0fdf6; border-radius: 10px; padding: 14px; margin-bottom: 12px;
+}
+.signal-grid span { display: block; font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; }
+.signal-grid strong { font-size: 15px; font-family: var(--mono); }
+.signal-reason { font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; line-height: 1.5; }
+.signal-foot { font-size: 11px; color: var(--text-muted); }
+.alert-banner {
+  background: #fffbeb; border: 1px dashed #fcd34d; border-radius: 10px;
+  padding: 12px 16px; font-size: 13px; color: #92400e; margin-bottom: 20px;
+}
+.alert-banner.warn { background: #fff7ed; border-color: #fdba74; color: #9a3412; }
+.badge-soft {
+  background: #d1fae5; color: #047857; padding: 6px 14px; border-radius: 100px;
+  font-size: 12px; font-weight: 600;
+}
+.ref-code-box {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: #f0fdf6; border: 1px dashed #86efac; border-radius: 12px; padding: 14px 16px;
+}
+.ref-code-box code { font-family: var(--mono); font-size: 18px; font-weight: 700; color: var(--primary); }
+.pkg-mini {
+  display: flex; align-items: center; gap: 14px; padding: 14px;
+  background: var(--bg); border-radius: 12px;
+}
+.pkg-mini-icon {
+  width: 40px; height: 40px; border-radius: 10px; background: #d1fae5;
+  display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--primary);
+}
+.deposit-box {
+  background: #0d3b2e; color: #e8f5f0; border-radius: 14px; padding: 20px;
+}
+.deposit-label { font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+.qr-placeholder {
+  width: 120px; height: 120px; background: #fff; color: #0d3b2e;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; border-radius: 8px; margin-bottom: 12px;
+}
+.wallet-addr {
+  font-family: var(--mono); font-size: 11px; word-break: break-all;
+  background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; margin-bottom: 12px;
+}
+.deposit-box .form-control { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #fff; }
+.deposit-box label { color: rgba(255,255,255,0.7); }
+body.app-mode.light .btn-primary {
+  background: #0d3b2e; box-shadow: none;
+}
+body.app-mode.light .btn-primary:hover { background: #0a2f24; }

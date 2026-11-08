@@ -159,9 +159,9 @@ function seedSignals() {
   signals = Array.from({ length: 10 }, () => generateSignal()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 }
 const DEFAULT_USER = {
-  id: 'u-demo', name: 'Demo Trader', email: 'demo@go-trade.app', role: 'member',
-  balance: 12580.45, equity: 13240.20, pnlToday: 342.80, pnlTotal: 2840.50,
-  activePackage: 'Growth', verified: true, referralCode: 'GOTRADE-DEMO88', avatar: null, joinedAt: '2025-11-12',
+  id: 'u-demo', name: 'satrio', email: 'demo@gotrade.io', role: 'member',
+  balance: 1250.50, equity: 1250.50, pnlToday: 31.50, pnlTotal: 186.30,
+  activePackage: 'Growth', verified: true, referralCode: 'GOTRADE-DEMO1', avatar: null, joinedAt: '2025-11-12',
 };
 const PACKAGES = [
   { id: 'starter', name: 'Starter', price: 50, roi: 1.1, duration: 30, features: ['Sinyal dasar', 'Chart standar', 'Risk basic', 'Support komunitas'] },

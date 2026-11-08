@@ -41,7 +41,7 @@ function enterDemo(role = 'member') {
   const app = $('#app');
   if (landing) landing.style.display = 'none';
   if (app) app.style.display = 'flex';
-  document.body.classList.add('app-mode');
+  document.body.classList.add('app-mode', 'light'); document.body.classList.remove('dark');
   renderSidebar();
   navigate(role === 'admin' ? 'admin-overview' : 'dashboard');
   startLiveUpdates();
@@ -61,21 +61,22 @@ function logout() {
 }
 
 const MEMBER_NAV = [
-  { section: 'Utama' },
+  { section: 'WORKSPACE' },
   { id: 'dashboard', icon: '◈', label: 'Dashboard' },
-  { id: 'signals', icon: '⚡', label: 'AI Signals' },
-  { id: 'charts', icon: '📊', label: 'Live Charts' },
-  { id: 'portfolio', icon: '💼', label: 'Portfolio' },
-  { section: 'Trading' },
-  { id: 'packages', icon: '📦', label: 'Auto-Trading' },
+  { id: 'signals', icon: '⚡', label: 'Signals' },
+  { id: 'packages', icon: '📦', label: 'Auto Trading' },
   { id: 'wallet', icon: '💰', label: 'Wallet' },
+  { id: 'deposit', icon: '↓', label: 'Deposit' },
+  { id: 'withdrawal', icon: '↑', label: 'Withdrawal' },
+  { section: 'GROWTH' },
+  { id: 'referral', icon: '🌐', label: 'Network' },
+  { id: 'bonus', icon: '✦', label: 'Bonus Tracking' },
   { id: 'history', icon: '📋', label: 'Trade History' },
-  { section: 'Network' },
-  { id: 'referral', icon: '🌐', label: 'Referral' },
+  { id: 'notifications', icon: '🔔', label: 'Notifications' },
   { id: 'news', icon: '📰', label: 'News' },
-  { section: 'Akun' },
-  { id: 'settings', icon: '⚙️', label: 'Settings' },
   { id: 'help', icon: '❓', label: 'Help Center' },
+  { id: 'settings', icon: '⚙️', label: 'Account settings' },
+  { id: 'charts', icon: '📊', label: 'Live Charts' },
 ];
 
 const ADMIN_NAV = [
@@ -109,7 +110,7 @@ function renderSidebar() {
     ['userName', 'footName'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = currentUser.name; });
     ['userAvatar', 'topAvatar', 'footAvatar'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = initials; });
     const st = document.getElementById('userStatus');
-    if (st) st.textContent = currentUser.verified ? 'Verified' : 'Unverified';
+    if (st) st.textContent = currentUser.verified ? 'Verified member' : 'Unverified';
   }
 }
 
@@ -117,9 +118,10 @@ function navigate(viewId) {
   currentView = viewId;
   $$('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.view === viewId));
   const labels = {
-    dashboard: 'Dashboard', signals: 'AI Signals', charts: 'Live Charts', portfolio: 'Portfolio',
-    packages: 'Auto-Trading Packages', wallet: 'Wallet', history: 'Trade History', referral: 'Referral Network',
-    news: 'News', settings: 'Account Settings', help: 'Help Center',
+    dashboard: 'Dashboard', signals: 'Signals', charts: 'Live Charts', portfolio: 'Portfolio',
+    packages: 'Auto Trading', wallet: 'Wallet', deposit: 'Deposit', withdrawal: 'Withdrawal',
+    history: 'Trade History', referral: 'Network & referral', bonus: 'Bonus Tracking',
+    notifications: 'Notifications', news: 'News', settings: 'Account settings', help: 'Help Center',
     'admin-overview': 'Admin Overview', 'admin-users': 'Manage Users', 'admin-signals': 'Manage Signals',
     'admin-deposits': 'Deposit Approvals', 'admin-withdrawals': 'Withdrawal Approvals',
     'admin-packages': 'Manage Packages', 'admin-news': 'News & Broadcast', 'admin-settings': 'System Settings',

@@ -1,174 +1,664 @@
-/* GO TRADE — All Views */
+/* GO TRADE — Premium Views (screenshot-matched + luxury) */
 function renderView(id) {
   const root = document.getElementById('viewRoot');
   if (!root) return;
   const map = {
-    dashboard: viewDashboard, signals: viewSignals, charts: viewCharts, portfolio: viewPortfolio,
-    packages: viewPackages, wallet: viewWallet, history: viewHistory, referral: viewReferral,
-    news: viewNews, settings: viewSettings, help: viewHelp,
-    'admin-overview': viewAdminOverview, 'admin-users': viewAdminUsers, 'admin-signals': viewAdminSignals,
-    'admin-deposits': viewAdminDeposits, 'admin-withdrawals': viewAdminWithdrawals,
-    'admin-packages': viewAdminPackages, 'admin-news': viewAdminNews, 'admin-settings': viewAdminSettings,
+    dashboard: viewDashboard,
+    signals: viewSignals,
+    charts: viewCharts,
+    portfolio: viewPortfolio,
+    packages: viewPackages,
+    wallet: viewWallet,
+    deposit: viewDeposit,
+    withdrawal: viewWithdrawal,
+    history: viewHistory,
+    referral: viewReferral,
+    bonus: viewBonus,
+    news: viewNews,
+    settings: viewSettings,
+    help: viewHelp,
+    notifications: viewNotifications,
+    'admin-overview': viewAdminOverview,
+    'admin-users': viewAdminUsers,
+    'admin-signals': viewAdminSignals,
+    'admin-deposits': viewAdminDeposits,
+    'admin-withdrawals': viewAdminWithdrawals,
+    'admin-packages': viewAdminPackages,
+    'admin-news': viewAdminNews,
+    'admin-settings': viewAdminSettings,
   };
   const fn = map[id];
   if (fn) {
     root.innerHTML = fn();
-    if (id === 'dashboard') setTimeout(() => { if (typeof initMiniChart==='function') initMiniChart('equityChart','BTCUSDT',160); renderSignalList('dashSignals',4); }, 50);
-    if (id === 'charts') setTimeout(() => { currentPair='BTCUSDT'; currentTf='5m'; if (typeof initMainChart==='function') initMainChart('workspaceChart'); }, 80);
-    if (id === 'signals') renderSignalList('fullSignalList', 15);
+    if (id === 'dashboard') {
+      setTimeout(() => {
+        if (typeof initMiniChart === 'function') initMiniChart('equityChart', 'BTCUSDT', 180);
+      }, 60);
+    }
+    if (id === 'charts') {
+      setTimeout(() => {
+        currentPair = 'BTCUSDT';
+        currentTf = '15m';
+        if (typeof initMainChart === 'function') initMainChart('workspaceChart');
+        bindPairTabs();
+      }, 80);
+    }
+    if (id === 'signals') {
+      // already rendered in view
+    }
   } else {
-    root.innerHTML = '<div class="empty-state"><div class="icon">🚧</div><p>View "'+id+'" sedang dikembangkan</p></div>';
+    root.innerHTML = '<div class="empty-state"><div class="icon">🚧</div><p>View "' + id + '" sedang dikembangkan</p></div>';
   }
 }
 
+function money(n) {
+  if (n == null || isNaN(n)) return '$0.00';
+  return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
 function viewDashboard() {
-  const u = currentUser;
-  return '<div class="view-header"><div><h1>Selamat datang, '+u.name.split(' ')[0]+' 👋</h1><p class="sub">Ringkasan performa dan market intelligence hari ini</p></div>'+
-    '<button class="btn btn-primary" onclick="navigate(\'signals\')">Lihat Signals →</button></div>'+
-    '<div class="stats-row">'+
-    '<div class="stat-card"><div class="label">Wallet Balance</div><div class="value">'+money(u.balance)+'</div><div class="change up">↑ Available</div></div>'+
-    '<div class="stat-card"><div class="label">Equity</div><div class="value">'+money(u.equity)+'</div><div class="change up">↑ +'+money(u.equity-u.balance)+'</div></div>'+
-    '<div class="stat-card"><div class="label">PnL Hari Ini</div><div class="value" style="color:var(--long)">'+money(u.pnlToday)+'</div><div class="change up">↑ +2.81%</div></div>'+
-    '<div class="stat-card"><div class="label">Paket Aktif</div><div class="value" style="font-size:20px">'+(u.activePackage||'—')+'</div><div class="change">Growth · ROI 1.8%/hari</div></div></div>'+
-    '<div class="grid-chart" style="margin-bottom:24px"><div class="card"><div class="card-head"><h3 style="font-size:15px">Equity Curve</h3></div><div id="equityChart" style="height:180px;padding:8px 12px"></div></div>'+
-    '<div class="card"><div class="card-head"><h3 style="font-size:15px">Posisi Aktif</h3></div><div style="padding:12px 16px">'+
-    positions.map(p => '<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)"><div><strong style="font-size:13px">'+p.pair+'</strong> <span class="tag '+p.side+'">'+p.side.toUpperCase()+'</span></div>'+
-    '<div style="text-align:right;font-family:var(--mono);font-size:13px;color:'+(p.pnl>=0?'var(--long)':'var(--short)')+'">'+(p.pnl>=0?'+':'')+money(p.pnl)+'</div></div>').join('')+
-    '</div></div></div><div class="grid-2"><div class="card"><div class="card-head"><h3 style="font-size:15px">AI Signals Terbaru</h3><button class="btn btn-ghost btn-sm" onclick="navigate(\'signals\')">Semua →</button></div><div id="dashSignals" class="signal-list" style="max-height:340px"></div></div>'+
-    '<div class="card"><div class="card-head"><h3 style="font-size:15px">News & Update</h3></div><div style="padding:8px 0">'+
-    NEWS.map(n => '<div style="padding:14px 20px;border-bottom:1px solid var(--border)"><span class="tag info">'+n.tag+'</span> <span style="font-size:11px;color:var(--text-muted)">'+n.time+'</span><div style="font-size:13px;margin-top:4px">'+n.title+'</div></div>').join('')+
-    '</div></div></div>';
+  const u = currentUser || { name: 'satrio', balance: 1250.5, equity: 1250.5, pnlToday: 31.5, activePackage: 'Growth', referralCode: 'GOTRADE-DEMO1', verified: true };
+  const firstName = (u.name || 'satrio').split(' ')[0];
+  return `
+  <div class="view-header dash-header">
+    <div>
+      <div class="eyebrow">WORKSPACE</div>
+      <h1>Halo, ${firstName}</h1>
+      <p class="sub">Ringkasan akun yang membantu Anda melihat langkah berikutnya.</p>
+    </div>
+    <button class="btn btn-primary" onclick="navigate('deposit')">+ Tambah dana</button>
+  </div>
+
+  <div class="ticker-bar" id="dashTicker"></div>
+
+  <div class="summary-banner">
+    <div>
+      <h3>Ringkasan akun</h3>
+      <p>Data simulasi tersimpan lokal. Pantau wallet, sinyal, dan aktivitas dari satu ruang kerja.</p>
+    </div>
+    <div class="summary-meta">
+      <div><span>USERNAME</span><strong>${u.name || 'satrio'}</strong></div>
+      <div><span>EMAIL</span><strong>${u.email || 'demo@gotrade.io'}</strong></div>
+      <div><span>REFERRAL CODE</span><strong>${u.referralCode || 'GOTRADE-DEMO1'}</strong></div>
+      <div><span>ACCOUNT LEVEL</span><strong>Level 1</strong></div>
+    </div>
+  </div>
+
+  <div class="stats-row four">
+    <div class="stat-card luxury">
+      <div class="stat-icon">💳</div>
+      <div class="label">Wallet balance</div>
+      <div class="value">${money(u.balance || 1250.5)}</div>
+      <div class="change up">↑ 8.4% vs last month</div>
+    </div>
+    <div class="stat-card luxury">
+      <div class="stat-icon">🛡️</div>
+      <div class="label">Status akun</div>
+      <div class="value" style="font-size:20px">${u.verified !== false ? 'Verified' : 'Unverified'}</div>
+      <div class="change">Siap digunakan · demo</div>
+    </div>
+    <div class="stat-card luxury">
+      <div class="stat-icon">📦</div>
+      <div class="label">Paket aktif</div>
+      <div class="value" style="font-size:22px">1</div>
+      <div class="change">Reward harian · berjalan</div>
+    </div>
+    <div class="stat-card luxury">
+      <div class="stat-icon">✨</div>
+      <div class="label">Total bonus</div>
+      <div class="value">${money(u.pnlToday || 31.5)}</div>
+      <div class="change up">↑ 12.5% dari network</div>
+    </div>
+  </div>
+
+  <div class="grid-2 dash-grid">
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h3>Performa portofolio</h3>
+          <p class="card-sub">Saldo dan intensitas sinyal selama 30 hari</p>
+        </div>
+        <select class="select-sm" onchange="toast('Filter diubah','info')">
+          <option>30 hari terakhir</option>
+          <option>7 hari</option>
+          <option>90 hari</option>
+        </select>
+      </div>
+      <div id="equityChart" style="height:220px;padding:8px 12px 16px"></div>
+      <div class="chart-legend">
+        <span><i class="dot saldo"></i> Saldo</span>
+        <span><i class="dot signal"></i> Signal activity</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h3>Paket auto-trading</h3>
+          <p class="card-sub">Sedang berjalan</p>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="navigate('packages')">Lihat semua →</button>
+      </div>
+      <div class="active-pkg">
+        <div class="pkg-icon">◈</div>
+        <div>
+          <strong>Growth Auto-Trade</strong>
+          <div class="pkg-meta">Modal $500.00 · ROI 1.3% /hari</div>
+        </div>
+        <span class="tag success">Active</span>
+      </div>
+      <div class="pkg-progress">
+        <div class="progress-bar"><div style="width:62%"></div></div>
+        <div class="progress-labels"><span>Hari 18/45</span><span>62%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:20px">
+    <div class="card">
+      <div class="card-head"><h3>Aktivitas mingguan</h3></div>
+      <div class="activity-list">
+        <div class="activity-item"><span class="ai-dot up"></span><div><strong>ROI harian Growth</strong><small>+$6.50</small></div><span class="time">Hari ini</span></div>
+        <div class="activity-item"><span class="ai-dot"></span><div><strong>Sinyal BTC/USDT aktif</strong><small>Buy · H4</small></div><span class="time">2 jam</span></div>
+        <div class="activity-item"><span class="ai-dot"></span><div><strong>Referral code dibagikan</strong><small>GOTRADE-DEMO1</small></div><span class="time">1 hari</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Komposisi wallet</h3></div>
+      <div class="wallet-comp">
+        <div class="comp-row"><span>USDT (BEP20)</span><strong>92%</strong></div>
+        <div class="comp-bar"><div style="width:92%;background:#10b981"></div></div>
+        <div class="comp-row"><span>Bonus pending</span><strong>5%</strong></div>
+        <div class="comp-bar"><div style="width:5%;background:#34d399"></div></div>
+        <div class="comp-row"><span>Locked package</span><strong>3%</strong></div>
+        <div class="comp-bar"><div style="width:3%;background:#6ee7b7"></div></div>
+      </div>
+    </div>
+  </div>`;
 }
 
 function viewSignals() {
-  return '<div class="view-header"><div><h1>AI Trading Signals</h1><p class="sub">Sinyal real-time dengan confidence score dan AI reasoning</p></div>'+
-    '<button class="btn btn-outline btn-sm" onclick="signals.unshift(generateSignal());renderSignalList(\'fullSignalList\',15);toast(\'Sinyal baru\',\'success\')">⟳ Refresh</button></div>'+
-    '<div class="stats-row"><div class="stat-card"><div class="label">Signals Aktif</div><div class="value">'+signals.filter(s=>s.status==='active').length+'</div></div>'+
-    '<div class="stat-card"><div class="label">Avg Confidence</div><div class="value">'+Math.round(signals.reduce((a,s)=>a+s.confidence,0)/signals.length)+'%</div></div>'+
-    '<div class="stat-card"><div class="label">Win Rate (30d)</div><div class="value" style="color:var(--long)">87.4%</div></div></div>'+
-    '<div class="card"><div id="fullSignalList" class="signal-list" style="max-height:none"></div></div>';
+  const demoSignals = [
+    {
+      pair: 'BTC/USDT', side: 'Buy', tf: 'H4 · Sep 13, 2026',
+      entry: '63,800', target: '66,200', sl: '62,400', status: 'ACTIVE',
+      note: 'Momentum bullish setelah breakout resistance mingguan. Perhatikan volume konfirmasi.',
+      desk: 'GO TRADE signal desk', tfShort: 'H4'
+    },
+    {
+      pair: 'ETH/USDT', side: 'Sell', tf: 'H1 · Sep 12, 2026',
+      entry: '3,180', target: '3,050', sl: '3,250', status: 'ACTIVE',
+      note: 'Rejection dari resistance kuat. RSI overbought di timeframe H1.',
+      desk: 'GO TRADE signal desk', tfShort: 'H1'
+    },
+  ];
+
+  return `
+  <div class="view-header">
+    <div>
+      <div class="eyebrow">GO TRADE INTELLIGENCE</div>
+      <h1>Signals</h1>
+      <p class="sub">Sinyal resmi yang dipublikasikan tim GO TRADE.</p>
+    </div>
+    <div class="header-actions">
+      <span class="live-pill">● 2 signal aktif</span>
+    </div>
+  </div>
+
+  <div class="alert-banner warning">
+    Signal adalah data simulasi untuk demo, bukan saran keuangan atau jaminan profit. Lakukan riset Anda sendiri sebelum mengambil keputusan trading.
+  </div>
+
+  <div class="signal-cards">
+    ${demoSignals.map(s => `
+      <div class="signal-card luxury">
+        <div class="signal-card-top">
+          <div>
+            <div class="signal-pair">${s.pair}</div>
+            <div class="signal-tf">${s.tf}</div>
+          </div>
+          <span class="side-badge ${s.side.toLowerCase()}">${s.side === 'Buy' ? '↗ Buy' : '↘ Sell'}</span>
+        </div>
+        <div class="signal-grid">
+          <div><span>ENTRY</span><strong>${s.entry}</strong></div>
+          <div><span>TARGET</span><strong>${s.target}</strong></div>
+          <div><span>STOP LOSS</span><strong>${s.sl}</strong></div>
+          <div><span>STATUS</span><strong class="status-active">${s.status}</strong></div>
+        </div>
+        <p class="signal-note">${s.note}</p>
+        <div class="signal-foot">
+          <span>✦ ${s.desk}</span>
+          <span>${s.tfShort}</span>
+        </div>
+      </div>
+    `).join('')}
+  </div>
+
+  <div class="card" style="margin-top:24px">
+    <div class="card-head">
+      <h3>Semua sinyal</h3>
+      <button class="btn btn-outline btn-sm" onclick="toast('Sinyal diperbarui','success')">⟳ Refresh</button>
+    </div>
+    <div id="fullSignalList" class="signal-list"></div>
+  </div>`;
 }
 
 function viewCharts() {
-  return '<div class="view-header"><div><h1>Live Charts</h1><p class="sub">Data real-time dari Binance</p></div><span class="live-badge"><span class="dot"></span> REAL DATA</span></div>'+
-    '<div class="card chart-card"><div class="card-head"><div class="pair-tabs" id="pairTabsWS">'+
-    Object.keys(PAIRS).map((p,i)=>'<button class="'+(i===0?'active':'')+'" data-pair="'+p+'">'+p.replace('USDT','')+'</button>').join('')+
-    '</div><div class="tf-tabs"><button data-tf="1m">1m</button><button data-tf="5m" class="active">5m</button><button data-tf="15m">15m</button><button data-tf="1h">1H</button><button data-tf="4h">4H</button><button data-tf="1d">1D</button></div></div>'+
-    '<div id="workspaceChart" class="chart-container" style="height:500px"></div>'+
-    '<div class="chart-footer"><div class="price-box"><span class="label">Last</span><strong id="lastPrice">—</strong> <span class="chg" id="priceChg"></span></div>'+
-    '<div class="price-box"><span class="label">24h High</span><strong id="high24">—</strong></div>'+
-    '<div class="price-box"><span class="label">24h Low</span><strong id="low24">—</strong></div>'+
-    '<div class="price-box"><span class="label">Volume</span><strong id="vol24">—</strong></div></div></div>';
+  return `
+  <div class="view-header">
+    <div>
+      <div class="eyebrow">MARKET DATA</div>
+      <h1>Live Charts</h1>
+      <p class="sub">Data real-time dari Binance · Chart disesuaikan per pair</p>
+    </div>
+    <span class="live-badge"><span class="dot"></span> REAL DATA</span>
+  </div>
+  <div class="card chart-card luxury">
+    <div class="card-head chart-toolbar">
+      <div class="pair-tabs" id="pairTabsWS">
+        ${Object.keys(PAIRS).map((p, i) => `<button class="${i === 0 ? 'active' : ''}" data-pair="${p}">${p.replace('USDT', '')}</button>`).join('')}
+      </div>
+      <div class="tf-tabs">
+        <button data-tf="1m">1m</button>
+        <button data-tf="5m">5m</button>
+        <button data-tf="15m" class="active">15m</button>
+        <button data-tf="1h">1H</button>
+        <button data-tf="4h">4H</button>
+        <button data-tf="1d">1D</button>
+      </div>
+    </div>
+    <div id="workspaceChart" class="chart-container" style="height:520px"></div>
+    <div class="chart-footer">
+      <div class="price-box"><span class="label">Last</span><strong id="lastPrice">—</strong> <span class="chg" id="priceChg"></span></div>
+      <div class="price-box"><span class="label">24h High</span><strong id="high24">—</strong></div>
+      <div class="price-box"><span class="label">24h Low</span><strong id="low24">—</strong></div>
+      <div class="price-box"><span class="label">Volume</span><strong id="vol24">—</strong></div>
+    </div>
+  </div>`;
+}
+
+function bindPairTabs() {
+  document.querySelectorAll('#pairTabsWS button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#pairTabsWS button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentPair = btn.dataset.pair;
+      if (typeof initMainChart === 'function') initMainChart('workspaceChart');
+    });
+  });
+  document.querySelectorAll('.tf-tabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tf-tabs button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTf = btn.dataset.tf;
+      if (typeof initMainChart === 'function') initMainChart('workspaceChart');
+    });
+  });
 }
 
 function viewPortfolio() {
-  const totalPnl = positions.reduce((a,p)=>a+p.pnl,0);
-  return '<div class="view-header"><div><h1>Portfolio</h1><p class="sub">Posisi terbuka dan risk metrics</p></div></div>'+
-    '<div class="stats-row"><div class="stat-card"><div class="label">Positions</div><div class="value">'+positions.length+'</div></div>'+
-    '<div class="stat-card"><div class="label">Unrealized PnL</div><div class="value" style="color:'+(totalPnl>=0?'var(--long)':'var(--short)')+'">'+(totalPnl>=0?'+':'')+money(totalPnl)+'</div></div></div>'+
-    '<div class="table-wrap"><table><thead><tr><th>Pair</th><th>Side</th><th>Size</th><th>Entry</th><th>Current</th><th>PnL</th></tr></thead><tbody>'+
-    positions.map(p=>'<tr><td><strong>'+p.pair+'</strong></td><td><span class="tag '+p.side+'">'+p.side.toUpperCase()+'</span></td><td style="font-family:var(--mono)">'+p.size+'</td><td style="font-family:var(--mono)">'+p.entry+'</td><td style="font-family:var(--mono)">'+p.current.toFixed(2)+'</td><td style="font-family:var(--mono);color:'+(p.pnl>=0?'var(--long)':'var(--short)')+'">'+(p.pnl>=0?'+':'')+money(p.pnl)+'</td></tr>').join('')+
-    '</tbody></table></div>';
+  return `
+  <div class="view-header"><div><h1>Portfolio</h1><p class="sub">Posisi dan performa terkini</p></div></div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="label">Total Equity</div><div class="value">${money(currentUser?.equity || 1250)}</div></div>
+    <div class="stat-card"><div class="label">Unrealized PnL</div><div class="value" style="color:var(--long)">+${money(492)}</div></div>
+    <div class="stat-card"><div class="label">Open Positions</div><div class="value">3</div></div>
+  </div>
+  <div class="card"><div class="table-wrap"><table>
+    <thead><tr><th>Pair</th><th>Side</th><th>Size</th><th>Entry</th><th>Current</th><th>PnL</th></tr></thead>
+    <tbody>
+      ${(positions || []).map(p => `<tr>
+        <td><strong>${p.pair}</strong></td>
+        <td><span class="tag ${p.side}">${p.side.toUpperCase()}</span></td>
+        <td>${p.size}</td>
+        <td style="font-family:var(--mono)">${p.entry}</td>
+        <td style="font-family:var(--mono)">${p.current}</td>
+        <td style="color:${p.pnl >= 0 ? 'var(--long)' : 'var(--short)'};font-family:var(--mono)">${p.pnl >= 0 ? '+' : ''}${money(p.pnl)} (${p.pnlPct}%)</td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div></div>`;
 }
 
 function viewPackages() {
-  return '<div class="view-header"><div><h1>Auto-Trading Packages</h1><p class="sub">Aktifkan mesin trading AI</p></div></div><div class="packages-grid">'+
-    PACKAGES.map(pkg=>'<div class="pkg-card '+(pkg.popular?'featured':'')+'"><div class="pkg-badge '+(pkg.popular?'popular':'')+'">'+(pkg.popular?'PALING POPULER':pkg.name.toUpperCase())+'</div>'+
-    '<div class="pkg-price">$'+pkg.price+'<span>/min</span></div><p>ROI harian hingga <strong style="color:var(--primary)">'+pkg.roi+'%</strong> · '+pkg.duration+' hari</p>'+
-    '<ul>'+pkg.features.map(f=>'<li>✓ '+f+'</li>').join('')+'</ul>'+
-    '<button class="btn '+(pkg.popular?'btn-primary':'btn-outline')+' btn-block" onclick="toast(\'Paket '+pkg.name+' — gunakan wallet untuk aktivasi\',\'info\')">'+(currentUser.activePackage===pkg.name?'✓ Aktif':'Aktifkan')+'</button></div>').join('')+'</div>';
+  return `
+  <div class="view-header"><div><h1>Auto-Trading Packages</h1><p class="sub">Aktifkan paket dari saldo wallet</p></div></div>
+  <div class="packages-grid">
+    ${PACKAGES.map(pkg => `
+      <div class="pkg-card ${pkg.popular ? 'popular' : ''}">
+        ${pkg.popular ? '<div class="pkg-badge">PALING POPULER</div>' : ''}
+        <div class="pkg-name">${pkg.name.toUpperCase()}</div>
+        <div class="pkg-price">$${pkg.price}<span>/min</span></div>
+        <p class="pkg-desc">ROI harian hingga ${pkg.roi}% · ${pkg.duration} hari</p>
+        <ul>${pkg.features.map(f => `<li>✓ ${f}</li>`).join('')}</ul>
+        <button class="btn ${pkg.popular ? 'btn-primary' : 'btn-outline'} btn-block" onclick="toast('Paket ${pkg.name} diaktifkan (demo)','success')">Aktifkan</button>
+      </div>
+    `).join('')}
+  </div>`;
 }
 
 function viewWallet() {
-  return '<div class="view-header"><div><h1>Wallet</h1><p class="sub">Deposit, withdraw, riwayat</p></div>'+
-    '<button class="btn btn-primary" onclick="toast(\'Deposit demo: saldo ditambah\',\'success\');currentUser.balance+=100;navigate(\'wallet\')">+ Deposit</button></div>'+
-    '<div class="stats-row"><div class="stat-card"><div class="label">Available</div><div class="value">'+money(currentUser.balance)+'</div></div>'+
-    '<div class="stat-card"><div class="label">Equity</div><div class="value">'+money(currentUser.equity)+'</div></div></div>'+
-    '<div class="table-wrap"><table><thead><tr><th>ID</th><th>Type</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody>'+
-    transactions.map(t=>'<tr><td style="font-family:var(--mono);font-size:12px">'+t.id+'</td><td><span class="tag info">'+t.type+'</span></td><td style="font-family:var(--mono);color:'+(t.amount>=0?'var(--long)':'var(--short)')+'">'+(t.amount>=0?'+':'')+money(t.amount)+'</td><td><span class="tag '+(t.status==='completed'?'success':'warning')+'">'+t.status+'</span></td><td style="font-size:12px">'+t.date+'</td></tr>').join('')+
-    '</tbody></table></div>';
+  const u = currentUser || { balance: 1250.5 };
+  return `
+  <div class="view-header"><div><h1>Wallet</h1><p class="sub">Saldo & transaksi</p></div>
+  <div class="header-actions">
+    <button class="btn btn-outline" onclick="navigate('deposit')">Deposit</button>
+    <button class="btn btn-primary" onclick="navigate('withdrawal')">Withdraw</button>
+  </div></div>
+  <div class="stats-row">
+    <div class="stat-card luxury"><div class="label">Available</div><div class="value">${money(u.balance)}</div></div>
+    <div class="stat-card luxury"><div class="label">In Packages</div><div class="value">$500.00</div></div>
+    <div class="stat-card luxury"><div class="label">Total Earned</div><div class="value" style="color:var(--long)">+$186.30</div></div>
+  </div>
+  <div class="card"><div class="card-head"><h3>Riwayat transaksi</h3></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>ID</th><th>Type</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+    <tbody>
+      ${(transactions || []).map(t => `<tr>
+        <td style="font-family:var(--mono)">${t.id}</td>
+        <td><span class="tag">${t.type}</span></td>
+        <td style="font-family:var(--mono);color:${t.amount >= 0 ? 'var(--long)' : 'var(--text)'}">${t.amount >= 0 ? '+' : ''}${money(Math.abs(t.amount))}</td>
+        <td><span class="tag ${t.status === 'completed' ? 'success' : 'warning'}">${t.status}</span></td>
+        <td>${t.date}</td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div></div>`;
+}
+
+function viewDeposit() {
+  return `
+  <div class="view-header">
+    <div>
+      <div class="eyebrow">WALLET / TOP UP</div>
+      <h1>Deposit</h1>
+      <p class="sub">Top up saldo untuk membeli paket auto-trading. Admin akan memverifikasi setiap permintaan deposit.</p>
+    </div>
+  </div>
+
+  <div class="alert-banner warning">
+    ⚠️ Ini adalah alamat demo, bukan alamat sungguhan. Jangan pernah mengirim dana asli ke alamat ini.
+  </div>
+
+  <div class="deposit-grid">
+    <div class="card deposit-card">
+      <h3>Pilih rekening & alamat tujuan deposit</h3>
+      <div class="network-tabs">
+        <button class="active">USDT (BEP20) · BNB Smart Chain (BSC)</button>
+      </div>
+      <div class="qr-row">
+        <div class="qr-box">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=0x168B8E4D0AE5F875a22061aa59ee58239F2988a5&color=0d3b2e" alt="QR" width="140" height="140" style="border-radius:8px" />
+        </div>
+        <div class="addr-box">
+          <label>Alamat wallet penerima (BEP20) — DEMO</label>
+          <div class="addr-value">0x168B8E4D0AE5F875a22061aa59ee58239F2988a5</div>
+          <button class="btn btn-primary" onclick="navigator.clipboard.writeText('0x168B8E4D0AE5F875a22061aa59ee58239F2988a5');toast('Alamat disalin','success')">Salin alamat</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Transfer bank (opsional)</h3>
+      <div class="form-group"><label>Atas nama</label><input class="form-control" value="GO TRADE Demo Ltd." readonly /></div>
+      <div class="form-group"><label>Nomor rekening — DEMO</label><input class="form-control" value="0000-1111-2222-3333" readonly /></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <h3 style="margin-bottom:16px">Form deposit</h3>
+    <div class="form-group"><label>Jumlah deposit (min $10)</label><input class="form-control" type="number" placeholder="Masukkan jumlah dalam USD" min="10" /></div>
+    <div class="form-group"><label>Metode pembayaran</label>
+      <select class="form-control"><option>USDT (BEP20)</option><option>Transfer Bank</option></select>
+    </div>
+    <div class="form-group"><label>Catatan (opsional)</label><input class="form-control" placeholder="Contoh: bukti transfer dikirim via chat" /></div>
+    <div class="form-group"><label>Upload bukti transfer</label><input class="form-control" type="file" accept="image/*" /></div>
+    <button class="btn btn-primary" onclick="toast('Permintaan deposit dikirim (demo)','success')">Kirim permintaan deposit</button>
+  </div>`;
+}
+
+function viewWithdrawal() {
+  return `
+  <div class="view-header"><div><h1>Withdrawal</h1><p class="sub">Tarik dana ke wallet atau rekening Anda</p></div></div>
+  <div class="alert-banner warning">Minimum penarikan $20. Proses verifikasi 1×24 jam (demo instan).</div>
+  <div class="card" style="max-width:520px">
+    <div class="form-group"><label>Jumlah (USD)</label><input class="form-control" type="number" placeholder="Minimal 20" min="20" /></div>
+    <div class="form-group"><label>Network</label><select class="form-control"><option>USDT BEP20</option><option>Bank Transfer</option></select></div>
+    <div class="form-group"><label>Alamat / Nomor rekening</label><input class="form-control" placeholder="Masukkan alamat tujuan" /></div>
+    <button class="btn btn-primary" onclick="toast('Permintaan penarikan dikirim','success')">Ajukan penarikan</button>
+  </div>`;
 }
 
 function viewHistory() {
-  return '<div class="view-header"><div><h1>Trade History</h1></div></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Pair</th><th>Side</th><th>Entry</th><th>Exit</th><th>PnL</th></tr></thead><tbody>'+
-    [{d:'2026-11-07',p:'BTCUSDT',s:'long',e:66120,x:67840,pnl:206.4},{d:'2026-11-06',p:'ETHUSDT',s:'long',e:3320,x:3450,pnl:234},{d:'2026-11-05',p:'SOLUSDT',s:'short',e:185.2,x:178.4,pnl:204}].map(t=>
-    '<tr><td>'+t.d+'</td><td><strong>'+t.p+'</strong></td><td><span class="tag '+t.s+'">'+t.s.toUpperCase()+'</span></td><td style="font-family:var(--mono)">'+t.e+'</td><td style="font-family:var(--mono)">'+t.x+'</td><td style="color:var(--long)">+'+money(t.pnl)+'</td></tr>').join('')+
-    '</tbody></table></div>';
+  return `
+  <div class="view-header"><div><h1>Trade History</h1></div></div>
+  <div class="card"><div class="table-wrap"><table>
+    <thead><tr><th>Time</th><th>Pair</th><th>Side</th><th>Entry</th><th>Exit</th><th>PnL</th></tr></thead>
+    <tbody>
+      <tr><td>2026-11-07 14:22</td><td>BTCUSDT</td><td><span class="tag long">LONG</span></td><td>74250</td><td>75884</td><td style="color:var(--long)">+$196.08</td></tr>
+      <tr><td>2026-11-06 09:10</td><td>ETHUSDT</td><td><span class="tag long">LONG</span></td><td>2180</td><td>2234</td><td style="color:var(--long)">+$151.20</td></tr>
+      <tr><td>2026-11-05 22:40</td><td>SOLUSDT</td><td><span class="tag short">SHORT</span></td><td>92.40</td><td>89.18</td><td style="color:var(--long)">+$144.90</td></tr>
+    </tbody>
+  </table></div></div>`;
 }
 
 function viewReferral() {
-  return '<div class="view-header"><div><h1>Referral Network</h1></div></div><div class="stats-row">'+
-    '<div class="stat-card"><div class="label">Kode</div><div class="value" style="font-size:16px;font-family:var(--mono)">'+currentUser.referralCode+'</div></div>'+
-    '<div class="stat-card"><div class="label">Downline</div><div class="value">12</div></div>'+
-    '<div class="stat-card"><div class="label">Bonus</div><div class="value" style="color:var(--long)">'+money(185)+'</div></div></div>'+
-    '<div class="card" style="padding:24px"><h3 style="margin-bottom:12px">Link Referral</h3><input class="form-control" readonly value="https://go-trade.app/ref/'+currentUser.referralCode+'" /></div>';
+  const code = (currentUser && currentUser.referralCode) || 'GOTRADE-DEMO1';
+  return `
+  <div class="view-header">
+    <div>
+      <div class="eyebrow">GROWTH NETWORK</div>
+      <h1>Network & referral</h1>
+      <p class="sub">Undang orang yang Anda percaya dan tumbuh bersama mereka.</p>
+    </div>
+  </div>
+
+  <div class="referral-grid">
+    <div class="card referral-main">
+      <div class="eyebrow">KODE REFERRAL ANDA</div>
+      <h3>Bagikan GO TRADE ke jaringan Anda</h3>
+      <p class="sub">Dapatkan bonus setiap kali teman bergabung dan mengaktifkan paket.</p>
+      <div class="code-box">
+        <span class="code">${code}</span>
+        <button class="btn btn-outline" onclick="navigator.clipboard.writeText('${code}');toast('Kode disalin','success')">Salin kode</button>
+      </div>
+      <div class="ref-link">gotrade.io/join/${code}</div>
+      <div class="ref-stats">
+        <div class="ref-stat"><div class="label">Total referral</div><div class="value">0</div></div>
+        <div class="ref-stat"><div class="label">Member aktif</div><div class="value">0</div></div>
+        <div class="ref-stat"><div class="label">Bonus diterima</div><div class="value">${money(31.5)}</div></div>
+        <div class="ref-stat"><div class="label">Level</div><div class="value">1</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Referral Anda</h3>
+      <p class="sub">Orang yang bergabung lewat kode Anda</p>
+      <div class="empty-ref">
+        <p>Belum ada referral. Bagikan kode Anda untuk mulai.</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+function viewBonus() {
+  return `
+  <div class="view-header"><div><h1>Bonus Tracking</h1><p class="sub">Riwayat bonus referral & reward</p></div></div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="label">Total bonus</div><div class="value">${money(31.5)}</div></div>
+    <div class="stat-card"><div class="label">Bulan ini</div><div class="value">${money(12.5)}</div></div>
+    <div class="stat-card"><div class="label">Pending</div><div class="value">$0.00</div></div>
+  </div>
+  <div class="card"><div class="table-wrap"><table>
+    <thead><tr><th>Tanggal</th><th>Sumber</th><th>Jumlah</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>2026-11-02</td><td>Referral bonus</td><td style="color:var(--long)">+$25.00</td><td><span class="tag success">Paid</span></td></tr>
+      <tr><td>2026-10-28</td><td>Network reward</td><td style="color:var(--long)">+$6.50</td><td><span class="tag success">Paid</span></td></tr>
+    </tbody>
+  </table></div></div>`;
 }
 
 function viewNews() {
-  return '<div class="view-header"><div><h1>News & Analysis</h1></div></div><div class="grid-2">'+
-    NEWS.map(n=>'<div class="card" style="padding:24px"><span class="tag info">'+n.tag+'</span><h3 style="margin:12px 0 8px;font-size:16px">'+n.title+'</h3><p style="font-size:13px;color:var(--text-muted)">'+n.time+'</p></div>').join('')+'</div>';
+  return `
+  <div class="view-header"><div><h1>News</h1><p class="sub">Update pasar & produk</p></div></div>
+  <div class="news-list">
+    ${(NEWS || []).map(n => `
+      <div class="card news-item">
+        <span class="tag info">${n.tag}</span>
+        <h3>${n.title}</h3>
+        <span class="time">${n.time}</span>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+function viewNotifications() {
+  return `
+  <div class="view-header"><div><h1>Notifications</h1></div>
+  <button class="btn btn-ghost btn-sm" onclick="toast('Semua ditandai dibaca','info')">Tandai semua dibaca</button></div>
+  <div class="card">
+    ${(NOTIFS || []).map(n => `
+      <div class="notif-row ${n.read ? '' : 'unread'}">
+        <div class="notif-dot"></div>
+        <div><strong>${n.text}</strong><div class="time">${n.time}</div></div>
+      </div>
+    `).join('')}
+  </div>`;
 }
 
 function viewSettings() {
-  return '<div class="view-header"><div><h1>Account Settings</h1></div></div><div class="grid-2">'+
-    '<div class="card" style="padding:24px"><h3 style="margin-bottom:16px">Profil</h3>'+
-    '<div class="form-group"><label>Nama</label><input class="form-control" value="'+currentUser.name+'" /></div>'+
-    '<div class="form-group"><label>Email</label><input class="form-control" value="'+currentUser.email+'" disabled /></div>'+
-    '<button class="btn btn-primary" onclick="toast(\'Profil disimpan\',\'success\')">Simpan</button></div>'+
-    '<div class="card" style="padding:24px"><h3 style="margin-bottom:16px">Keamanan</h3>'+
-    '<div class="form-group"><label>Password Baru</label><input class="form-control" type="password" /></div>'+
-    '<button class="btn btn-primary" onclick="toast(\'Password diupdate\',\'success\')">Update</button></div></div>';
+  const u = currentUser || { name: 'satrio', email: 'demo@gotrade.io' };
+  return `
+  <div class="view-header"><div><h1>Account settings</h1></div></div>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-bottom:16px">Profil</h3>
+      <div class="form-group"><label>Nama</label><input class="form-control" value="${u.name}" /></div>
+      <div class="form-group"><label>Email</label><input class="form-control" value="${u.email}" readonly /></div>
+      <button class="btn btn-primary" onclick="toast('Profil disimpan','success')">Simpan</button>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:16px">Keamanan</h3>
+      <div class="form-group"><label>Password baru</label><input class="form-control" type="password" placeholder="••••••••" /></div>
+      <button class="btn btn-outline" onclick="toast('Password diubah (demo)','success')">Ubah password</button>
+      <div style="margin-top:20px"><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" /> Aktifkan 2FA (demo)</label></div>
+    </div>
+  </div>`;
 }
 
 function viewHelp() {
-  return '<div class="view-header"><div><h1>Help Center</h1></div></div><div class="grid-2">'+
-    [['Bagaimana deposit?','Pilih network, transfer USDT, konfirmasi otomatis.'],['Apa AI Confidence?','Skor 0-100% keyakinan model terhadap setup.'],['ROI paket?','Dihitung harian dari modal paket.']].map(([q,a])=>
-    '<div class="card" style="padding:24px"><h3 style="font-size:15px;margin-bottom:10px">'+q+'</h3><p style="font-size:13px;color:var(--text-secondary)">'+a+'</p></div>').join('')+'</div>';
+  return `
+  <div class="view-header"><div><h1>Help Center</h1></div></div>
+  <div class="grid-2">
+    ${[['Bagaimana deposit?', 'Pilih network BEP20, transfer USDT ke alamat yang ditampilkan, lalu submit form dengan bukti.'],
+      ['Apa itu AI Confidence?', 'Skor 0–100% yang menunjukkan keyakinan model terhadap setup sinyal.'],
+      ['ROI paket dihitung bagaimana?', 'Dihitung harian dari modal paket yang aktif dan dikredit ke wallet.'],
+      ['Bagaimana referral bekerja?', 'Bagikan kode Anda. Setiap downline yang aktif paket, Anda mendapat bonus.']
+    ].map(([q, a]) => `<div class="card" style="padding:24px"><h3 style="font-size:15px;margin-bottom:10px">${q}</h3><p style="font-size:13px;color:var(--text-secondary);line-height:1.55">${a}</p></div>`).join('')}
+  </div>`;
 }
 
+/* ========== ADMIN VIEWS ========== */
 function viewAdminOverview() {
-  return '<div class="view-header"><div><h1>Admin Overview</h1></div></div><div class="stats-row">'+
-    '<div class="stat-card"><div class="label">Members</div><div class="value">'+adminUsers.filter(u=>u.role==='member').length+'</div></div>'+
-    '<div class="stat-card"><div class="label">Active Signals</div><div class="value">'+signals.length+'</div></div>'+
-    '<div class="stat-card"><div class="label">Pending Deposits</div><div class="value" style="color:var(--warning)">2</div></div>'+
-    '<div class="stat-card"><div class="label">AUM</div><div class="value">'+money(adminUsers.reduce((a,u)=>a+u.balance,0))+'</div></div></div>';
+  return `
+  <div class="view-header"><div><h1>Admin Overview</h1></div></div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="label">Total Users</div><div class="value">3,842</div></div>
+    <div class="stat-card"><div class="label">Active Packages</div><div class="value">1,204</div></div>
+    <div class="stat-card"><div class="label">Pending Deposits</div><div class="value">12</div></div>
+    <div class="stat-card"><div class="label">Pending Withdrawals</div><div class="value">7</div></div>
+  </div>
+  <div class="card"><div class="card-head"><h3>Recent activity</h3></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>User</th><th>Action</th><th>Amount</th><th>Time</th></tr></thead>
+    <tbody>
+      <tr><td>Andi R.</td><td>Deposit</td><td>$500</td><td>10m ago</td></tr>
+      <tr><td>Sari L.</td><td>Activate Growth</td><td>$250</td><td>1h ago</td></tr>
+      <tr><td>Budi K.</td><td>Withdraw request</td><td>$1,200</td><td>2h ago</td></tr>
+    </tbody>
+  </table></div></div>`;
 }
 
 function viewAdminUsers() {
-  return '<div class="view-header"><div><h1>Manage Users</h1></div></div><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Balance</th><th>Status</th></tr></thead><tbody>'+
-    adminUsers.map(u=>'<tr><td><strong>'+u.name+'</strong></td><td style="font-size:12px">'+u.email+'</td><td><span class="tag info">'+u.role+'</span></td><td style="font-family:var(--mono)">'+money(u.balance)+'</td><td><span class="tag success">'+u.status+'</span></td></tr>').join('')+
-    '</tbody></table></div>';
+  return `
+  <div class="view-header"><div><h1>Manage Users</h1></div><button class="btn btn-primary" onclick="toast('User ditambahkan','success')">+ Add User</button></div>
+  <div class="card"><div class="table-wrap"><table>
+    <thead><tr><th>Name</th><th>Email</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>
+      ${(adminUsers || []).map(u => `<tr>
+        <td>${u.name}</td><td>${u.email}</td><td style="font-family:var(--mono)">${money(u.balance)}</td>
+        <td><span class="tag success">${u.status}</span></td>
+        <td><button class="btn btn-ghost btn-sm" onclick="toast('Edit ${u.name}','info')">Edit</button></td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div></div>`;
 }
 
 function viewAdminSignals() {
-  return '<div class="view-header"><div><h1>Manage Signals</h1></div><button class="btn btn-primary" onclick="signals.unshift(generateSignal());toast(\'Signal dibuat\',\'success\');navigate(\'admin-signals\')">+ Create</button></div>'+
-    '<div class="table-wrap"><table><thead><tr><th>Pair</th><th>Side</th><th>Entry</th><th>SL</th><th>Conf</th><th>Status</th></tr></thead><tbody>'+
-    signals.slice(0,12).map(s=>'<tr><td><strong>'+s.pair+'</strong></td><td><span class="tag '+s.side+'">'+s.side.toUpperCase()+'</span></td><td style="font-family:var(--mono)">'+s.entry+'</td><td style="font-family:var(--mono)">'+s.sl+'</td><td>'+s.confidence+'%</td><td><span class="tag success">'+s.status+'</span></td></tr>').join('')+
-    '</tbody></table></div>';
+  return `
+  <div class="view-header"><div><h1>Manage Signals</h1></div><button class="btn btn-primary" onclick="toast('Signal dibuat','success')">+ New Signal</button></div>
+  <div class="card"><div class="table-wrap"><table>
+    <thead><tr><th>Pair</th><th>Side</th><th>Entry</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td>BTCUSDT</td><td><span class="tag long">BUY</span></td><td>63800</td><td><span class="tag success">ACTIVE</span></td><td><button class="btn btn-ghost btn-sm">Edit</button></td></tr>
+      <tr><td>ETHUSDT</td><td><span class="tag short">SELL</span></td><td>3180</td><td><span class="tag success">ACTIVE</span></td><td><button class="btn btn-ghost btn-sm">Edit</button></td></tr>
+    </tbody>
+  </table></div></div>`;
 }
 
 function viewAdminDeposits() {
-  return '<div class="view-header"><div><h1>Deposit Approvals</h1></div></div><div class="table-wrap"><table><thead><tr><th>User</th><th>Amount</th><th>Network</th><th>Status</th><th>Actions</th></tr></thead><tbody>'+
-    '<tr><td>Andi R.</td><td style="font-family:var(--mono)">'+money(500)+'</td><td>BEP20</td><td><span class="tag warning">pending</span></td><td><button class="btn btn-primary btn-sm" onclick="toast(\'Approved\',\'success\')">Approve</button></td></tr></tbody></table></div>';
+  return `
+  <div class="view-header"><div><h1>Deposit Approvals</h1></div></div>
+  <div class="card"><div class="table-wrap"><table>
+    <thead><tr><th>User</th><th>Amount</th><th>Network</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td>Andi R.</td><td style="font-family:var(--mono)">$500</td><td>BEP20</td><td><span class="tag warning">pending</span></td>
+      <td><button class="btn btn-primary btn-sm" onclick="toast('Approved','success')">Approve</button></td></tr>
+    </tbody>
+  </table></div></div>`;
 }
 
 function viewAdminWithdrawals() {
-  return '<div class="view-header"><div><h1>Withdrawal Approvals</h1></div></div><div class="table-wrap"><table><thead><tr><th>User</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead><tbody>'+
-    '<tr><td>Demo Trader</td><td style="font-family:var(--mono)">'+money(200)+'</td><td><span class="tag warning">pending</span></td><td><button class="btn btn-primary btn-sm" onclick="toast(\'Processed\',\'success\')">Approve</button></td></tr></tbody></table></div>';
+  return `
+  <div class="view-header"><div><h1>Withdrawal Approvals</h1></div></div>
+  <div class="card"><div class="table-wrap"><table>
+    <thead><tr><th>User</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td>Demo Trader</td><td style="font-family:var(--mono)">$200</td><td><span class="tag warning">pending</span></td>
+      <td><button class="btn btn-primary btn-sm" onclick="toast('Processed','success')">Approve</button></td></tr>
+    </tbody>
+  </table></div></div>`;
 }
 
 function viewAdminPackages() {
-  return '<div class="view-header"><div><h1>Manage Packages</h1></div></div><div class="packages-grid">'+
-    PACKAGES.map(pkg=>'<div class="pkg-card"><div class="pkg-badge">'+pkg.name.toUpperCase()+'</div><div class="pkg-price">$'+pkg.price+'</div><p>ROI '+pkg.roi+'%/hari · '+pkg.duration+' hari</p><button class="btn btn-outline btn-block" onclick="toast(\'Edit '+pkg.name+'\',\'info\')">Edit</button></div>').join('')+'</div>';
+  return `
+  <div class="view-header"><div><h1>Manage Packages</h1></div></div>
+  <div class="packages-grid">
+    ${PACKAGES.map(pkg => `<div class="pkg-card"><div class="pkg-name">${pkg.name.toUpperCase()}</div><div class="pkg-price">$${pkg.price}</div>
+    <p>ROI ${pkg.roi}%/hari · ${pkg.duration} hari</p>
+    <button class="btn btn-outline btn-block" onclick="toast('Edit ${pkg.name}','info')">Edit</button></div>`).join('')}
+  </div>`;
 }
 
 function viewAdminNews() {
-  return '<div class="view-header"><div><h1>News & Broadcast</h1></div><button class="btn btn-primary" onclick="toast(\'Broadcast terkirim\',\'success\')">📢 Broadcast</button></div>'+
-    '<div class="card" style="padding:24px"><h3 style="margin-bottom:12px">Publish News</h3><div class="form-group"><label>Judul</label><input class="form-control" /></div><button class="btn btn-primary" onclick="toast(\'Published\',\'success\')">Publish</button></div>';
+  return `
+  <div class="view-header"><div><h1>News & Broadcast</h1></div>
+  <button class="btn btn-primary" onclick="toast('Broadcast terkirim','success')">📢 Broadcast</button></div>
+  <div class="card" style="padding:24px">
+    <h3 style="margin-bottom:12px">Publish News</h3>
+    <div class="form-group"><label>Judul</label><input class="form-control" /></div>
+    <button class="btn btn-primary" onclick="toast('Published','success')">Publish</button>
+  </div>`;
 }
 
 function viewAdminSettings() {
-  return '<div class="view-header"><div><h1>System Settings</h1></div></div><div class="grid-2">'+
-    '<div class="card" style="padding:24px"><h3 style="margin-bottom:16px">Deposit Wallet</h3><div class="form-group"><label>BEP20</label><input class="form-control" value="0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1" /></div><button class="btn btn-primary" onclick="toast(\'Saved\',\'success\')">Simpan</button></div>'+
-    '<div class="card" style="padding:24px"><h3 style="margin-bottom:16px">Config</h3><div class="form-group"><label>Min Deposit</label><input class="form-control" type="number" value="50" /></div><button class="btn btn-primary" onclick="toast(\'Saved\',\'success\')">Simpan</button></div></div>';
+  return `
+  <div class="view-header"><div><h1>System Settings</h1></div></div>
+  <div class="grid-2">
+    <div class="card" style="padding:24px">
+      <h3 style="margin-bottom:16px">Deposit Wallet</h3>
+      <div class="form-group"><label>BEP20 Address</label><input class="form-control" value="0x168B8E4D0AE5F875a22061aa59ee58239F2988a5" /></div>
+      <button class="btn btn-primary" onclick="toast('Saved','success')">Simpan</button>
+    </div>
+    <div class="card" style="padding:24px">
+      <h3 style="margin-bottom:16px">Config</h3>
+      <div class="form-group"><label>Min Deposit</label><input class="form-control" type="number" value="10" /></div>
+      <button class="btn btn-primary" onclick="toast('Saved','success')">Simpan</button>
+    </div>
+  </div>`;
 }

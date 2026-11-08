@@ -15,7 +15,7 @@
   <link rel="icon" href="assets/logo-icon.png" />
   <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 </head>
-<body class="dark">
+<body class="light">
   <div id="landing" class="landing">
     <nav class="nav">
       <div class="nav-brand">
@@ -185,24 +185,23 @@
       <nav class="sidebar-nav" id="sidebarNav"></nav>
       <div class="sidebar-foot">
         <div class="profile-card">
-          <div class="avatar" id="userAvatar">M</div>
+          <div class="avatar" id="userAvatar">S</div>
           <div>
-            <strong id="userName">Member</strong>
-            <span id="userStatus">Demo Mode</span>
+            <strong id="userName">satrio</strong>
+            <span id="userStatus">Verified member</span>
           </div>
         </div>
-        <button class="btn btn-ghost btn-sm" onclick="logout()">Keluar</button>
+        <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>
       </div>
     </aside>
     <main class="main">
       <header class="topbar">
         <button class="icon-btn mobile-only" id="menuBtn">☰</button>
-        <div class="breadcrumb" id="breadcrumb">Dashboard</div>
+        <div class="breadcrumb" id="breadcrumb">Workspace / Dashboard</div>
         <div class="topbar-right">
-          <div class="search-box"><input type="text" placeholder="Cari pair, sinyal..." id="globalSearch" /></div>
-          <button class="icon-btn" id="notifBtn">🔔 <span class="badge" id="notifCount">3</span></button>
-          <button class="icon-btn" id="themeBtn">☾</button>
-          <div class="user-chip"><div class="avatar sm" id="topAvatar">M</div></div>
+          <span class="demo-badge">● Demo workspace</span>
+          <button class="icon-btn" id="notifBtn">🔔 <span class="badge" id="notifCount">1</span></button>
+          <div class="user-chip"><div class="avatar sm" id="topAvatar">S</div></div>
         </div>
       </header>
       <div class="view-container" id="viewRoot"></div>

@@ -4,37 +4,50 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <meta name="theme-color" content="#0a0e17" />
-  <meta name="description" content="GO TRADE — Platform trading AI. Live signals, advanced charts, auto-trading." />
-  <title>GO TRADE — Intelligent Trading System</title>
+  <meta name="description" content="GO TRADE — Intelligent Trading Systems. AI signals, live charts, auto-trading." />
+  <title>GO TRADE — Intelligent Trading Systems</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/main.css" />
   <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/logo-icon.png" />
   <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 </head>
 <body class="dark">
   <div id="landing" class="landing">
     <nav class="nav">
       <div class="nav-brand">
-        <div class="logo-mark">G</div>
-        <div><strong>GO TRADE</strong><span>AI TRADING SYSTEM</span></div>
+        <img src="assets/logo-icon.png" alt="GO TRADE" class="logo-img" />
+        <div>
+          <strong>GO TRADE</strong>
+          <span>INTELLIGENT TRADING SYSTEMS</span>
+        </div>
       </div>
       <div class="nav-links">
         <a href="#features">Fitur</a>
         <a href="#signals">Signals</a>
         <a href="#packages">Paket</a>
-        <a href="#charts">Live Charts</a>
+        <a href="#live-demo">Live Charts</a>
       </div>
       <div class="nav-actions">
         <a class="btn btn-ghost" href="login.html">Masuk</a>
         <a class="btn btn-primary" href="register.html">Daftar Gratis</a>
       </div>
     </nav>
+
     <header class="hero">
-      <div class="hero-badge"><span class="pulse"></span> AI-POWERED TRADING PLATFORM · v9.0</div>
+      <div class="hero-glow"></div>
+      <div class="hero-badge"><span class="pulse"></span> AI-POWERED · REAL-TIME · v9.0</div>
+      <div class="hero-logo-wrap">
+        <img src="assets/logo-gotrade.jpg" alt="GO TRADE" class="hero-logo" />
+      </div>
       <h1>Market bergerak.<br /><span class="gradient-text">Anda sudah siap.</span></h1>
-      <p class="hero-sub">GO TRADE mengubah noise pasar menjadi sinyal AI yang bisa dipercaya, paket auto-trading cerdas, live chart profesional, dan next-action real-time — dipantau 24/7 oleh sistem multi-agent AI kami.</p>
+      <p class="hero-sub">
+        GO TRADE mengubah noise pasar menjadi sinyal AI yang bisa dipercaya —
+        live chart profesional, auto-trading cerdas, dan next-action real-time
+        dipantau 24/7 oleh sistem multi-agent AI kami.
+      </p>
       <div class="hero-cta">
         <a class="btn btn-primary btn-lg" href="login.html">Masuk / Coba Demo</a>
         <button class="btn btn-outline btn-lg" onclick="document.getElementById('live-demo').scrollIntoView({behavior:'smooth'})">Lihat Live Chart</button>
@@ -46,9 +59,15 @@
         <div class="stat"><div class="stat-val">120+</div><div class="stat-label">FITUR LENGKAP</div></div>
       </div>
     </header>
+
     <div class="ticker-wrap"><div class="ticker" id="ticker"></div></div>
+
     <section id="live-demo" class="section">
-      <div class="section-header"><span class="eyebrow">LIVE PREVIEW</span><h2>Chart & Signal Real-Time</h2></div>
+      <div class="section-header">
+        <span class="eyebrow">LIVE PREVIEW</span>
+        <h2>Chart & Signal Real-Time</h2>
+        <p>Data harga langsung dari Binance. Sinyal AI diperbarui otomatis.</p>
+      </div>
       <div class="live-grid">
         <div class="card chart-card">
           <div class="card-head">
@@ -59,55 +78,118 @@
               <button data-pair="BNBUSDT">BNB/USDT</button>
             </div>
             <div class="tf-tabs">
-              <button data-tf="1m">1m</button><button data-tf="5m" class="active">5m</button>
-              <button data-tf="15m">15m</button><button data-tf="1h">1H</button><button data-tf="4h">4H</button>
+              <button data-tf="1m">1m</button>
+              <button data-tf="5m" class="active">5m</button>
+              <button data-tf="15m">15m</button>
+              <button data-tf="1h">1H</button>
+              <button data-tf="4h">4H</button>
             </div>
           </div>
           <div id="mainChart" class="chart-container"></div>
           <div class="chart-footer">
-            <div class="price-box"><span class="label">Last</span><strong id="lastPrice">—</strong><span class="chg" id="priceChg"></span></div>
+            <div class="price-box"><span class="label">Last</span><strong id="lastPrice">—</strong> <span class="chg" id="priceChg"></span></div>
             <div class="price-box"><span class="label">24h High</span><strong id="high24">—</strong></div>
             <div class="price-box"><span class="label">24h Low</span><strong id="low24">—</strong></div>
             <div class="price-box"><span class="label">Volume</span><strong id="vol24">—</strong></div>
           </div>
         </div>
         <div class="card signal-panel">
-          <div class="card-head"><h3>AI Signal Feed</h3><span class="live-badge"><span class="dot"></span> LIVE</span></div>
+          <div class="card-head">
+            <h3>AI Signal Feed</h3>
+            <span class="live-badge"><span class="dot"></span> LIVE</span>
+          </div>
           <div class="signal-list" id="signalList"></div>
         </div>
       </div>
     </section>
+
     <section id="features" class="section">
-      <div class="section-header"><span class="eyebrow">KEMAMPUAN PLATFORM</span><h2>Semua yang dibutuhkan trader modern</h2></div>
+      <div class="section-header">
+        <span class="eyebrow">KEMAMPUAN PLATFORM</span>
+        <h2>Semua yang dibutuhkan trader modern</h2>
+      </div>
       <div class="features-grid">
         <div class="feature-card"><div class="f-icon">⚡</div><h3>AI Trading Signals</h3><p>Feed sinyal Buy/Sell dengan entry, multi-TP, SL, confidence score, dan AI reasoning.</p></div>
-        <div class="feature-card"><div class="f-icon">📊</div><h3>Professional Live Charts</h3><p>Chart TradingView-grade dengan data real Binance, multi-timeframe.</p></div>
-        <div class="feature-card"><div class="f-icon">🤖</div><h3>Auto-Trading Engine</h3><p>Paket auto-trading dengan ROI harian dan risk management otomatis.</p></div>
-        <div class="feature-card"><div class="f-icon">💰</div><h3>Wallet & Settlement</h3><p>Deposit USDT, withdrawal, riwayat, dan ledger transparan.</p></div>
+        <div class="feature-card"><div class="f-icon">📊</div><h3>Professional Live Charts</h3><p>Chart TradingView-grade dengan data real Binance, multi-timeframe & volume.</p></div>
+        <div class="feature-card"><div class="f-icon">🤖</div><h3>Auto-Trading Engine</h3><p>Paket auto-trading dengan ROI harian, risk management, dan trailing stop.</p></div>
+        <div class="feature-card"><div class="f-icon">💰</div><h3>Wallet & Settlement</h3><p>Deposit USDT multi-network, withdrawal, ledger transparan.</p></div>
         <div class="feature-card"><div class="f-icon">🛡️</div><h3>Admin Center Pro</h3><p>CRUD users, signals, packages, approval deposit/withdraw, broadcast.</p></div>
-        <div class="feature-card"><div class="f-icon">🌐</div><h3>Referral Network</h3><p>Kode referral unik, tracking downline, bonus otomatis.</p></div>
+        <div class="feature-card"><div class="f-icon">🌐</div><h3>Referral Network</h3><p>Kode referral unik, tracking downline, komisi otomatis.</p></div>
       </div>
     </section>
+
     <section id="packages" class="section">
-      <div class="section-header"><span class="eyebrow">AUTO-TRADING PACKAGES</span><h2>Pilih mesin trading Anda</h2></div>
+      <div class="section-header">
+        <span class="eyebrow">AUTO-TRADING PACKAGES</span>
+        <h2>Pilih mesin trading Anda</h2>
+      </div>
       <div class="packages-grid">
-        <div class="pkg-card"><div class="pkg-badge">STARTER</div><div class="pkg-price">$50<span>/min</span></div><p>Cocok untuk memulai</p><ul><li>ROI hingga <strong>1.1%</strong></li><li>Durasi 30 hari</li></ul><button class="btn btn-outline" onclick="location.href='login.html'">Aktifkan</button></div>
-        <div class="pkg-card featured"><div class="pkg-badge popular">PALING POPULER</div><div class="pkg-price">$250<span>/min</span></div><p>Balance terbaik</p><ul><li>ROI hingga <strong>1.8%</strong></li><li>Durasi 45 hari</li><li>AI Coach</li></ul><button class="btn btn-primary" onclick="location.href='login.html'">Aktifkan Sekarang</button></div>
-        <div class="pkg-card"><div class="pkg-badge">PRO</div><div class="pkg-price">$1.000<span>/min</span></div><p>Volume tinggi</p><ul><li>ROI hingga <strong>2.5%</strong></li><li>Durasi 60 hari</li></ul><button class="btn btn-outline" onclick="location.href='login.html'">Aktifkan</button></div>
+        <div class="pkg-card">
+          <div class="pkg-badge">STARTER</div>
+          <div class="pkg-price">$50<span>/min</span></div>
+          <p>Cocok untuk memulai</p>
+          <ul>
+            <li>ROI hingga <strong>1.1%</strong>/hari</li>
+            <li>Durasi 30 hari</li>
+            <li>Sinyal dasar + chart</li>
+          </ul>
+          <a class="btn btn-outline btn-block" href="login.html">Aktifkan</a>
+        </div>
+        <div class="pkg-card featured">
+          <div class="pkg-badge popular">PALING POPULER</div>
+          <div class="pkg-price">$250<span>/min</span></div>
+          <p>Balance terbaik</p>
+          <ul>
+            <li>ROI hingga <strong>1.8%</strong>/hari</li>
+            <li>Durasi 45 hari</li>
+            <li>AI Coach + Trailing stop</li>
+          </ul>
+          <a class="btn btn-primary btn-block" href="login.html">Aktifkan Sekarang</a>
+        </div>
+        <div class="pkg-card">
+          <div class="pkg-badge">PRO</div>
+          <div class="pkg-price">$1.000<span>/min</span></div>
+          <p>Volume tinggi</p>
+          <ul>
+            <li>ROI hingga <strong>2.5%</strong>/hari</li>
+            <li>Durasi 60 hari</li>
+            <li>Dedicated risk + priority</li>
+          </ul>
+          <a class="btn btn-outline btn-block" href="login.html">Aktifkan</a>
+        </div>
       </div>
     </section>
+
     <footer class="footer">
-      <div class="footer-brand"><div class="logo-mark">G</div><div><strong>GO TRADE</strong><span>Intelligent Trading System · 2026</span></div></div>
-      <p>Demo mode — data harga real dari Binance. Sinyal & transaksi simulasi.</p>
+      <div class="footer-brand">
+        <img src="assets/logo-icon.png" alt="" class="logo-img sm" />
+        <div>
+          <strong>GO TRADE</strong>
+          <span>Intelligent Trading Systems · 2026</span>
+        </div>
+      </div>
+      <p>Demo mode — data harga real dari Binance. Sinyal & transaksi simulasi untuk evaluasi fitur.</p>
     </footer>
   </div>
 
   <div id="app" class="app-shell" style="display:none">
     <aside class="sidebar" id="sidebar">
-      <div class="sidebar-brand"><div class="logo-mark sm">G</div><div><strong>GO TRADE</strong><span id="roleLabel">WORKSPACE</span></div></div>
+      <div class="sidebar-brand">
+        <img src="assets/logo-icon.png" alt="" class="logo-img sm" />
+        <div>
+          <strong>GO TRADE</strong>
+          <span id="roleLabel">WORKSPACE</span>
+        </div>
+      </div>
       <nav class="sidebar-nav" id="sidebarNav"></nav>
       <div class="sidebar-foot">
-        <div class="profile-card"><div class="avatar" id="userAvatar">M</div><div><strong id="userName">Member</strong><span id="userStatus">Demo Mode</span></div></div>
+        <div class="profile-card">
+          <div class="avatar" id="userAvatar">M</div>
+          <div>
+            <strong id="userName">Member</strong>
+            <span id="userStatus">Demo Mode</span>
+          </div>
+        </div>
         <button class="btn btn-ghost btn-sm" onclick="logout()">Keluar</button>
       </div>
     </aside>
@@ -116,7 +198,7 @@
         <button class="icon-btn mobile-only" id="menuBtn">☰</button>
         <div class="breadcrumb" id="breadcrumb">Dashboard</div>
         <div class="topbar-right">
-          <div class="search-box"><input type="text" placeholder="Cari..." id="globalSearch" /></div>
+          <div class="search-box"><input type="text" placeholder="Cari pair, sinyal..." id="globalSearch" /></div>
           <button class="icon-btn" id="notifBtn">🔔 <span class="badge" id="notifCount">3</span></button>
           <button class="icon-btn" id="themeBtn">☾</button>
           <div class="user-chip"><div class="avatar sm" id="topAvatar">M</div></div>
@@ -133,9 +215,17 @@
   <div id="aiWidget" class="ai-widget">
     <button class="ai-toggle" id="aiToggle">✦</button>
     <div class="ai-panel" id="aiPanel" style="display:none">
-      <div class="ai-head"><strong>GO TRADE AI Coach</strong><button onclick="document.getElementById('aiPanel').style.display='none'">×</button></div>
-      <div class="ai-messages" id="aiMessages"><div class="ai-msg bot">Halo! Saya AI Coach GO TRADE. Tanya tentang market, sinyal, atau strategi.</div></div>
-      <div class="ai-input"><input type="text" id="aiInput" placeholder="Tanya AI..." /><button id="aiSend">➤</button></div>
+      <div class="ai-head">
+        <strong>GO TRADE AI Coach</strong>
+        <button type="button" onclick="document.getElementById('aiPanel').style.display='none'">×</button>
+      </div>
+      <div class="ai-messages" id="aiMessages">
+        <div class="ai-msg bot">Halo! Saya AI Coach GO TRADE. Tanya tentang market, sinyal, atau strategi.</div>
+      </div>
+      <div class="ai-input">
+        <input type="text" id="aiInput" placeholder="Tanya AI..." />
+        <button type="button" id="aiSend">➤</button>
+      </div>
     </div>
   </div>
 

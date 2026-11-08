@@ -1,119 +1,110 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#191153" />
-    <title>Sign in to GO TRADE — Intelligent Trading System</title>
-    <link rel="icon" type="image/png" href="assets/logo-icon.png" />
-    <link rel="manifest" href="manifest.json" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="auth-shell">
-      <div class="theme-toggle auth-theme-toggle"><button data-theme-btn="light" title="Light mode"><span data-icon="sun" data-icon-size="14"></span></button><button data-theme-btn="dark" title="Dark mode"><span data-icon="moon" data-icon-size="14"></span></button></div>
-      <section class="auth-left">
-        <div class="auth-brand">
-          <img class="brand-mark" src="assets/logo-icon.png" alt="GO TRADE" />
-          <div>
-            <strong>GO TRADE</strong>
-            <span>INTELLIGENT TRADING SYSTEM</span>
-          </div>
-        </div>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — GO TRADE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css" />
+  <style>
+    body { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:24px; }
+    .auth-card {
+      width:100%; max-width:420px;
+      background: var(--bg-card);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:36px 32px;
+      box-shadow: var(--shadow);
+    }
+    .auth-card h1 { font-size:24px; margin:16px 0 6px; }
+    .auth-card .sub { color:var(--text-secondary); font-size:14px; margin-bottom:28px; }
+    .auth-logo { display:flex; align-items:center; gap:10px; }
+    .form-group { margin-bottom:16px; }
+    .form-group label { display:block; font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:6px; }
+    .form-control {
+      width:100%; padding:12px 14px; background:var(--bg);
+      border:1px solid var(--border); border-radius:8px; font-size:14px; outline:none;
+    }
+    .form-control:focus { border-color: var(--primary); }
+    .error-msg { color:var(--danger); font-size:13px; margin-top:8px; display:none; }
+    .demo-hint {
+      margin-top:20px; padding:12px 14px; background:rgba(16,185,129,0.08);
+      border:1px solid rgba(16,185,129,0.2); border-radius:8px; font-size:12px; color:var(--text-secondary);
+    }
+    .demo-hint strong { color:var(--primary); }
+    .links { margin-top:20px; text-align:center; font-size:13px; color:var(--text-secondary); }
+    .links a { color:var(--primary); font-weight:600; }
+  </style>
+</head>
+<body class="dark">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="logo-mark">G</div>
+      <div><strong>GO TRADE</strong><span style="display:block;font-size:11px;color:var(--text-muted)">INTELLIGENT TRADING</span></div>
+    </div>
+    <h1>Masuk Workspace</h1>
+    <p class="sub">Login dengan akun GO TRADE Anda</p>
 
-        <div class="auth-tag">
-          <div class="eyebrow">INTELLIGENT TRADING SYSTEMS</div>
-          <h1>Markets move.<br /><span class="accent">You are ready.</span></h1>
-          <p>GO TRADE turns market noise into signals, auto-trading packages, and next actions you can trust — monitored 24/7 by our AI systems.</p>
-        </div>
+    <form id="loginForm">
+      <div class="form-group">
+        <label>Email</label>
+        <input class="form-control" type="email" id="email" placeholder="email@example.com" required />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input class="form-control" type="password" id="password" placeholder="••••••••" required />
+      </div>
+      <div class="error-msg" id="errorMsg"></div>
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:8px;width:100%;padding:12px" id="submitBtn">
+        Masuk
+      </button>
+    </form>
 
-        <div class="auth-stats">
-          <div><b>84.7%</b><span>SIGNAL ACCURACY*</span></div>
-          <div><b>24/7</b><span>MARKET WATCH</span></div>
-          <div><b>12K+</b><span>ACTIVE MEMBERS*</span></div>
-        </div>
-
-        <div class="auth-foot">© 2026 GO TRADE Intelligence. Built for decisive moves.</div>
-      </section>
-
-      <section class="auth-right">
-        <div class="auth-card">
-          <div class="auth-eyebrow">SECURE ACCESS</div>
-          <h2>Sign in to GO TRADE</h2>
-          <p class="auth-sub">Return to your trading workspace.</p>
-
-          <form id="loginForm">
-            <div class="field">
-              <label class="form-label">Email</label>
-              <input class="form-control" type="email" id="email" placeholder="name@email.com" required />
-            </div>
-            <div class="field pass-row">
-              <label class="form-label">Password</label>
-              <div class="pass-field">
-                <input class="form-control" type="password" id="password" placeholder="Enter your password" required />
-                <button type="button" class="pass-toggle-btn" data-pass-toggle="password" aria-label="Show password"><span data-icon="eye" data-icon-size="16"></span></button>
-              </div>
-            </div>
-            <div id="loginError" class="form-error" style="display:none"></div>
-            <button class="btn btn-primary" type="submit" style="width:100%;padding:13px;margin-top:6px">Sign in to workspace →</button>
-          </form>
-
-          <p class="auth-switch">Don't have access yet? <a href="register.html">Register now</a></p>
-        </div>
-      </section>
+    <div class="demo-hint">
+      <strong>Demo cepat:</strong><br>
+      Member → <code>demo@go-trade.app</code> / <code>demo123</code><br>
+      Admin → <code>admin@go-trade.app</code> / <code>admin123</code>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="config.js"></script>
-    <script src="supabase-client.js"></script>
-    <script src="icons.js"></script>
-    <script src="auth.js"></script>
-    <script>
-      document.querySelectorAll("[data-theme-btn]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const theme = btn.getAttribute("data-theme-btn");
-          document.documentElement.setAttribute("data-theme", theme);
-          localStorage.setItem("gt-theme", theme);
-        });
-      });
-      const saved = localStorage.getItem("gt-theme");
-      if (saved) document.documentElement.setAttribute("data-theme", saved);
+    <div class="links">
+      Belum punya akun? <a href="register.html">Daftar</a> · <a href="index.html">← Beranda</a>
+    </div>
+  </div>
 
-      document.getElementById("loginForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
-        const errorBox = document.getElementById("loginError");
-        const submitBtn = e.target.querySelector('button[type="submit"]');
-        errorBox.style.display = "none";
-        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Signing in..."; }
-        try {
-          const result = await window.gtLogin(email, password);
-          if (result.error) {
-            errorBox.textContent = result.error;
-            errorBox.style.display = "block";
-            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Sign in to workspace →"; }
-            return;
-          }
-          const role = result.user?.role || "member";
-          window.location.href = role === "admin" ? "admin.html" : "dashboard.html";
-        } catch (err) {
-          errorBox.textContent = err.message || "Sign in failed. Please try again.";
-          errorBox.style.display = "block";
-          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Sign in to workspace →"; }
-        }
-      });
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    initSupabase();
+    (async () => {
+      const u = await gtRestoreSession();
+      if (u) {
+        window.location.href = 'index.html?workspace=1&role=' + (u.role || 'member');
+      }
+    })();
 
-      document.querySelectorAll("[data-pass-toggle]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const id = btn.getAttribute("data-pass-toggle");
-          const input = document.getElementById(id);
-          if (!input) return;
-          input.type = input.type === "password" ? "text" : "password";
-        });
-      });
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('submitBtn');
+      const err = document.getElementById('errorMsg');
+      err.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Memproses...';
 
-      if (window.gtPaintIcons) window.gtPaintIcons(document);
-    </script>
-  </body>
+      const res = await gtSignIn(email, password);
+      if (res.ok) {
+        gtPushNotif('Berhasil masuk sebagai ' + res.user.name, 'success');
+        window.location.href = 'index.html?workspace=1&role=' + (res.user.role || 'member');
+      } else {
+        err.textContent = res.error || 'Login gagal';
+        err.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Masuk';
+      }
+    });
+  </script>
+</body>
 </html>

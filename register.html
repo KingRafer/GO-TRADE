@@ -1,166 +1,102 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#191153" />
-    <title>Register — GO TRADE Intelligent Trading System</title>
-    <link rel="icon" type="image/png" href="assets/logo-icon.png" />
-    <link rel="manifest" href="manifest.json" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="auth-shell">
-      <div class="theme-toggle auth-theme-toggle"><button data-theme-btn="light" title="Light mode"><span data-icon="sun" data-icon-size="14"></span></button><button data-theme-btn="dark" title="Dark mode"><span data-icon="moon" data-icon-size="14"></span></button></div>
-      <section class="auth-left">
-        <div class="auth-brand">
-          <img class="brand-mark" src="assets/logo-icon.png" alt="GO TRADE" />
-          <div>
-            <strong>GO TRADE</strong>
-            <span>INTELLIGENT TRADING SYSTEM</span>
-          </div>
-        </div>
-
-        <div class="auth-tag">
-          <div class="eyebrow">JOIN NOW</div>
-          <h1>Start your<br /><span class="accent">smart trading journey.</span></h1>
-          <p>Create your GO TRADE member account, activate auto-trading packages, and monitor AI signals from one workspace.</p>
-        </div>
-
-        <div class="auth-stats">
-          <div><b>84.7%</b><span>SIGNAL ACCURACY*</span></div>
-          <div><b>24/7</b><span>MARKET WATCH</span></div>
-          <div><b>3 MIN</b><span>TO REGISTER</span></div>
-        </div>
-
-        <div class="auth-foot">© 2026 GO TRADE Intelligence. Built for decisive moves.</div>
-      </section>
-
-      <section class="auth-right">
-        <div class="auth-card">
-          <div class="auth-eyebrow">CREATE ACCOUNT</div>
-          <h2>Create member account</h2>
-          <p class="auth-sub">Create a new account and start trading in minutes.</p>
-
-          <form id="registerForm">
-            <div class="field">
-              <label class="form-label">Full name</label>
-              <input class="form-control" type="text" id="regName" placeholder="e.g. Alex Morgan" required />
-            </div>
-            <div class="field">
-              <label class="form-label">Email</label>
-              <input class="form-control" type="email" id="regEmail" placeholder="name@email.com" required />
-            </div>
-            <div class="form-row" style="margin:0 0 16px">
-              <div class="field" style="margin-bottom:0">
-                <label class="form-label">Password</label>
-                <div class="pass-field">
-                  <input class="form-control" type="password" id="regPassword" placeholder="Min. 6 characters" minlength="6" required />
-                  <button type="button" class="pass-toggle-btn" data-pass-toggle="regPassword"><span data-icon="eye" data-icon-size="15"></span></button>
-                </div>
-              </div>
-              <div class="field" style="margin-bottom:0">
-                <label class="form-label">Confirm password</label>
-                <div class="pass-field">
-                  <input class="form-control" type="password" id="regPassword2" placeholder="Repeat password" minlength="6" required />
-                  <button type="button" class="pass-toggle-btn" data-pass-toggle="regPassword2"><span data-icon="eye" data-icon-size="15"></span></button>
-                </div>
-              </div>
-            </div>
-            <div class="field">
-              <label class="form-label">Referral code <span style="font-weight:400">(optional)</span></label>
-              <input class="form-control" type="text" id="regReferral" placeholder="e.g. GOTRADE-DEMO1" />
-            </div>
-            <div class="checkbox-row">
-              <input type="checkbox" id="regTerms" required />
-              <label for="regTerms">I agree to the Terms &amp; Conditions and Privacy Policy of GO TRADE.</label>
-            </div>
-            <div id="regError" class="auth-error"></div>
-            <div id="regSuccess" class="auth-success"></div>
-            <button class="btn btn-primary" type="submit" style="width:100%;padding:13px">Create account →</button>
-          </form>
-
-          <p class="auth-switch">Already have an account? <a href="login.html">Sign in here</a></p>
-        </div>
-      </section>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daftar — GO TRADE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css" />
+  <style>
+    body { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:24px; }
+    .auth-card {
+      width:100%; max-width:420px;
+      background: var(--bg-card);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:36px 32px;
+      box-shadow: var(--shadow);
+    }
+    .auth-card h1 { font-size:24px; margin:16px 0 6px; }
+    .auth-card .sub { color:var(--text-secondary); font-size:14px; margin-bottom:28px; }
+    .auth-logo { display:flex; align-items:center; gap:10px; }
+    .form-group { margin-bottom:16px; }
+    .form-group label { display:block; font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:6px; }
+    .form-control {
+      width:100%; padding:12px 14px; background:var(--bg);
+      border:1px solid var(--border); border-radius:8px; font-size:14px; outline:none;
+    }
+    .form-control:focus { border-color: var(--primary); }
+    .error-msg { color:var(--danger); font-size:13px; margin-top:8px; display:none; }
+    .links { margin-top:20px; text-align:center; font-size:13px; color:var(--text-secondary); }
+    .links a { color:var(--primary); font-weight:600; }
+  </style>
+</head>
+<body class="dark">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="logo-mark">G</div>
+      <div><strong>GO TRADE</strong><span style="display:block;font-size:11px;color:var(--text-muted)">INTELLIGENT TRADING</span></div>
     </div>
+    <h1>Buat Akun</h1>
+    <p class="sub">Daftar gratis dan mulai trading dengan AI</p>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="config.js"></script>
-    <script src="supabase-client.js"></script>
-    <script src="auth.js"></script>
-    <script src="icons.js"></script>
-    <script>
-      if (typeof gtBindThemeToggle === "function") gtBindThemeToggle();
-      document.querySelectorAll("[data-theme-btn]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const theme = btn.getAttribute("data-theme-btn");
-          document.documentElement.setAttribute("data-theme", theme);
-          localStorage.setItem("gt-theme", theme);
-        });
-      });
-      const saved = localStorage.getItem("gt-theme");
-      if (saved) document.documentElement.setAttribute("data-theme", saved);
+    <form id="regForm">
+      <div class="form-group">
+        <label>Nama Lengkap</label>
+        <input class="form-control" type="text" id="name" placeholder="Nama Anda" required />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input class="form-control" type="email" id="email" placeholder="email@example.com" required />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input class="form-control" type="password" id="password" placeholder="Min. 6 karakter" minlength="6" required />
+      </div>
+      <div class="form-group">
+        <label>Kode Referral (opsional)</label>
+        <input class="form-control" type="text" id="ref" placeholder="GOTRADE-XXXX" />
+      </div>
+      <div class="error-msg" id="errorMsg"></div>
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:8px;width:100%;padding:12px" id="submitBtn">
+        Daftar Sekarang
+      </button>
+    </form>
 
-      document.querySelectorAll("[data-pass-toggle]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const id = btn.getAttribute("data-pass-toggle");
-          const input = document.getElementById(id);
-          if (!input) return;
-          input.type = input.type === "password" ? "text" : "password";
-        });
-      });
+    <div class="links">
+      Sudah punya akun? <a href="login.html">Masuk</a> · <a href="index.html">← Beranda</a>
+    </div>
+  </div>
 
-      (function fillReferralFromUrl() {
-        const params = new URLSearchParams(location.search);
-        let code = params.get("ref") || params.get("referral") || "";
-        if (!code) {
-          const m = location.pathname.match(/\/join\/([^/]+)/);
-          if (m) code = decodeURIComponent(m[1]);
-        }
-        if (code) {
-          const el = document.getElementById("regReferral");
-          if (el) el.value = code;
-        }
-      })();
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    initSupabase();
+    document.getElementById('regForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('submitBtn');
+      const err = document.getElementById('errorMsg');
+      err.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Mendaftar...';
 
-      document.getElementById("registerForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const name = document.getElementById("regName").value.trim();
-        const email = document.getElementById("regEmail").value.trim();
-        const password = document.getElementById("regPassword").value;
-        const password2 = document.getElementById("regPassword2").value;
-        const referral = document.getElementById("regReferral").value.trim();
-        const errorBox = document.getElementById("regError");
-        const successBox = document.getElementById("regSuccess");
-        const submitBtn = e.target.querySelector('button[type="submit"]');
-        errorBox.textContent = "";
-        successBox.textContent = "";
-        if (password !== password2) {
-          errorBox.textContent = "Passwords do not match.";
-          return;
-        }
-        if (password.length < 6) {
-          errorBox.textContent = "Password must be at least 6 characters";
-          return;
-        }
-        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Registering..."; }
-        try {
-          const result = await window.gtRegister(name, email, password, referral || null);
-          if (result.error) {
-            errorBox.textContent = result.error;
-            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Create account →"; }
-            return;
-          }
-          successBox.textContent = result.message || "Account created successfully. Redirecting to login...";
-          setTimeout(() => { window.location.href = "login.html"; }, 1500);
-        } catch (err) {
-          errorBox.textContent = err.message || "Registration failed. Please try again.";
-          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Create account →"; }
-        }
-      });
-
-      if (window.gtPaintIcons) window.gtPaintIcons(document);
-    </script>
-  </body>
+      const res = await gtSignUp(email, password, name);
+      if (res.ok) {
+        gtPushNotif('Akun berhasil dibuat. Selamat datang!', 'success');
+        await gtSignIn(email, password);
+        window.location.href = 'index.html?workspace=1&role=member';
+      } else {
+        err.textContent = res.error || 'Pendaftaran gagal';
+        err.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Daftar Sekarang';
+      }
+    });
+  </script>
+</body>
 </html>

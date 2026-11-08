@@ -3,87 +3,162 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login — GO TRADE</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/main.css" />
+  <title>Masuk — GO TRADE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    body { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:24px; }
-    .auth-card {
-      width:100%; max-width:420px;
-      background: var(--bg-card);
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:36px 32px;
-      box-shadow: var(--shadow);
+    :root {
+      --green-deep: #0d3b2e;
+      --green: #0f766e;
+      --green-bright: #10b981;
+      --mint: #d1fae5;
+      --bg: #f8faf9;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
     }
-    .auth-card h1 { font-size:24px; margin:16px 0 6px; }
-    .auth-card .sub { color:var(--text-secondary); font-size:14px; margin-bottom:28px; }
-    .auth-logo { display:flex; align-items:center; gap:10px; }
-    .form-group { margin-bottom:16px; }
-    .form-group label { display:block; font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:6px; }
-    .form-control {
-      width:100%; padding:12px 14px; background:var(--bg);
-      border:1px solid var(--border); border-radius:8px; font-size:14px; outline:none;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Inter, system-ui, sans-serif; min-height: 100vh; display: flex; }
+    .left {
+      flex: 1; background: linear-gradient(160deg, #0a2f24 0%, #0d3b2e 40%, #115e4b 100%);
+      color: #fff; padding: 48px; display: flex; flex-direction: column; justify-content: space-between;
+      position: relative; overflow: hidden; min-height: 100vh;
     }
-    .form-control:focus { border-color: var(--primary); }
-    .error-msg { color:var(--danger); font-size:13px; margin-top:8px; display:none; }
-    .demo-hint {
-      margin-top:20px; padding:12px 14px; background:rgba(16,185,129,0.08);
-      border:1px solid rgba(16,185,129,0.2); border-radius:8px; font-size:12px; color:var(--text-secondary);
+    .left::before {
+      content: ''; position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      border: 40px solid rgba(16,185,129,0.08); top: -100px; right: -100px;
     }
-    .demo-hint strong { color:var(--primary); }
-    .links { margin-top:20px; text-align:center; font-size:13px; color:var(--text-secondary); }
-    .links a { color:var(--primary); font-weight:600; }
+    .left::after {
+      content: ''; position: absolute; width: 350px; height: 350px; border-radius: 50%;
+      border: 30px solid rgba(16,185,129,0.06); bottom: -80px; left: -80px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }
+    .brand img { width: 44px; height: 44px; border-radius: 10px; }
+    .brand strong { display: block; font-size: 16px; letter-spacing: 0.5px; }
+    .brand span { font-size: 11px; opacity: 0.7; letter-spacing: 1px; }
+    .left-content { position: relative; z-index: 1; max-width: 420px; }
+    .left-content .eyebrow { font-size: 12px; letter-spacing: 2px; opacity: 0.7; margin-bottom: 16px; font-weight: 600; }
+    .left-content h1 { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
+    .left-content h1 em { font-style: normal; color: var(--green-bright); }
+    .left-content p { font-size: 15px; opacity: 0.75; line-height: 1.6; margin-bottom: 40px; }
+    .stats { display: flex; gap: 32px; }
+    .stats div strong { display: block; font-size: 22px; font-weight: 700; }
+    .stats div span { font-size: 12px; opacity: 0.6; }
+    .left-foot { font-size: 12px; opacity: 0.45; position: relative; z-index: 1; }
+    .right {
+      width: 480px; max-width: 100%; background: #fff; display: flex; align-items: center; justify-content: center;
+      padding: 48px 40px;
+    }
+    .form-wrap { width: 100%; max-width: 360px; }
+    .form-wrap .welcome { font-size: 12px; font-weight: 600; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 8px; }
+    .form-wrap h2 { font-size: 26px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+    .form-wrap .sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+    .role-toggle {
+      display: flex; background: #f1f5f4; border-radius: 10px; padding: 4px; margin-bottom: 24px;
+    }
+    .role-toggle button {
+      flex: 1; padding: 10px; border: none; background: transparent; border-radius: 8px;
+      font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; font-family: inherit;
+    }
+    .role-toggle button.active { background: #fff; color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .fg { margin-bottom: 16px; }
+    .fg label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .fg input {
+      width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px;
+      font-size: 14px; outline: none; font-family: inherit; background: #fff;
+    }
+    .fg input:focus { border-color: var(--green-bright); box-shadow: 0 0 0 3px rgba(16,185,129,0.12); }
+    .btn-submit {
+      width: 100%; padding: 14px; background: var(--green-deep); color: #fff; border: none;
+      border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;
+      margin-top: 8px; transition: background .2s;
+    }
+    .btn-submit:hover { background: #0a2f24; }
+    .demo-box {
+      margin-top: 20px; padding: 14px; background: #f0fdf6; border: 1px dashed #86efac;
+      border-radius: 10px; font-size: 12px; color: var(--muted); line-height: 1.5;
+    }
+    .demo-box strong { color: var(--green); display: block; margin-bottom: 4px; }
+    .links { margin-top: 20px; text-align: center; font-size: 13px; color: var(--muted); }
+    .links a { color: var(--green); font-weight: 600; text-decoration: none; }
+    .err { color: #ef4444; font-size: 13px; margin-top: 8px; display: none; }
+    @media (max-width: 900px) {
+      body { flex-direction: column; }
+      .left { min-height: auto; padding: 32px 24px; }
+      .right { width: 100%; padding: 32px 24px; }
+    }
   </style>
 </head>
-<body class="dark">
-  <div class="auth-card">
-    <div class="auth-logo">
-      <div class="logo-mark">G</div>
-      <div><strong>GO TRADE</strong><span style="display:block;font-size:11px;color:var(--text-muted)">INTELLIGENT TRADING</span></div>
-    </div>
-    <h1>Masuk Workspace</h1>
-    <p class="sub">Login dengan akun GO TRADE Anda</p>
-
-    <form id="loginForm">
-      <div class="form-group">
-        <label>Email</label>
-        <input class="form-control" type="email" id="email" placeholder="email@example.com" required />
+<body>
+  <div class="left">
+    <div class="brand">
+      <img src="assets/logo-icon.png" alt="GO TRADE" />
+      <div>
+        <strong>GO TRADE</strong>
+        <span>INTELLIGENT TRADING SYSTEMS</span>
       </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input class="form-control" type="password" id="password" placeholder="••••••••" required />
-      </div>
-      <div class="error-msg" id="errorMsg"></div>
-      <button type="submit" class="btn btn-primary btn-block" style="margin-top:8px;width:100%;padding:12px" id="submitBtn">
-        Masuk
-      </button>
-    </form>
-
-    <div class="demo-hint">
-      <strong>Demo cepat:</strong><br>
-      Member → <code>demo@go-trade.app</code> / <code>demo123</code><br>
-      Admin → <code>admin@go-trade.app</code> / <code>admin123</code>
     </div>
-
-    <div class="links">
-      Belum punya akun? <a href="register.html">Daftar</a> · <a href="index.html">← Beranda</a>
+    <div class="left-content">
+      <div class="eyebrow">FINANCIAL WORKSPACE, MADE CLEAR</div>
+      <h1>Trade with a <em>clearer</em> view.</h1>
+      <p>Workspace demo untuk memahami kondisi akun, membaca sinyal, dan mengambil langkah berikutnya tanpa noise.</p>
+      <div class="stats">
+        <div><strong>24/7</strong><span>Market watch</span></div>
+        <div><strong>3.8k</strong><span>Demo members</span></div>
+        <div><strong>1 view</strong><span>For your next move</span></div>
+      </div>
+    </div>
+    <div class="left-foot">Frontend demo · Semua data tersimpan lokal di browser</div>
+  </div>
+  <div class="right">
+    <div class="form-wrap">
+      <div class="welcome">WELCOME BACK</div>
+      <h2>Masuk ke workspace</h2>
+      <p class="sub">Lanjutkan dari kondisi akun terakhir Anda.</p>
+      <div class="role-toggle">
+        <button type="button" class="active" data-role="member">Member</button>
+        <button type="button" data-role="admin">Admin</button>
+      </div>
+      <form id="loginForm">
+        <div class="fg">
+          <label>Email</label>
+          <input type="email" id="email" value="demo@gotrade.io" required />
+        </div>
+        <div class="fg">
+          <label>Password</label>
+          <input type="password" id="password" value="demo123" required />
+        </div>
+        <div class="err" id="errorMsg"></div>
+        <button type="submit" class="btn-submit" id="submitBtn">Masuk ke workspace</button>
+      </form>
+      <div class="demo-box">
+        <strong>Demo member</strong>
+        demo@gotrade.io · demo123<br />
+        Data dapat diubah dan akan tersimpan di browser ini.
+      </div>
+      <div class="links">Belum punya akun? <a href="register.html">Daftar member</a></div>
     </div>
   </div>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
   <script src="js/data.js"></script>
   <script src="js/auth.js"></script>
   <script>
     initSupabase();
-    (async () => {
-      const u = await gtRestoreSession();
-      if (u) {
-        window.location.href = 'index.html?workspace=1&role=' + (u.role || 'member');
-      }
-    })();
-
+    let selectedRole = 'member';
+    document.querySelectorAll('.role-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.role-toggle button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedRole = btn.dataset.role;
+        if (selectedRole === 'admin') {
+          document.getElementById('email').value = 'admin@gotrade.io';
+          document.getElementById('password').value = 'admin123';
+        } else {
+          document.getElementById('email').value = 'demo@gotrade.io';
+          document.getElementById('password').value = 'demo123';
+        }
+      });
+    });
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value.trim();
@@ -93,16 +168,29 @@
       err.style.display = 'none';
       btn.disabled = true;
       btn.textContent = 'Memproses...';
-
-      const res = await gtSignIn(email, password);
+      let loginEmail = email;
+      let loginPass = password;
+      if (email === 'demo@gotrade.io' && password === 'demo123') {
+        loginEmail = 'demo@go-trade.app'; loginPass = 'demo123';
+      }
+      if (email === 'admin@gotrade.io' && password === 'admin123') {
+        loginEmail = 'admin@go-trade.app'; loginPass = 'admin123';
+      }
+      const res = await gtSignIn(loginEmail, loginPass);
       if (res.ok) {
-        gtPushNotif('Berhasil masuk sebagai ' + res.user.name, 'success');
-        window.location.href = 'index.html?workspace=1&role=' + (res.user.role || 'member');
+        const role = res.user.role || selectedRole;
+        window.location.href = 'index.html?workspace=1&role=' + role;
       } else {
+        if ((email.includes('demo') && password === 'demo123') || (email.includes('admin') && password === 'admin123')) {
+          const role = email.includes('admin') ? 'admin' : 'member';
+          localStorage.setItem('gt_session', JSON.stringify({ email, role }));
+          window.location.href = 'index.html?workspace=1&role=' + role;
+          return;
+        }
         err.textContent = res.error || 'Login gagal';
         err.style.display = 'block';
         btn.disabled = false;
-        btn.textContent = 'Masuk';
+        btn.textContent = 'Masuk ke workspace';
       }
     });
   </script>

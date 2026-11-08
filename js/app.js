@@ -32,7 +32,7 @@ function enterWorkspace(role = 'member') { enterDemo(role); }
 
 function enterDemo(role = 'member') {
   currentRole = role;
-  currentUser = { ...DEFAULT_USER, role };
+  currentUser = { ...DEFAULT_USER, role }; if (role === "member") currentUser.name = "satrio";
   if (role === 'admin') {
     currentUser.name = 'Admin GO TRADE';
     currentUser.email = 'admin@go-trade.app';

@@ -1,129 +1,67 @@
-# GO TRADE — Intelligent Trading System
+# GO TRADE — Intelligent Trading System v9
 
-**v8.0** · Member Workspace + Admin Center · Supabase Backend · White-label Ready
+Platform AI Trading lengkap: **live chart real-time (Binance)**, AI signals, auto-trading, wallet, referral, Admin Center, **login real (Supabase)**, dan notifikasi.
 
-**International Edition (English UI)**
+## Fitur Baru v9
+- Login / Register real (Supabase Auth + local fallback)
+- Session persistence
+- Sistem notifikasi (local + siap Supabase)
+- Schema SQL lengkap (profiles, signals, transactions, notifications)
+- Demo accounts tetap berfungsi offline
 
-Premium AI trading platform with real-time signals, auto-trading packages, wallet, referral network, news, notifications, and a complete admin panel. Built with vanilla HTML/CSS/JS + Supabase — zero build step, easy to deploy and rebrand.
+## Demo Accounts
+| Role   | Email               | Password |
+|--------|---------------------|----------|
+| Member | demo@go-trade.app   | demo123  |
+| Admin  | admin@go-trade.app  | admin123 |
 
----
-
-## Why this product has high commercial value
-
-| Aspect | Value |
-|--------|--------|
-| **Ready to sell** | White-label: change logo, brand name, colors, domain in minutes |
-| **Full features** | Member + Admin in one codebase |
-| **Modern backend** | Supabase (Auth + Postgres + RLS) — scalable & secure |
-| **Premium UI** | Dark/Light mode, smooth animations, mobile-responsive, PWA |
-| **Zero build** | Deploy on any static host (Netlify, Vercel, Cloudflare Pages, Nginx) |
-| **Documentation** | Setup, SQL schema, demo accounts, security notes |
-
----
-
-## Member Workspace
-
-- **Dashboard** — balance, status, active packages, performance chart, live market ticker
-- **AI Trading Signals** — Buy/Sell, entry, target, SL, confidence meter
-- **Auto-Trading Packages** — Starter / Growth / Pro (customizable ROI & duration)
-- **Wallet** — balance, history, CSV export
-- **Deposit** — QR + USDT (BEP20) address, status tracking
-- **Withdrawal** — form + approval flow
-- **Network Referral** — unique code, downline tracking, bonuses
-- **Bonus Tracking** — referral & manual bonus history
-- **Trade History** — transaction log
-- **News** — admin-published feed
-- **Notifications** — in-app + broadcast
-- **Account Settings** — profile, avatar, password, 2FA toggle
-- **Help Center** + **AI Assistant Widget**
-- **Dark / Light mode** with saved preference
-
-## Admin Center
-
-- Real-time metrics overview
-- Manage Users (verify, edit, bonus, delete)
-- Manage Signals (CRUD + open/close)
-- Deposit & Withdrawal approval
-- Manage Packages & News
-- Broadcast notifications
-- System settings (deposit wallet address)
-- Data reset (dev/demo)
-
----
-
-## Quick Setup
-
-### 1. Supabase
-1. Create a project at [supabase.com](https://supabase.com)
-2. SQL Editor → run the full contents of `supabase/schema.sql`
-3. Authentication → Providers → Email → optionally disable *Confirm email* (for demo)
-4. Copy **Project URL** + **anon key** into `config.js`
-
-### 2. Demo accounts
-| Role   | Email              | Password  |
-|--------|--------------------|-----------|
-| Member | demo@gotrade.io    | demo123   |
-| Admin  | admin@gotrade.io   | admin123  |
-
-After first register/login, set `role = admin` in Table Editor → `profiles` for the admin account.
-
-### 3. Run locally
+## Jalankan Lokal
 ```bash
-cd GO-TRADE
+cd go-trade-ai
 python3 -m http.server 8080
-# open http://localhost:8080
+# http://localhost:8080
 ```
 
-> Do not open via `file://` — localStorage, CDN, and Auth require an HTTP server.
+## Setup Supabase (opsional tapi recommended)
+1. Buat project di https://supabase.com
+2. SQL Editor → jalankan isi `supabase/schema.sql`
+3. Authentication → Providers → Email (boleh nonaktifkan Confirm email untuk demo)
+4. Copy **Project URL** + **anon key** ke `js/config.js`
 
----
+## Deploy ke Vercel (gratis, 1 menit)
+```bash
+npm i -g vercel
+cd go-trade-ai
+vercel login
+vercel --yes
+```
+Atau push ke GitHub lalu import di https://vercel.com/new
 
-## White-label (rebrand in 5 minutes)
+## Deploy ke Netlify
+1. https://app.netlify.com/drop
+2. Drag folder project
+3. Dapat URL langsung
 
-Edit `config.js`:
-
-```js
-window.GT_CONFIG = {
-  brand: {
-    name: "YOUR BRAND NAME",
-    tagline: "YOUR TAGLINE",
-    domain: "yourdomain.com",
-    supportEmail: "support@yourdomain.com",
-  },
-  theme: {
-    primary: "#16b884",
-    accent: "#2fe0a4",
-    navy: "#0a0c1f",
-  },
-};
+## Struktur
+```
+├── index.html          # Landing + App shell
+├── login.html
+├── register.html
+├── css/main.css
+├── js/
+│   ├── config.js       # Brand + Supabase keys
+│   ├── auth.js         # Login/Register/Session
+│   ├── data.js         # Market data + store
+│   ├── charts.js       # Lightweight Charts
+│   ├── app.js          # Core logic
+│   └── views.js        # All pages
+├── supabase/schema.sql
+├── vercel.json
+└── manifest.json
 ```
 
-Replace logos:
-- `assets/logo-icon.png` (favicon + small icon)
-- `assets/logo-full.jpg` (optional)
+## White-label
+Edit `js/config.js` → brand name, colors, Supabase keys.
 
 ---
-
-## Security (already applied)
-
-1. **Privilege escalation** — signup role is always forced to `member`
-2. **Wallet self-edit** — members cannot change `wallet_balance`, `role`, or `status` themselves (DB trigger)
-3. **XSS** — `gtEscapeHtml` / `gtSafeUrl` helpers
-4. **Input validation** — deposit / withdrawal / package amounts validated
-5. **RLS** — Row Level Security on all critical tables
-
-For production: enable HTTPS, review RLS, restrict CORS, enable email confirmation.
-
----
-
-## Tech Stack
-
-- **Frontend:** Vanilla HTML5, CSS3, ES modules-ready JS
-- **Backend:** Supabase (Auth, Postgres, Realtime-ready, Storage)
-- **Charts:** Native SVG
-- **Icons:** Inline SVG system (`icons.js`)
-- **PWA:** manifest.json install-ready
-
----
-
-© 2026 GO TRADE Intelligence · Built for decisive moves.
+© 2026 GO TRADE · Intelligent Trading System

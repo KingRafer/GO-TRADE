@@ -21,7 +21,14 @@ window.GT_CONFIG = {
     notifications: true,
     liveCharts: true,
     aiSignals: true,
+    requireSupabaseInProd: false,
+    activityLog: true,
+    clientRateLimit: true,
   },
-  version: "9.0.0",
-  build: "2026.11.08",
+  security: {
+    orderPerMinute: 30,
+    authPerMinute: 10,
+  },
+  version: "9.1.0",
+  build: "2026.11.09",
 };

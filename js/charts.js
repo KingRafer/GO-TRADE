@@ -1,6 +1,4 @@
-/* ============================================================
-   GO TRADE — Chart Engine (Lightweight Charts + Real Data)
-   ============================================================ */
+/* GO TRADE — Chart Engine (Lightweight Charts + Real Data) */
 let chartInstance = null;
 let candleSeries = null;
 let volumeSeries = null;
@@ -11,10 +9,10 @@ let chartContainerId = 'mainChart';
 function getChartTheme() {
   const isDark = !document.body.classList.contains('light');
   return {
-    bg: isDark ? '#151c2c' : '#ffffff',
-    text: isDark ? '#94a3b8' : '#64748b',
-    grid: isDark ? '#1e2a3f' : '#e2e8f0',
-    border: isDark ? '#1e2a3f' : '#e2e8f0',
+    bg: isDark ? '#0b0e14' : '#ffffff',
+    text: isDark ? '#8b9bb4' : '#64748b',
+    grid: isDark ? '#1a2030' : '#e2e8f0',
+    border: isDark ? '#1e2636' : '#e2e8f0',
   };
 }
 

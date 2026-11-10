@@ -1,0 +1,472 @@
+/* =========================================================
+   GO TRADE × Aurora-inspired UI
+   Soft MUI-like surfaces, airy spacing, pastel accents
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Aurora-like palette */
+  --au-bg: #f5f7fb;
+  --au-bg-elevated: #ffffff;
+  --au-bg-soft: #eef2f8;
+  --au-bg-sidebar: #ffffff;
+  --au-border: #e8ecf4;
+  --au-border-soft: #f0f3f9;
+  --au-text: #1b1f3b;
+  --au-text-2: #5c647a;
+  --au-text-3: #8b93a7;
+  --au-primary: #3874ff;
+  --au-primary-soft: rgba(56, 116, 255, 0.12);
+  --au-primary-hover: #2f63db;
+  --au-success: #25b003;
+  --au-success-soft: rgba(37, 176, 3, 0.12);
+  --au-danger: #ff3b5f;
+  --au-danger-soft: rgba(255, 59, 95, 0.12);
+  --au-warning: #ff9f43;
+  --au-warning-soft: rgba(255, 159, 67, 0.14);
+  --au-info: #00baff;
+  --au-mint: #e8faf0;
+  --au-mint-text: #0d7a4f;
+  --au-radius: 14px;
+  --au-radius-sm: 10px;
+  --au-radius-pill: 999px;
+  --au-shadow: 0 2px 12px rgba(27, 31, 59, 0.04), 0 1px 3px rgba(27, 31, 59, 0.03);
+  --au-shadow-md: 0 8px 28px rgba(27, 31, 59, 0.06);
+  --au-font: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Map to existing vars used across app */
+  --bg: var(--au-bg);
+  --bg-elevated: var(--au-bg-elevated);
+  --bg-card: var(--au-bg-elevated);
+  --bg-hover: var(--au-bg-soft);
+  --border: var(--au-border);
+  --border-light: #dfe5f0;
+  --text: var(--au-text);
+  --text-secondary: var(--au-text-2);
+  --text-muted: var(--au-text-3);
+  --primary: var(--au-primary);
+  --primary-hover: var(--au-primary-hover);
+  --primary-glow: var(--au-primary-soft);
+  --accent: #6b9bff;
+  --danger: var(--au-danger);
+  --warning: var(--au-warning);
+  --info: var(--au-info);
+  --success: var(--au-success);
+  --long: var(--au-success);
+  --short: var(--au-danger);
+  --radius: var(--au-radius);
+  --radius-sm: var(--au-radius-sm);
+  --shadow: var(--au-shadow);
+  --font: var(--au-font);
+  --sidebar-w: 260px;
+  --topbar-h: 64px;
+}
+
+/* Landing: aurora gradient hero */
+body:not(.app-mode) {
+  background: #05070f;
+  color: #e8edf7;
+}
+
+body:not(.app-mode) .landing {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(120, 60, 255, 0.35), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(0, 200, 180, 0.18), transparent 50%),
+    radial-gradient(ellipse 50% 30% at 15% 30%, rgba(56, 116, 255, 0.2), transparent 45%),
+    #05070f;
+}
+
+body:not(.app-mode) .nav {
+  background: rgba(5, 7, 15, 0.65);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+body:not(.app-mode) .btn-primary {
+  background: linear-gradient(135deg, #3874ff, #6b4dff);
+  border: none;
+  box-shadow: 0 0 24px rgba(56, 116, 255, 0.35);
+  border-radius: var(--au-radius-pill);
+}
+
+body:not(.app-mode) .btn-outline {
+  border-radius: var(--au-radius-pill);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+body:not(.app-mode) .hero h1 {
+  letter-spacing: -0.03em;
+  font-weight: 600;
+}
+
+body:not(.app-mode) .gradient-text {
+  background: linear-gradient(90deg, #7dd3fc, #a78bfa, #34d399);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ========== APP MODE: Aurora light workspace ========== */
+body.app-mode {
+  background: var(--au-bg) !important;
+  color: var(--au-text);
+  font-family: var(--au-font);
+}
+
+body.app-mode.light,
+body.app-mode:not(.light) {
+  /* force soft aurora light for workspace pages; terminal keeps own tokens */
+}
+
+/* Sidebar — white, soft active */
+body.app-mode .sidebar,
+.app-shell.terminal-shell .sidebar {
+  background: var(--au-bg-sidebar) !important;
+  border-right: 1px solid var(--au-border) !important;
+  box-shadow: 1px 0 0 var(--au-border);
+}
+
+body.app-mode .t-sidebar-brand,
+body.app-mode .sidebar-brand {
+  border-bottom: 1px solid var(--au-border);
+}
+
+body.app-mode .t-nav-item,
+body.app-mode .nav-item {
+  border-radius: var(--au-radius-sm);
+  color: var(--au-text-2);
+  font-weight: 500;
+  font-size: 13px;
+}
+
+body.app-mode .t-nav-item:hover,
+body.app-mode .nav-item:hover {
+  background: var(--au-bg-soft);
+  color: var(--au-text);
+}
+
+body.app-mode .t-nav-item.active,
+body.app-mode .nav-item.active {
+  background: var(--au-primary-soft) !important;
+  color: var(--au-primary) !important;
+  font-weight: 600;
+}
+
+body.app-mode .t-nav-section,
+body.app-mode .nav-section {
+  color: var(--au-text-3);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+/* Topbar */
+body.app-mode .t-topbar {
+  background: var(--au-bg-elevated) !important;
+  border-bottom: 1px solid var(--au-border) !important;
+  height: 64px;
+}
+
+body.app-mode .t-pair-select {
+  background: var(--au-bg-soft);
+  border-radius: var(--au-radius-pill);
+  border-color: transparent;
+}
+
+body.app-mode .t-badge {
+  background: var(--au-primary-soft);
+  color: var(--au-primary);
+  border-radius: var(--au-radius-pill);
+}
+
+body.app-mode .t-icon-btn {
+  border-radius: 50%;
+  background: var(--au-bg-soft);
+  width: 36px;
+  height: 36px;
+}
+
+body.app-mode .t-icon-btn:hover {
+  background: var(--au-primary-soft);
+  color: var(--au-primary);
+}
+
+body.app-mode .t-user-chip {
+  border-radius: var(--au-radius-pill);
+  background: var(--au-bg-soft);
+  border: none;
+}
+
+body.app-mode .t-user-chip .avatar,
+body.app-mode .t-sidebar-foot .avatar {
+  background: linear-gradient(135deg, #3874ff, #6b4dff);
+}
+
+/* Main / cards */
+body.app-mode .main,
+body.app-mode .t-view-container:not(.terminal-view) {
+  background: var(--au-bg) !important;
+}
+
+body.app-mode .stat-card,
+body.app-mode .stat-card.luxury,
+body.app-mode .card,
+body.app-mode .pkg-card,
+body.app-mode .signal-card,
+body.app-mode .summary-banner {
+  background: var(--au-bg-elevated) !important;
+  border: 1px solid var(--au-border) !important;
+  border-radius: var(--au-radius) !important;
+  box-shadow: var(--au-shadow) !important;
+  color: var(--au-text) !important;
+}
+
+body.app-mode .summary-banner {
+  background: linear-gradient(135deg, #eef6ff 0%, #e8faf0 100%) !important;
+  border: none !important;
+}
+
+body.app-mode .view-header h1 {
+  color: var(--au-text);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+body.app-mode .view-header .sub,
+body.app-mode .eyebrow {
+  color: var(--au-text-3);
+}
+
+body.app-mode .btn-primary {
+  background: var(--au-primary);
+  border-radius: var(--au-radius-sm);
+  box-shadow: 0 4px 14px rgba(56, 116, 255, 0.28);
+}
+
+body.app-mode .btn-primary:hover {
+  background: var(--au-primary-hover);
+}
+
+body.app-mode .btn-outline {
+  border-radius: var(--au-radius-sm);
+  border-color: var(--au-border);
+  color: var(--au-text-2);
+}
+
+body.app-mode .btn-outline:hover {
+  border-color: var(--au-primary);
+  color: var(--au-primary);
+  background: var(--au-primary-soft);
+}
+
+/* Change chips like Aurora */
+body.app-mode .change.up,
+body.app-mode .up {
+  color: var(--au-success) !important;
+}
+body.app-mode .change.down,
+body.app-mode .down {
+  color: var(--au-danger) !important;
+}
+
+/* Watchlist */
+body.app-mode .t-watchlist {
+  border-bottom-color: var(--au-border);
+}
+body.app-mode .t-wl-item:hover {
+  background: var(--au-bg-soft);
+}
+body.app-mode .t-wl-item.active {
+  background: var(--au-primary-soft);
+}
+body.app-mode .t-wl-item .sym {
+  color: var(--au-text);
+  font-weight: 600;
+}
+
+/* Terminal panels — hybrid: dark chart area, soft chrome */
+body.app-mode .term-layout {
+  background: var(--au-bg);
+}
+
+body.app-mode .term-context-bar {
+  background: var(--au-bg-elevated);
+  border-bottom: 1px solid var(--au-border);
+}
+
+body.app-mode .term-chart-toolbar {
+  background: var(--au-bg-elevated);
+  border-bottom: 1px solid var(--au-border);
+}
+
+body.app-mode .term-dock {
+  background: var(--au-bg-soft);
+  border-radius: var(--au-radius-sm);
+}
+
+body.app-mode .dock-btn.active {
+  background: #fff;
+  color: var(--au-primary);
+  box-shadow: var(--au-shadow);
+}
+
+body.app-mode .term-mid,
+body.app-mode .term-order,
+body.app-mode .term-right {
+  background: var(--au-bg-elevated);
+  border-color: var(--au-border);
+}
+
+body.app-mode .term-panel-head {
+  color: var(--au-text-2);
+  border-bottom-color: var(--au-border);
+}
+
+body.app-mode .term-chart {
+  background: #0b1220;
+  border-radius: 0;
+}
+
+body.app-mode .ord-submit.buy {
+  background: var(--au-success);
+  border-radius: var(--au-radius-sm);
+}
+body.app-mode .ord-submit.sell {
+  background: var(--au-danger);
+  border-radius: var(--au-radius-sm);
+}
+
+body.app-mode .ord-input {
+  background: var(--au-bg);
+  border-color: var(--au-border);
+  border-radius: var(--au-radius-sm);
+  color: var(--au-text);
+}
+
+body.app-mode .ord-side.buy.active {
+  background: var(--au-success-soft);
+  border-color: var(--au-success);
+  color: var(--au-success);
+}
+body.app-mode .ord-side.sell.active {
+  background: var(--au-danger-soft);
+  border-color: var(--au-danger);
+  color: var(--au-danger);
+}
+
+body.app-mode .term-sig-card,
+body.app-mode .term-pkg-active,
+body.app-mode .term-pkg-row {
+  background: var(--au-bg-elevated);
+  border: 1px solid var(--au-border);
+  border-radius: var(--au-radius);
+  box-shadow: var(--au-shadow);
+}
+
+body.app-mode .term-pkg-active {
+  background: linear-gradient(145deg, #eef6ff, #e8faf0);
+  border: none;
+}
+
+body.app-mode .t-bottom {
+  background: var(--au-bg-elevated);
+  border-top: 1px solid var(--au-border);
+}
+
+body.app-mode .t-bottom-tab.active {
+  background: var(--au-primary-soft);
+  color: var(--au-primary);
+}
+
+body.app-mode .t-table th {
+  color: var(--au-text-3);
+  border-bottom-color: var(--au-border);
+}
+body.app-mode .t-table td {
+  color: var(--au-text);
+  border-bottom-color: var(--au-border-soft);
+}
+
+/* Promo / mint card style */
+body.app-mode .pkg-card.popular {
+  border-color: var(--au-primary) !important;
+  box-shadow: 0 8px 32px rgba(56, 116, 255, 0.12) !important;
+}
+
+/* AI widget */
+body.app-mode .ai-toggle {
+  background: linear-gradient(135deg, #3874ff, #6b4dff);
+  box-shadow: 0 8px 24px rgba(56, 116, 255, 0.4);
+}
+
+body.app-mode .ai-panel {
+  background: var(--au-bg-elevated);
+  border: 1px solid var(--au-border);
+  border-radius: var(--au-radius);
+  box-shadow: var(--au-shadow-md);
+  color: var(--au-text);
+}
+
+/* Metric labels */
+body.app-mode .t-metric .label {
+  color: var(--au-text-3);
+}
+body.app-mode .t-metric .value {
+  color: var(--au-text);
+}
+
+/* Soft status dots */
+body.app-mode .t-status-dot {
+  background: var(--au-success);
+  box-shadow: 0 0 0 3px var(--au-success-soft);
+}
+
+/* Modal */
+body.app-mode .modal {
+  background: var(--au-bg-elevated) !important;
+  color: var(--au-text) !important;
+  border-radius: var(--au-radius);
+  border: 1px solid var(--au-border);
+  box-shadow: var(--au-shadow-md);
+}
+
+/* Toast */
+body.app-mode .toast {
+  border-radius: var(--au-radius-sm);
+  box-shadow: var(--au-shadow-md);
+}
+
+/* Terminal token overrides when aurora light is preferred in shell */
+body.app-mode {
+  --t-bg: #f5f7fb;
+  --t-bg-1: #ffffff;
+  --t-bg-2: #eef2f8;
+  --t-bg-3: #e8ecf4;
+  --t-border: #e8ecf4;
+  --t-border-2: #dfe5f0;
+  --t-text: #1b1f3b;
+  --t-text-2: #5c647a;
+  --t-text-3: #8b93a7;
+  --t-green: #25b003;
+  --t-green-dim: rgba(37, 176, 3, 0.12);
+  --t-red: #ff3b5f;
+  --t-red-dim: rgba(255, 59, 95, 0.12);
+  --t-primary: #3874ff;
+  --t-primary-dim: rgba(56, 116, 255, 0.12);
+}
+
+/* Keep chart canvas dark for readability */
+body.app-mode .term-chart,
+body.app-mode #terminalChart,
+body.app-mode #terminalChartDual {
+  background: #0b1220 !important;
+}
+
+/* Landing cards on marketing page */
+body:not(.app-mode) .card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+}

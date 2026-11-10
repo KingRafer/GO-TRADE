@@ -30,5 +30,5 @@ window.GT_CONFIG = {
     authPerMinute: 10,
   },
   version: "9.1.0",
-  build: "2026.11.09",
+  build: "2026.11.10",
 };

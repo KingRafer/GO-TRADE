@@ -147,21 +147,6 @@
     .form-wrap .sub {
       font-size: 14.5px; color: var(--muted); margin-bottom: 32px; line-height: 1.5;
     }
-    .role-toggle {
-      display: flex; background: #eef5f1; border-radius: 12px;
-      padding: 5px; margin-bottom: 28px;
-      border: 1px solid #e0ebe5;
-    }
-    .role-toggle button {
-      flex: 1; padding: 11px; border: none; background: transparent;
-      border-radius: 9px; font-size: 14px; font-weight: 600;
-      color: var(--muted); cursor: pointer; font-family: inherit;
-      transition: all 0.22s ease;
-    }
-    .role-toggle button.active {
-      background: #fff; color: var(--text);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-    }
     .fg { margin-bottom: 18px; }
     .fg label {
       display: block; font-size: 13px; font-weight: 600;
@@ -255,27 +240,24 @@
       <div class="welcome">WELCOME BACK</div>
       <h2>Masuk ke workspace</h2>
       <p class="sub">Lanjutkan dari kondisi akun terakhir Anda.</p>
-      <div class="role-toggle">
-        <button type="button" class="active" data-role="member">Member</button>
-        <button type="button" data-role="admin">Admin</button>
-      </div>
       <div id="pkgBanner" style="display:none;margin-bottom:14px;padding:10px 12px;border-radius:10px;background:#ecfdf5;border:1px solid #a7f3d0;font-size:13px;color:#065f46"></div>
       <form id="loginForm">
         <div class="fg">
-          <label>Email</label>
-          <input type="email" id="email" value="demo@gotrade.io" autocomplete="username" required />
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" value="demo@gotrade.io" autocomplete="username" required />
         </div>
         <div class="fg">
-          <label>Password</label>
-          <input type="password" id="password" value="demo123" autocomplete="current-password" required />
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" value="demo123" autocomplete="current-password" required />
         </div>
         <div class="err" id="errorMsg"></div>
         <button type="submit" class="btn-submit" id="submitBtn">Masuk ke workspace</button>
       </form>
       <div class="demo-box">
-        <strong>Demo member</strong>
-        demo@gotrade.io · demo123<br />
-        Data dapat diubah dan akan tersimpan di browser ini.
+        <strong>Akun demo</strong>
+        Member: demo@gotrade.io · demo123<br />
+        Admin: admin@gotrade.io · admin123<br />
+        Data tersimpan lokal di browser ini.
       </div>
       <div class="security-note">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -290,7 +272,7 @@
   <script src="js/auth.js"></script>
   <script>
     initSupabase();
-    (function(){
+    (function () {
       const pkg = new URLSearchParams(location.search).get('package');
       const banner = document.getElementById('pkgBanner');
       if (pkg && banner) {
@@ -298,21 +280,14 @@
         banner.textContent = 'Paket dipilih: ' + pkg.toUpperCase() + ' — masuk untuk melanjutkan (demo).';
       }
     })();
-    let selectedRole = 'member';
-    document.querySelectorAll('.role-toggle button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.role-toggle button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        selectedRole = btn.dataset.role;
-        if (selectedRole === 'admin') {
-          document.getElementById('email').value = 'admin@gotrade.io';
-          document.getElementById('password').value = 'admin123';
-        } else {
-          document.getElementById('email').value = 'demo@gotrade.io';
-          document.getElementById('password').value = 'demo123';
-        }
-      });
-    });
+
+    function redirectAfterLogin(role) {
+      const pkg = new URLSearchParams(location.search).get('package');
+      let dest = 'index.html?workspace=1&role=' + encodeURIComponent(role || 'member');
+      if (pkg) dest += '&package=' + encodeURIComponent(pkg);
+      window.location.href = dest;
+    }
+
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value.trim();
@@ -322,36 +297,40 @@
       err.style.display = 'none';
       btn.disabled = true;
       btn.textContent = 'Memproses...';
+
       let loginEmail = email;
       let loginPass = password;
       if (email === 'demo@gotrade.io' && password === 'demo123') {
-        loginEmail = 'demo@go-trade.app'; loginPass = 'demo123';
+        loginEmail = 'demo@go-trade.app';
+        loginPass = 'demo123';
       }
       if (email === 'admin@gotrade.io' && password === 'admin123') {
-        loginEmail = 'admin@go-trade.app'; loginPass = 'admin123';
+        loginEmail = 'admin@go-trade.app';
+        loginPass = 'admin123';
       }
+
       const res = await gtSignIn(loginEmail, loginPass);
       if (res.ok) {
-        const role = res.user.role || selectedRole;
-        const pkg = new URLSearchParams(location.search).get('package');
-        let dest = 'index.html?workspace=1&role=' + role;
-        if (pkg) dest += '&package=' + encodeURIComponent(pkg);
-        window.location.href = dest;
-      } else {
-        if ((email.includes('demo') && password === 'demo123') || (email.includes('admin') && password === 'admin123')) {
-          const role = email.includes('admin') ? 'admin' : 'member';
-          localStorage.setItem('gt_session', JSON.stringify({ email, role, name: role === 'admin' ? 'Admin' : 'satrio' }));
-          const pkg = new URLSearchParams(location.search).get('package');
-          let dest = 'index.html?workspace=1&role=' + role;
-          if (pkg) dest += '&package=' + encodeURIComponent(pkg);
-          window.location.href = dest;
-          return;
-        }
-        err.textContent = res.error || 'Login gagal';
-        err.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Masuk ke workspace';
+        redirectAfterLogin(res.user.role || 'member');
+        return;
       }
+
+      // Fallback demo credentials
+      if ((email.includes('demo') && password === 'demo123') || (email.includes('admin') && password === 'admin123')) {
+        const role = email.includes('admin') ? 'admin' : 'member';
+        localStorage.setItem('gt_session', JSON.stringify({
+          email: loginEmail,
+          role,
+          name: role === 'admin' ? 'Admin' : 'satrio'
+        }));
+        redirectAfterLogin(role);
+        return;
+      }
+
+      err.textContent = res.error || 'Login gagal';
+      err.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Masuk ke workspace';
     });
   </script>
 </body>

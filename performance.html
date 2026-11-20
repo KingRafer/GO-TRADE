@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Performance — GO TRADE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css"/><link rel="icon" href="assets/logo-icon.png"/>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="logo"><img src="assets/logo-icon.png" class="logo-round" width="44" height="44"><strong class="logo-text">GO<span>TRADE</span></strong></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Beranda</a></li>
+      <li><a href="performance.html" class="active">Performance</a></li>
+      <li><a href="features.html">Fitur</a></li>
+      <li><a href="products.html">Paket</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Theme"><svg class="icon-moon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg class="icon-sun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></svg></button>
+      <a href="register.html" class="btn btn-nav">Registrasi</a>
+      <a href="login.html" class="btn btn-login">Login</a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html" onclick="closeMenu()">Beranda</a><a href="performance.html" onclick="closeMenu()">Performance</a>
+    <a href="login.html" onclick="closeMenu()">Login</a>
+  </div>
+  <main style="padding-top:6rem">
+    <section class="section">
+      <div class="section-header">
+        <span class="eyebrow">PERFORMANCE</span>
+        <h2>Ringkasan performa demo</h2>
+        <p>Angka di bawah bersifat simulasi untuk keperluan demo platform.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card"><h3>Win Rate</h3><p style="font-size:2rem;font-weight:800;color:var(--cyan)">87.4%</p><p>Akurasi sinyal AI (demo)</p></div>
+        <div class="feature-card"><h3>Signals / hari</h3><p style="font-size:2rem;font-weight:800;color:var(--cyan)">12–18</p><p>Rata-rata sinyal aktif</p></div>
+        <div class="feature-card"><h3>Pairs covered</h3><p style="font-size:2rem;font-weight:800;color:var(--cyan)">8+</p><p>BTC, ETH, SOL, BNB, …</p></div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><div class="footer-brand"><img src="assets/logo-icon.png" class="logo-round" width="40" height="40"><div><strong>GO TRADE</strong><span>2026</span></div></div></div>
+  <p class="footer-disclaimer">Data simulasi. Bukan kinerja real-time atau jaminan hasil.</p></footer>
+  <script src="js/theme.js"></script>
+</body>
+</html>

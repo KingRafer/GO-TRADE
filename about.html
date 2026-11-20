@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About — GO TRADE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css"/><link rel="icon" href="assets/logo-icon.png"/>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="logo"><img src="assets/logo-icon.png" class="logo-round" width="44" height="44"><strong class="logo-text">GO<span>TRADE</span></strong></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Beranda</a></li>
+      <li><a href="features.html">Fitur</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Theme"><svg class="icon-moon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg class="icon-sun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></svg></button>
+      <a href="register.html" class="btn btn-nav">Registrasi</a>
+      <a href="login.html" class="btn btn-login">Login</a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html" onclick="closeMenu()">Beranda</a><a href="about.html" onclick="closeMenu()">About</a>
+    <a href="login.html" onclick="closeMenu()">Login</a>
+  </div>
+  <main style="padding-top:6rem">
+    <section class="section">
+      <div class="section-header">
+        <span class="eyebrow">ABOUT US</span>
+        <h2>GO TRADE — Intelligent Trading Systems</h2>
+        <p>Platform yang menggabungkan sinyal AI, live market data, auto-trading, dan tools manajemen member dalam satu pengalaman yang bersih dan profesional.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card"><h3>Visi</h3><p>Memberikan tools trading modern yang transparan, cepat, dan mudah dipakai — dari chart real-time sampai admin center.</p></div>
+        <div class="feature-card"><h3>Fokus</h3><p>UX premium, data harga real (Binance), arsitektur siap Supabase & Vercel, dan mode demo yang aman untuk evaluasi.</p></div>
+        <div class="feature-card"><h3>Disclaimer</h3><p>Semua angka performa & ROI di site ini bersifat simulasi. Trading mengandung risiko kehilangan modal.</p></div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><div class="footer-brand"><img src="assets/logo-icon.png" class="logo-round" width="40" height="40"><div><strong>GO TRADE</strong><span>Intelligent Trading Systems · 2026</span></div></div></div></footer>
+  <script src="js/theme.js"></script>
+</body>
+</html>

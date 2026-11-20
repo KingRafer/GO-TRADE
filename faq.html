@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQ — GO TRADE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css"/><link rel="icon" href="assets/logo-icon.png"/>
+  <style>.faq-item{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:.75rem}.faq-item h3{font-size:1rem;margin-bottom:.4rem}.faq-item p{color:var(--text-muted);font-size:.9rem}</style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="logo"><img src="assets/logo-icon.png" class="logo-round" width="44" height="44"><strong class="logo-text">GO<span>TRADE</span></strong></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Beranda</a></li>
+      <li><a href="features.html">Fitur</a></li>
+      <li><a href="products.html">Paket</a></li>
+      <li><a href="faq.html" class="active">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Theme"><svg class="icon-moon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg class="icon-sun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></svg></button>
+      <a href="register.html" class="btn btn-nav">Registrasi</a>
+      <a href="login.html" class="btn btn-login">Login</a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html" onclick="closeMenu()">Beranda</a><a href="faq.html" onclick="closeMenu()">FAQ</a>
+    <a href="login.html" onclick="closeMenu()">Login</a>
+  </div>
+  <main style="padding-top:6rem">
+    <section class="section">
+      <div class="section-header"><span class="eyebrow">FAQ</span><h2>Pertanyaan yang sering diajukan</h2></div>
+      <div class="faq-item"><h3>Apakah ini trading real?</h3><p>Platform ini menampilkan data harga real dari Binance. Sinyal, PnL, dan transaksi di mode demo bersifat simulasi.</p></div>
+      <div class="faq-item"><h3>Bagaimana cara mulai?</h3><p>Daftar gratis → login → pilih paket auto-trading atau gunakan sinyal AI + chart manual.</p></div>
+      <div class="faq-item"><h3>Apakah ada biaya?</h3><p>Pendaftaran gratis. Paket auto-trading memiliki minimum deposit sesuai tier (Starter / Growth / Pro).</p></div>
+      <div class="faq-item"><h3>Apakah support referral?</h3><p>Ya. Setiap member mendapat kode referral unik dan tracking komisi di portal member.</p></div>
+      <div class="faq-item"><h3>Data saya aman?</h3><p>Auth bisa dihubungkan ke Supabase. Selalu gunakan password kuat dan jangan bagikan kredensial.</p></div>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><div class="footer-brand"><img src="assets/logo-icon.png" class="logo-round" width="40" height="40"><div><strong>GO TRADE</strong><span>2026</span></div></div></div>
+  <p class="footer-disclaimer">Bukan nasihat investasi. Trading berisiko.</p></footer>
+  <script src="js/theme.js"></script>
+</body>
+</html>

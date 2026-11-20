@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Members — Admin GO TRADE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/site.css"/><link rel="icon" href="../assets/logo-icon.png"/>
+  <style>
+    .member-shell{display:flex;min-height:100vh}.side{width:240px;background:var(--bg-elevated);border-right:1px solid var(--border);padding:1.25rem;position:fixed;top:0;bottom:0;left:0}
+    .side a{display:block;color:var(--text-muted);text-decoration:none;padding:.6rem .8rem;border-radius:10px;font-size:.875rem;margin-bottom:.25rem}
+    .side a:hover,.side a.active{background:rgba(16,185,129,.12);color:var(--cyan)}
+    .side .brand{display:flex;align-items:center;gap:.6rem;margin-bottom:1.5rem;font-weight:800}
+    .main-area{margin-left:240px;flex:1;padding:1.5rem 2rem}
+    @media(max-width:900px){.side{display:none}.main-area{margin-left:0}}
+    table{width:100%;border-collapse:collapse;font-size:.875rem}
+    th,td{padding:.75rem;text-align:left;border-bottom:1px solid var(--border)}
+    th{color:var(--text-dim);font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="member-shell">
+    <aside class="side">
+      <div class="brand"><img src="../assets/logo-icon.png" width="32" height="32" style="border-radius:8px"><span>Admin</span></div>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="members.html" class="active">Members</a>
+      <a href="#" onclick="GTAuth.logout();return false" style="margin-top:2rem;color:#f87171">Logout</a>
+    </aside>
+    <div class="main-area">
+      <h1 style="font-size:1.5rem;font-weight:800">Members</h1>
+      <div class="card" style="margin-top:1rem;overflow-x:auto">
+        <table>
+          <thead><tr><th>Email</th><th>Name</th><th>Role</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>demo@gotrade.io</td><td>Demo Member</td><td>member</td><td>Active</td></tr>
+            <tr><td>admin@gotrade.io</td><td>Admin GO TRADE</td><td>admin</td><td>Active</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script src="../js/config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    const s = GTAuth.getSession();
+    if (!s || s.role !== 'admin') location.href = 'index.html';
+  </script>
+</body>
+</html>

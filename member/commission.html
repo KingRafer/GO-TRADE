@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Commission — GO TRADE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/site.css"/><link rel="icon" href="../assets/logo-icon.png"/>
+  <style>
+    .member-shell{display:flex;min-height:100vh}.side{width:240px;background:var(--bg-elevated);border-right:1px solid var(--border);padding:1.25rem;position:fixed;top:0;bottom:0;left:0}
+    .side a{display:block;color:var(--text-muted);text-decoration:none;padding:.6rem .8rem;border-radius:10px;font-size:.875rem;margin-bottom:.25rem}
+    .side a:hover,.side a.active{background:rgba(16,185,129,.12);color:var(--cyan)}
+    .side .brand{display:flex;align-items:center;gap:.6rem;margin-bottom:1.5rem;font-weight:800}
+    .main-area{margin-left:240px;flex:1;padding:1.5rem 2rem}
+    @media(max-width:900px){.side{display:none}.main-area{margin-left:0}}
+  </style>
+</head>
+<body>
+  <div class="member-shell">
+    <aside class="side">
+      <div class="brand"><img src="../assets/logo-icon.png" width="32" height="32" style="border-radius:8px"><span>GO TRADE</span></div>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="referral.html">Referral</a>
+      <a href="commission.html" class="active">Commission</a>
+      <a href="profile.html">Profile</a>
+      <a href="#" onclick="GTAuth.logout();return false" style="margin-top:2rem;color:#f87171">Logout</a>
+    </aside>
+    <div class="main-area">
+      <h1 style="font-size:1.5rem;font-weight:800">Commission</h1>
+      <p style="color:var(--text-muted)">Riwayat komisi referral (demo).</p>
+      <div class="card" style="margin-top:1.25rem">
+        <p style="color:var(--text-dim);text-align:center;padding:2rem">Belum ada komisi. Ajak teman dengan kode referral Anda.</p>
+      </div>
+    </div>
+  </div>
+  <script src="../js/config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>if (!GTAuth.getSession()) location.href='../login.html';</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Login — GO TRADE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/login.css"/><link rel="icon" href="../assets/logo-icon.png"/>
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-card">
+      <a href="../index.html" class="login-brand"><img src="../assets/logo-icon.png" alt=""><strong>GO<span>TRADE</span> Admin</strong></a>
+      <h1>Admin Login</h1>
+      <p class="sub">Panel administrasi platform.</p>
+      <form id="loginForm" data-login>
+        <div class="form-group"><label>Email</label><input type="email" name="email" id="email" placeholder="admin@gotrade.io" required></div>
+        <div class="form-group"><label>Password</label><input type="password" name="password" id="password" required></div>
+        <button type="submit" class="btn-submit">Masuk Admin</button>
+        <div class="error-msg" id="loginError"></div>
+      </form>
+      <div class="demo-hint">admin@gotrade.io / admin123</div>
+    </div>
+  </div>
+  <script src="../js/config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    // Override redirect for admin form on this page
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const res = GTAuth.login(document.getElementById('email').value, document.getElementById('password').value);
+      if (res.ok && res.role === 'admin') location.href = 'dashboard.html';
+      else if (res.ok) { document.getElementById('loginError').textContent = 'Akun ini bukan admin'; document.getElementById('loginError').style.display='block'; }
+      else { document.getElementById('loginError').textContent = res.error; document.getElementById('loginError').style.display='block'; }
+    }, true);
+  </script>
+</body>
+</html>

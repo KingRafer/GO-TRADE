@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard — GO TRADE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/site.css"/><link rel="icon" href="../assets/logo-icon.png"/>
+  <style>
+    .member-shell{display:flex;min-height:100vh}.side{width:240px;background:var(--bg-elevated);border-right:1px solid var(--border);padding:1.25rem;position:fixed;top:0;bottom:0;left:0}
+    .side a{display:block;color:var(--text-muted);text-decoration:none;padding:.6rem .8rem;border-radius:10px;font-size:.875rem;margin-bottom:.25rem}
+    .side a:hover,.side a.active{background:rgba(16,185,129,.12);color:var(--cyan)}
+    .side .brand{display:flex;align-items:center;gap:.6rem;margin-bottom:1.5rem;font-weight:800}
+    .main-area{margin-left:240px;flex:1;padding:1.5rem 2rem}
+    @media(max-width:900px){.side{display:none}.main-area{margin-left:0}}
+    .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:1.25rem 0}
+    .stat-box{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:1.1rem}
+    .stat-box .label{font-size:.7rem;color:var(--text-dim);font-weight:700;text-transform:uppercase}
+    .stat-box .value{font-size:1.35rem;font-weight:800;margin-top:.25rem}
+  </style>
+</head>
+<body>
+  <div class="member-shell">
+    <aside class="side">
+      <div class="brand"><img src="../assets/logo-icon.png" width="32" height="32" style="border-radius:8px"><span>Admin</span></div>
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="members.html">Members</a>
+      <a href="../index.html">← Site</a>
+      <a href="#" onclick="GTAuth.logout();return false" style="margin-top:2rem;color:#f87171">Logout</a>
+    </aside>
+    <div class="main-area">
+      <h1 style="font-size:1.5rem;font-weight:800">Admin Dashboard</h1>
+      <p style="color:var(--text-muted)">Ringkasan platform (demo)</p>
+      <div class="stat-row">
+        <div class="stat-box"><div class="label">Total Members</div><div class="value">128</div></div>
+        <div class="stat-box"><div class="label">Active Today</div><div class="value">42</div></div>
+        <div class="stat-box"><div class="label">Pending Withdraw</div><div class="value">3</div></div>
+        <div class="stat-box"><div class="label">Signals Live</div><div class="value">14</div></div>
+      </div>
+      <div class="card"><p style="color:var(--text-dim)">Kelola members, signals, packages, dan approval lewat menu di sidebar. Data masih mock/demo.</p></div>
+    </div>
+  </div>
+  <script src="../js/config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    const s = GTAuth.getSession();
+    if (!s || s.role !== 'admin') location.href = 'index.html';
+  </script>
+</body>
+</html>
